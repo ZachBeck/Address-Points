@@ -1,0 +1,851 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9de0feed-899c-44ef-8e7e-580c7100b1d1" name="Default" comment="" />
+    <ignored path="AddressPointsPython.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="AddressPointsPython" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="DeleteDuplicatePoints.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DeleteDuplicatePoints.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="147">
+              <caret line="8" column="27" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="29" selection-end-column="39" />
+              <folding>
+                <element signature="e#0#12#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="deleteAddressPts.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/deleteAddressPts.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="546">
+              <caret line="27" column="47" lean-forward="true" selection-start-line="27" selection-start-column="47" selection-end-line="27" selection-end-column="47" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CreateApartmentDuplicates.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/CreateApartmentDuplicates.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1617">
+              <caret line="80" column="0" lean-forward="false" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CountyAddressPointETL.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/CountyAddressPointETL.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-155">
+              <caret line="866" column="18" lean-forward="false" selection-start-line="866" selection-start-column="18" selection-end-line="866" selection-end-column="18" />
+              <folding>
+                <element signature="e#0#12#0" expanded="true" />
+                <element signature="e#4022#4124#0" expanded="false" />
+                <element signature="e#4154#4275#0" expanded="false" />
+                <element signature="e#4305#4697#0" expanded="false" />
+                <element signature="e#4739#4847#0" expanded="false" />
+                <element signature="e#4881#4936#0" expanded="false" />
+                <element signature="e#4964#5014#0" expanded="false" />
+                <element signature="e#5054#5224#0" expanded="false" />
+                <element signature="e#5256#5655#0" expanded="false" />
+                <element signature="e#5694#5832#0" expanded="false" />
+                <element signature="e#5871#5949#0" expanded="false" />
+                <element signature="e#5988#6232#0" expanded="false" />
+                <element signature="e#6265#6545#0" expanded="false" />
+                <element signature="e#6582#6642#0" expanded="false" />
+                <element signature="e#6675#6731#0" expanded="false" />
+                <element signature="e#6770#7197#0" expanded="false" />
+                <element signature="e#7225#10154#0" expanded="false" />
+                <element signature="e#10183#14739#0" expanded="false" />
+                <element signature="e#14765#23958#0" expanded="false" />
+                <element signature="e#23985#33826#0" expanded="false" />
+                <element signature="e#33854#38563#0" expanded="false" />
+                <element signature="e#38589#46176#0" expanded="false" />
+                <element signature="e#46205#49207#0" expanded="false" />
+                <element signature="e#49233#53036#0" expanded="false" />
+                <element signature="e#53065#56124#0" expanded="false" />
+                <element signature="e#56150#60840#0" expanded="false" />
+                <element signature="e#60865#64392#0" expanded="false" />
+                <element signature="e#64417#66997#0" expanded="false" />
+                <element signature="e#71920#77069#0" expanded="false" />
+                <element signature="e#77096#80835#0" expanded="false" />
+                <element signature="e#80861#83839#0" expanded="false" />
+                <element signature="e#83865#87214#0" expanded="false" />
+                <element signature="e#87244#98090#0" expanded="false" />
+                <element signature="e#98126#101804#0" expanded="false" />
+                <element signature="e#101839#105482#0" expanded="false" />
+                <element signature="e#105509#107981#0" expanded="false" />
+                <element signature="e#108008#110732#0" expanded="false" />
+                <element signature="e#110760#120584#0" expanded="false" />
+                <element signature="e#120610#128267#0" expanded="false" />
+                <element signature="e#128294#132135#0" expanded="false" />
+                <element signature="e#132164#136920#0" expanded="false" />
+                <element signature="e#136952#142114#0" expanded="false" />
+                <element signature="e#142140#145189#0" expanded="false" />
+                <element signature="e#145215#156385#0" expanded="false" />
+                <element signature="e#156442#156745#0" expanded="false" />
+                <element signature="e#156805#158097#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CreateErrorPts.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/CreateErrorPts.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="42">
+              <caret line="3" column="4" lean-forward="false" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
+              <folding>
+                <element signature="e#0#12#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>unitTypeDir</find>
+      <find>transl</find>
+      <find>addNum</find>
+      <find>re.</find>
+      <find>re.sub</find>
+      <find>REAR</find>
+      <find>flrDict</find>
+      <find>findSeparator</find>
+      <find>unitID</find>
+      <find>addPolyAttributes</find>
+      <find>0.0667556742323</find>
+      <find>1.06809078772</find>
+      <find>2.13618157543</find>
+      <find>what</find>
+      <find>splitVals</find>
+      <find>date</find>
+      <find>sq</find>
+      <find>preDir</find>
+      <find>DeleteFeatures_management</find>
+      <find>sql</find>
+      <find>checkRequiredFields</find>
+      <find>noTypeList</find>
+      <find>FREEPORT CENTER</find>
+      <find>StreetType</find>
+      <find>sType</find>
+      <find>6860</find>
+      <find>print</find>
+      <find>stripTypes</find>
+      <find>union</find>
+      <find>xd1</find>
+    </findStrings>
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="true" />
+    </FindUsagesManager>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="C:/sgidout/CreatePackages_json.py" />
+        <option value="$PROJECT_DIR$/ApartmentDuplicates.py" />
+        <option value="$PROJECT_DIR$/hashExample.py" />
+        <option value="$PROJECT_DIR$/hashTests.py" />
+        <option value="$PROJECT_DIR$/DeleteDuplicatePoints.py" />
+        <option value="$PROJECT_DIR$/ztest.py" />
+        <option value="$PROJECT_DIR$/../../MISC_WORK/PLPCO/xmlRoutes.py" />
+        <option value="D:/VectorTiles/reclassifyHillshadeToPolygons.py" />
+        <option value="$PROJECT_DIR$/WashingtonCAD_ETL.py" />
+        <option value="$PROJECT_DIR$/createErrorPts.py" />
+        <option value="$PROJECT_DIR$/CreateErrorPts.py" />
+        <option value="C:/PYTHONz/reclassifyRaster.py" />
+        <option value="$PROJECT_DIR$/CreateApartmentDuplicates.py" />
+        <option value="$PROJECT_DIR$/deleteAddressPts.py" />
+        <option value="$PROJECT_DIR$/CountyAddressPointETL.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="41" />
+    <option name="y" value="39" />
+    <option name="width" value="1496" />
+    <option name="height" value="1305" />
+  </component>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AddressPointsPython" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AddressPointsPython" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="recentsLimit" value="5" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="options.lastSelected" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.deleteAddressPts">
+    <configuration default="false" name="deleteAddressPts" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="AddressPointsPython" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/deleteAddressPts.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="reclassifyHillshadeToPolygons" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="D:/VectorTiles" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="AddressPointsPython" />
+      <option name="SCRIPT_NAME" value="D:/VectorTiles/reclassifyHillshadeToPolygons.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="WashingtonCAD_ETL" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="AddressPointsPython" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/WashingtonCAD_ETL.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="CreateErrorPts" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="AddressPointsPython" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CreateErrorPts.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="reclassifyRaster" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="C:/PYTHONz" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="AddressPointsPython" />
+      <option name="SCRIPT_NAME" value="C:/PYTHONz/reclassifyRaster.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="AddressPointsPython" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="AddressPointsPython" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="AddressPointsPython" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Nosetests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="AddressPointsPython" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="AddressPointsPython" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="py.test">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="AddressPointsPython" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method />
+    </configuration>
+    <configuration default="false" name="CountyAddressPointETL" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="AddressPointsPython" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CountyAddressPointETL.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <list size="6">
+      <item index="0" class="java.lang.String" itemvalue="Python.CountyAddressPointETL" />
+      <item index="1" class="java.lang.String" itemvalue="Python.deleteAddressPts" />
+      <item index="2" class="java.lang.String" itemvalue="Python.reclassifyHillshadeToPolygons" />
+      <item index="3" class="java.lang.String" itemvalue="Python.WashingtonCAD_ETL" />
+      <item index="4" class="java.lang.String" itemvalue="Python.CreateErrorPts" />
+      <item index="5" class="java.lang.String" itemvalue="Python.reclassifyRaster" />
+    </list>
+    <recent_temporary>
+      <list size="5">
+        <item index="0" class="java.lang.String" itemvalue="Python.deleteAddressPts" />
+        <item index="1" class="java.lang.String" itemvalue="Python.reclassifyRaster" />
+        <item index="2" class="java.lang.String" itemvalue="Python.CreateErrorPts" />
+        <item index="3" class="java.lang.String" itemvalue="Python.WashingtonCAD_ETL" />
+        <item index="4" class="java.lang.String" itemvalue="Python.reclassifyHillshadeToPolygons" />
+      </list>
+    </recent_temporary>
+    <configuration default="true" type="tests" factoryName="Attests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="AddressPointsPython" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9de0feed-899c-44ef-8e7e-580c7100b1d1" name="Default" comment="" />
+      <created>1422463453639</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1422463453639</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TodoView" selected-index="0">
+    <todo-panel id="selected-file">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+    <todo-panel id="default-changelist">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="41" y="39" width="1496" height="1305" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16508795" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290735" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21934198" sideWeight="0.5003296" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19863014" sideWeight="0.49967042" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32768923" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32846004" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14271457" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="48" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/CountyAddressPointETL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="52" column="82" lean-forward="false" selection-start-line="52" selection-start-column="82" selection-end-line="52" selection-end-column="82" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hack.py" />
+    <entry file="file://$PROJECT_DIR$/CountyAddressPointETL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="52" column="82" lean-forward="false" selection-start-line="52" selection-start-column="82" selection-end-line="52" selection-end-column="82" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hack.py" />
+    <entry file="file://$PROJECT_DIR$/CountyAddressPointETL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="52" column="82" lean-forward="false" selection-start-line="52" selection-start-column="82" selection-end-line="52" selection-end-column="82" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hack.py" />
+    <entry file="file://$PROJECT_DIR$/CountyAddressPointETL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="62" column="41" lean-forward="false" selection-start-line="62" selection-start-column="41" selection-end-line="62" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hack.py" />
+    <entry file="file://$PROJECT_DIR$/CountyAddressPointETL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="54" column="0" lean-forward="false" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CountyAddressPointETL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="62" column="0" lean-forward="false" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CountyAddressPointETL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="115" column="21" lean-forward="false" selection-start-line="115" selection-start-column="21" selection-end-line="115" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="1225" column="0" lean-forward="false" selection-start-line="1225" selection-start-column="0" selection-end-line="1225" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CountyAddressPointETL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="50" column="35" lean-forward="false" selection-start-line="50" selection-start-column="35" selection-end-line="50" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hack.py" />
+    <entry file="file://$PROJECT_DIR$/hack.py" />
+    <entry file="file://$PROJECT_DIR$/hack.py" />
+    <entry file="file://$PROJECT_DIR$/hack.py" />
+    <entry file="file://$PROJECT_DIR$/hack.py" />
+    <entry file="file://$PROJECT_DIR$/hack.py" />
+    <entry file="file://$PROJECT_DIR$/WashingtonAddressPointUpdater.py" />
+    <entry file="file://$PROJECT_DIR$/WashingtonAddressPointUpdater.py" />
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="1225" column="0" lean-forward="false" selection-start-line="1225" selection-start-column="0" selection-end-line="1225" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AddressPointUpdater.py" />
+    <entry file="file://C:/GIS/Testing/RandP_TESTER.py" />
+    <entry file="file://$PROJECT_DIR$/../../BlueStakes/Blue Stakes Python/BlueStakesETL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="1912" column="40" lean-forward="false" selection-start-line="1912" selection-start-column="40" selection-end-line="1912" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/ArcGIS10.3/Lib/site-packages/agrc/parse_address.py" />
+    <entry file="file://$PROJECT_DIR$/test.py" />
+    <entry file="file://C:/PYTHONz/reconcileFClists.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hack.py" />
+    <entry file="file://C:/PYTHONz/addPolygonAttributes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WashingtonAddressPointUpdater.py" />
+    <entry file="file://$PROJECT_DIR$/AddressPoints_ErrorChecker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1326">
+          <caret line="87" column="0" lean-forward="false" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/checkAddressFields.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/sgidout/CreatePackages_json.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hashExample.py" />
+    <entry file="file://$PROJECT_DIR$/hashTests.py" />
+    <entry file="file://$PROJECT_DIR$/ApartmentDuplicates.py" />
+    <entry file="file://$PROJECT_DIR$/../../GitHub/backseat-driver/zip_loader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/checkPtsAgainstPoly.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-102">
+          <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ztest.py" />
+    <entry file="file://$PROJECT_DIR$/../../MISC_WORK/PLPCO/xmlRoutes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="578">
+          <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/VectorTiles/reclassifyHillshadeToPolygons.py" />
+    <entry file="file://$PROJECT_DIR$/WashingtonCAD_ETL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://K:/zbeck/RasterMosaics/CreateRasterMosaics_GoogleBucketsWASATCH.py" />
+    <entry file="file://C:/PYTHONz/reclassifyRaster.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="22" column="49" lean-forward="false" selection-start-line="22" selection-start-column="49" selection-end-line="22" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/ArcGISx6410.5/Lib/site-packages/agrc/parse_address.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CreateApartmentDuplicates.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1617">
+          <caret line="80" column="0" lean-forward="false" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DeleteDuplicatePoints.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="8" column="27" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="29" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CreateErrorPts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="3" column="4" lean-forward="false" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/deleteAddressPts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="546">
+          <caret line="27" column="47" lean-forward="true" selection-start-line="27" selection-start-column="47" selection-end-line="27" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CountyAddressPointETL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-155">
+          <caret line="866" column="18" lean-forward="false" selection-start-line="866" selection-start-column="18" selection-end-line="866" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+            <element signature="e#4022#4124#0" expanded="false" />
+            <element signature="e#4154#4275#0" expanded="false" />
+            <element signature="e#4305#4697#0" expanded="false" />
+            <element signature="e#4739#4847#0" expanded="false" />
+            <element signature="e#4881#4936#0" expanded="false" />
+            <element signature="e#4964#5014#0" expanded="false" />
+            <element signature="e#5054#5224#0" expanded="false" />
+            <element signature="e#5256#5655#0" expanded="false" />
+            <element signature="e#5694#5832#0" expanded="false" />
+            <element signature="e#5871#5949#0" expanded="false" />
+            <element signature="e#5988#6232#0" expanded="false" />
+            <element signature="e#6265#6545#0" expanded="false" />
+            <element signature="e#6582#6642#0" expanded="false" />
+            <element signature="e#6675#6731#0" expanded="false" />
+            <element signature="e#6770#7197#0" expanded="false" />
+            <element signature="e#7225#10154#0" expanded="false" />
+            <element signature="e#10183#14739#0" expanded="false" />
+            <element signature="e#14765#23958#0" expanded="false" />
+            <element signature="e#23985#33826#0" expanded="false" />
+            <element signature="e#33854#38563#0" expanded="false" />
+            <element signature="e#38589#46176#0" expanded="false" />
+            <element signature="e#46205#49207#0" expanded="false" />
+            <element signature="e#49233#53036#0" expanded="false" />
+            <element signature="e#53065#56124#0" expanded="false" />
+            <element signature="e#56150#60840#0" expanded="false" />
+            <element signature="e#60865#64392#0" expanded="false" />
+            <element signature="e#64417#66997#0" expanded="false" />
+            <element signature="e#71920#77069#0" expanded="false" />
+            <element signature="e#77096#80835#0" expanded="false" />
+            <element signature="e#80861#83839#0" expanded="false" />
+            <element signature="e#83865#87214#0" expanded="false" />
+            <element signature="e#87244#98090#0" expanded="false" />
+            <element signature="e#98126#101804#0" expanded="false" />
+            <element signature="e#101839#105482#0" expanded="false" />
+            <element signature="e#105509#107981#0" expanded="false" />
+            <element signature="e#108008#110732#0" expanded="false" />
+            <element signature="e#110760#120584#0" expanded="false" />
+            <element signature="e#120610#128267#0" expanded="false" />
+            <element signature="e#128294#132135#0" expanded="false" />
+            <element signature="e#132164#136920#0" expanded="false" />
+            <element signature="e#136952#142114#0" expanded="false" />
+            <element signature="e#142140#145189#0" expanded="false" />
+            <element signature="e#145215#156385#0" expanded="false" />
+            <element signature="e#156442#156745#0" expanded="false" />
+            <element signature="e#156805#158097#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
