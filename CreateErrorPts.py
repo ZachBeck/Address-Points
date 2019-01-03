@@ -19,8 +19,8 @@ def createErrorPts(dict, outLocation, outFile, fldName, countySrcPts):
     arcpy.AddField_management(shp_fullPath, 'NOTES', 'TEXT')
     arcpy.DeleteField_management(shp_fullPath, 'Id')
 
-    flds = [fldName, 'NOTES', 'SHAPE@']
-    iCursor = arcpy.da.InsertCursor(shp_fullPath, flds)
+    errorFlds = [fldName, 'NOTES', 'SHAPE@']
+    iCursor = arcpy.da.InsertCursor(shp_fullPath, errorFlds)
 
     for d in dict:
         inFld = removeNone(d)
@@ -30,3 +30,4 @@ def createErrorPts(dict, outLocation, outFile, fldName, countySrcPts):
         iCursor.insertRow((inFld, notes, shp))
 
     del iCursor
+    return errorFlds

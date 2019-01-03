@@ -11,6 +11,9 @@ from agrc import parse_address
 from CreateApartmentDuplicates import addBaseAddress
 from DeleteDuplicatePoints import deleteDuplicatePts
 from CreateErrorPts import createErrorPts
+from ReturnDuplicateAddresses import returnDuplicateAddresses
+from ReturnDuplicateAddresses import updateErrorPts
+
 
 global sgid10, agrcAddFLDS, errorList
 
@@ -3145,13 +3148,11 @@ def washingtonCounty():
                     addressErrors = errorPtsDict.setdefault('{} | {}'.format(sName, row[12]), [])
                     addressErrors.extend(['street name not in roads', row[9]])
 
-
-
                 iCursor.insertRow(('', '', fullAdd, addNum, '', preDir, sName, sType, sufDir, landmark, '', unitType, unitID, '', '', '49053', 'UT', 'Unknown', \
                                    'Unknown', 'Unknown', parcel, 'WASHINGTON COUNTY', date, 'COMPLETE', '', modDate, '', '', '', shp))
 
         print errorPtsDict
-        createErrorPts(errorPtsDict, cntyFldr, 'Washington_ErrorPts.shp', washcoAddFLDS[12], washcoAddPts)
+        errorFlds = createErrorPts(errorPtsDict, cntyFldr, 'Washington_ErrorPts.shp', washcoAddFLDS[12], washcoAddPts)
 
     del iCursor
     del sCursor_washco
@@ -3166,6 +3167,8 @@ def washingtonCounty():
     addPolyAttributes(sgid10, agrcAddPts_washCo, inputDict)
     addBaseAddress(agrcAddPts_washCo)
     deleteDuplicatePts(agrcAddPts_washCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
+    dupePts = returnDuplicateAddresses(agrcAddPts_washCo, ['UTAddPtID', 'SHAPE@'])
+    updateErrorPts(os.path.join(cntyFldr, 'Washington_ErrorPts.shp'), errorFlds, dupePts)
 
 
 def wayneCounty():
@@ -3549,7 +3552,7 @@ def addPolyAttributes(sgid10, agrcAddPts, polyDict):
 #ironCounty()   #Complete
 #juabCounty()
 #kaneCounty()   #Complete
-millardCounty()   #Complete w/error points
+#millardCounty()   #Complete w/error points
 #morganCounty()    #Complete
 #murrayCity_AddressPts()
 #murrayCity_ParcelPts()
@@ -3562,7 +3565,7 @@ millardCounty()   #Complete w/error points
 #uintahCounty()
 #utahCounty() #Complete
 #wasatchCounty()  #Complete w/error points
-#washingtonCounty()  #Complete
+washingtonCounty()  #Complete
 #wayneCounty()
 #weberCounty()   #Complete
 
