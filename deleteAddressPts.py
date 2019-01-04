@@ -33,6 +33,6 @@ appAddressPts = r'Database Connections\DC_AddressAdmin@AddressPointEditing@itdb1
 sgidAddressPts = r'Database Connections\DC_Location@SGID10@sgid.agrc.utah.gov.sde\SGID10.LOCATION.AddressPoints'
 
 
-deleteAddressPts('Millard', sgidAddressPts) #Update input points and SQL query
+deleteAddressPts('Davis', sgidAddressPts) #Update input points and SQL query
 
 

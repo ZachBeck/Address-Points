@@ -23,7 +23,7 @@
       <file leaf-file-name="DeleteDuplicatePoints.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DeleteDuplicatePoints.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
+            <state relative-caret-position="357">
               <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
@@ -35,8 +35,8 @@
       <file leaf-file-name="deleteAddressPts.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/deleteAddressPts.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="27" column="47" lean-forward="false" selection-start-line="27" selection-start-column="47" selection-end-line="27" selection-end-column="47" />
+            <state relative-caret-position="578">
+              <caret line="35" column="23" lean-forward="false" selection-start-line="35" selection-start-column="23" selection-end-line="35" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -52,11 +52,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CountyAddressPointETL.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CountyAddressPointETL.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CountyAddressPointETL.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1028">
-              <caret line="3160" column="19" lean-forward="true" selection-start-line="3160" selection-start-column="19" selection-end-line="3160" selection-end-column="19" />
+            <state relative-caret-position="261">
+              <caret line="942" column="51" lean-forward="false" selection-start-line="942" selection-start-column="51" selection-end-line="942" selection-end-column="51" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
                 <element signature="e#4137#4239#0" expanded="false" />
@@ -68,7 +68,6 @@
                 <element signature="e#5169#5339#0" expanded="false" />
                 <element signature="e#5371#5770#0" expanded="false" />
                 <element signature="e#5809#5947#0" expanded="false" />
-                <element signature="e#5986#6064#0" expanded="false" />
                 <element signature="e#6103#6347#0" expanded="false" />
                 <element signature="e#6380#6660#0" expanded="false" />
                 <element signature="e#6697#6757#0" expanded="false" />
@@ -79,31 +78,30 @@
                 <element signature="e#14880#24073#0" expanded="false" />
                 <element signature="e#24100#33941#0" expanded="false" />
                 <element signature="e#33969#38678#0" expanded="false" />
-                <element signature="e#38704#46291#0" expanded="false" />
-                <element signature="e#46320#49322#0" expanded="false" />
-                <element signature="e#49348#53151#0" expanded="false" />
-                <element signature="e#53180#56239#0" expanded="false" />
-                <element signature="e#56265#60955#0" expanded="false" />
-                <element signature="e#60980#64507#0" expanded="false" />
-                <element signature="e#64532#67112#0" expanded="false" />
-                <element signature="e#67137#72007#0" expanded="false" />
-                <element signature="e#72035#77184#0" expanded="false" />
-                <element signature="e#77211#80950#0" expanded="false" />
-                <element signature="e#80976#83954#0" expanded="false" />
-                <element signature="e#83980#87329#0" expanded="false" />
-                <element signature="e#87359#98205#0" expanded="false" />
-                <element signature="e#98241#101919#0" expanded="false" />
-                <element signature="e#101954#105597#0" expanded="false" />
-                <element signature="e#105624#108096#0" expanded="false" />
-                <element signature="e#108123#110847#0" expanded="false" />
-                <element signature="e#110875#120699#0" expanded="false" />
-                <element signature="e#120725#128382#0" expanded="false" />
-                <element signature="e#128409#132250#0" expanded="false" />
-                <element signature="e#132279#137035#0" expanded="false" />
-                <element signature="e#142438#145487#0" expanded="false" />
-                <element signature="e#145513#156683#0" expanded="false" />
-                <element signature="e#156740#157043#0" expanded="false" />
-                <element signature="e#157103#158395#0" expanded="false" />
+                <element signature="e#46445#49447#0" expanded="false" />
+                <element signature="e#49473#53276#0" expanded="false" />
+                <element signature="e#53305#56364#0" expanded="false" />
+                <element signature="e#56390#61080#0" expanded="false" />
+                <element signature="e#61105#64632#0" expanded="false" />
+                <element signature="e#64657#67237#0" expanded="false" />
+                <element signature="e#67262#72132#0" expanded="false" />
+                <element signature="e#72160#77309#0" expanded="false" />
+                <element signature="e#77336#81075#0" expanded="false" />
+                <element signature="e#81101#84079#0" expanded="false" />
+                <element signature="e#84105#87454#0" expanded="false" />
+                <element signature="e#87484#98330#0" expanded="false" />
+                <element signature="e#98366#102044#0" expanded="false" />
+                <element signature="e#102079#105722#0" expanded="false" />
+                <element signature="e#105749#108221#0" expanded="false" />
+                <element signature="e#108248#110972#0" expanded="false" />
+                <element signature="e#111000#120824#0" expanded="false" />
+                <element signature="e#120850#128507#0" expanded="false" />
+                <element signature="e#132404#137160#0" expanded="false" />
+                <element signature="e#137192#142537#0" expanded="false" />
+                <element signature="e#142563#145612#0" expanded="false" />
+                <element signature="e#145638#156808#0" expanded="false" />
+                <element signature="e#156865#157168#0" expanded="false" />
+                <element signature="e#157228#158520#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -112,7 +110,7 @@
       <file leaf-file-name="CreateErrorPts.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CreateErrorPts.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
+            <state relative-caret-position="527">
               <caret line="32" column="20" lean-forward="false" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
@@ -121,7 +119,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ReturnDuplicateAddresses.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ReturnDuplicateAddresses.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ReturnDuplicateAddresses.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="510">
@@ -197,17 +195,16 @@
         <option value="$PROJECT_DIR$/createErrorPts.py" />
         <option value="C:/PYTHONz/reclassifyRaster.py" />
         <option value="$PROJECT_DIR$/CreateApartmentDuplicates.py" />
-        <option value="$PROJECT_DIR$/deleteAddressPts.py" />
         <option value="$PROJECT_DIR$/FindDuplicateAddresses.py" />
         <option value="$PROJECT_DIR$/CreateErrorPts.py" />
         <option value="$PROJECT_DIR$/ReturnDuplicateAddresses.py" />
+        <option value="$PROJECT_DIR$/deleteAddressPts.py" />
         <option value="$PROJECT_DIR$/CountyAddressPointETL.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="2311" />
-    <option name="y" value="39" />
+    <option name="x" value="282" />
     <option name="width" value="1496" />
     <option name="height" value="1087" />
   </component>
@@ -230,8 +227,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -246,6 +241,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -269,7 +266,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.CountyAddressPointETL">
+  <component name="RunManager" selected="Python.deleteAddressPts">
     <configuration default="false" name="deleteAddressPts" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -552,18 +549,19 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="2311" y="39" width="1496" height="1087" extended-state="0" />
+    <frame x="282" y="0" width="1496" height="1087" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16418919" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290735" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21934198" sideWeight="0.5003296" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19856705" sideWeight="0.49967042" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19856705" sideWeight="0.49967042" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32768923" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32846004" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -757,14 +755,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/deleteAddressPts.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="27" column="47" lean-forward="false" selection-start-line="27" selection-start-column="47" selection-end-line="27" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CreateApartmentDuplicates.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1309">
@@ -773,17 +763,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/FindDuplicateAddresses.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/FindDuplicateAddresses.py" />
     <entry file="file://$PROJECT_DIR$/DeleteDuplicatePoints.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
+        <state relative-caret-position="357">
           <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
@@ -793,7 +776,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/CreateErrorPts.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
+        <state relative-caret-position="527">
           <caret line="32" column="20" lean-forward="false" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
@@ -801,10 +784,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ReturnDuplicateAddresses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/deleteAddressPts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="578">
+          <caret line="35" column="23" lean-forward="false" selection-start-line="35" selection-start-column="23" selection-end-line="35" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/CountyAddressPointETL.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1028">
-          <caret line="3160" column="19" lean-forward="true" selection-start-line="3160" selection-start-column="19" selection-end-line="3160" selection-end-column="19" />
+        <state relative-caret-position="261">
+          <caret line="942" column="51" lean-forward="false" selection-start-line="942" selection-start-column="51" selection-end-line="942" selection-end-column="51" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
             <element signature="e#4137#4239#0" expanded="false" />
@@ -816,7 +815,6 @@
             <element signature="e#5169#5339#0" expanded="false" />
             <element signature="e#5371#5770#0" expanded="false" />
             <element signature="e#5809#5947#0" expanded="false" />
-            <element signature="e#5986#6064#0" expanded="false" />
             <element signature="e#6103#6347#0" expanded="false" />
             <element signature="e#6380#6660#0" expanded="false" />
             <element signature="e#6697#6757#0" expanded="false" />
@@ -827,40 +825,31 @@
             <element signature="e#14880#24073#0" expanded="false" />
             <element signature="e#24100#33941#0" expanded="false" />
             <element signature="e#33969#38678#0" expanded="false" />
-            <element signature="e#38704#46291#0" expanded="false" />
-            <element signature="e#46320#49322#0" expanded="false" />
-            <element signature="e#49348#53151#0" expanded="false" />
-            <element signature="e#53180#56239#0" expanded="false" />
-            <element signature="e#56265#60955#0" expanded="false" />
-            <element signature="e#60980#64507#0" expanded="false" />
-            <element signature="e#64532#67112#0" expanded="false" />
-            <element signature="e#67137#72007#0" expanded="false" />
-            <element signature="e#72035#77184#0" expanded="false" />
-            <element signature="e#77211#80950#0" expanded="false" />
-            <element signature="e#80976#83954#0" expanded="false" />
-            <element signature="e#83980#87329#0" expanded="false" />
-            <element signature="e#87359#98205#0" expanded="false" />
-            <element signature="e#98241#101919#0" expanded="false" />
-            <element signature="e#101954#105597#0" expanded="false" />
-            <element signature="e#105624#108096#0" expanded="false" />
-            <element signature="e#108123#110847#0" expanded="false" />
-            <element signature="e#110875#120699#0" expanded="false" />
-            <element signature="e#120725#128382#0" expanded="false" />
-            <element signature="e#128409#132250#0" expanded="false" />
-            <element signature="e#132279#137035#0" expanded="false" />
-            <element signature="e#142438#145487#0" expanded="false" />
-            <element signature="e#145513#156683#0" expanded="false" />
-            <element signature="e#156740#157043#0" expanded="false" />
-            <element signature="e#157103#158395#0" expanded="false" />
+            <element signature="e#46445#49447#0" expanded="false" />
+            <element signature="e#49473#53276#0" expanded="false" />
+            <element signature="e#53305#56364#0" expanded="false" />
+            <element signature="e#56390#61080#0" expanded="false" />
+            <element signature="e#61105#64632#0" expanded="false" />
+            <element signature="e#64657#67237#0" expanded="false" />
+            <element signature="e#67262#72132#0" expanded="false" />
+            <element signature="e#72160#77309#0" expanded="false" />
+            <element signature="e#77336#81075#0" expanded="false" />
+            <element signature="e#81101#84079#0" expanded="false" />
+            <element signature="e#84105#87454#0" expanded="false" />
+            <element signature="e#87484#98330#0" expanded="false" />
+            <element signature="e#98366#102044#0" expanded="false" />
+            <element signature="e#102079#105722#0" expanded="false" />
+            <element signature="e#105749#108221#0" expanded="false" />
+            <element signature="e#108248#110972#0" expanded="false" />
+            <element signature="e#111000#120824#0" expanded="false" />
+            <element signature="e#120850#128507#0" expanded="false" />
+            <element signature="e#132404#137160#0" expanded="false" />
+            <element signature="e#137192#142537#0" expanded="false" />
+            <element signature="e#142563#145612#0" expanded="false" />
+            <element signature="e#145638#156808#0" expanded="false" />
+            <element signature="e#156865#157168#0" expanded="false" />
+            <element signature="e#157228#158520#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ReturnDuplicateAddresses.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>

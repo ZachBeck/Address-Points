@@ -940,14 +940,12 @@ def davisCounty():
                 if streetName == 'FREEPORT CENTER':
                     addNum = '0'
                     fullAdd = '{} {} {} {}'.format(addNum, streetName, unitType, unitId)
-                elif addNumSuf in addNumSufList:
-                    fullAdd = '{} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, streetName, sufDir, streetType)
-                else:
-                    #fullAdd = removeDuplicateWords(row[8].split(',')[0].upper())
+                if unitId != '' and unitType != '':
                     fullAdd = '{} {} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, streetName, sufDir, streetType, unitType, unitId)
-
+                else:
+                    fullAdd = '{} {} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, streetName, sufDir, streetType, unitType, unitId)
                 fullAdd = ' '.join(fullAdd.split())
-                fullAdd = removeDuplicateWords(fullAdd)
+                #fullAdd = removeDuplicateWords(fullAdd)
 
 
                 if preDir != '' and preDir == sufDir:
@@ -997,7 +995,7 @@ def davisCounty():
                                    status, '', modified, '', '', '', shp))
 
         print errorPtsDict
-        createErrorPts(errorPtsDict, cntyFldr, 'Davis_ErrorPts.shp', davisCoAddFLDS[8], davisCoAddPts)
+        errorFlds = createErrorPts(errorPtsDict, cntyFldr, 'Davis_ErrorPts.shp', davisCoAddFLDS[8], davisCoAddPts)
 
     del iCursor
     del sCursor_davis
@@ -1012,7 +1010,8 @@ def davisCounty():
     addPolyAttributes(sgid10, agrcAddPts_davisCo, inputDict)
     addBaseAddress(agrcAddPts_davisCo)
     deleteDuplicatePts(agrcAddPts_davisCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
-
+    dupePts = returnDuplicateAddresses(agrcAddPts_davisCo, ['UTAddPtID', 'SHAPE@'])
+    updateErrorPts(os.path.join(cntyFldr, 'Davis_ErrorPts.shp'), errorFlds, dupePts)
 
 def duchesneCounty():
     duchesneCoAddPts = r'C:\ZBECK\Addressing\Duchesne\DuchesneCo_April7th.gdb\DuchesneAddress472017'
@@ -3544,7 +3543,7 @@ def addPolyAttributes(sgid10, agrcAddPts, polyDict):
 #cacheCounty()  #Complete w/error points
 #carbonCounty() #Complete
 #daggettCounty() #Complete w/error points
-#davisCounty()  #Complete
+davisCounty()  #Complete
 #duchesneCounty()
 #emeryCounty()  #Complete
 #garfieldCounty()  #Complete
@@ -3565,7 +3564,7 @@ def addPolyAttributes(sgid10, agrcAddPts, polyDict):
 #uintahCounty()
 #utahCounty() #Complete
 #wasatchCounty()  #Complete w/error points
-washingtonCounty()  #Complete
+#washingtonCounty()  #Complete
 #wayneCounty()
 #weberCounty()   #Complete
 
