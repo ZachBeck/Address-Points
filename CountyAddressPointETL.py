@@ -13,6 +13,7 @@ from DeleteDuplicatePoints import deleteDuplicatePts
 from CreateErrorPts import createErrorPts
 from ReturnDuplicateAddresses import returnDuplicateAddresses
 from ReturnDuplicateAddresses import updateErrorPts
+from compareSGIDpts import findMissingPts
 
 
 global sgid10, agrcAddFLDS, errorList
@@ -1013,31 +1014,47 @@ def davisCounty():
     dupePts = returnDuplicateAddresses(agrcAddPts_davisCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Davis_ErrorPts.shp'), errorFlds, dupePts)
 
+
 def duchesneCounty():
-    duchesneCoAddPts = r'C:\ZBECK\Addressing\Duchesne\DuchesneCo_April7th.gdb\DuchesneAddress472017'
+    duchesneCoAddPts = r'C:\ZBECK\Addressing\Duchesne\DuchesneCounty.gdb\DuchesneAddressPoints'
     agrcAddPts_duchesneCo = r'C:\ZBECK\Addressing\Duchesne\Duchesne.gdb\AddressPoints_Duchesne'
+    cntyFldr = r'C:\ZBECK\Addressing\Duchesne'
 
     duchesneCoAddFLDS = ['HOUSE_N', 'PRE_DIR', 'S_NAME', 'SUF_DIR', 'S_TYPE', 'PARCEL_ID', 'Date_Mod', 'SHAPE@']
 
     checkRequiredFields(duchesneCoAddPts, duchesneCoAddFLDS)
     truncateOldCountyPts(agrcAddPts_duchesneCo)
 
+    hwyLst = ['35', '40', '121']
+    crLst = ['29']
+
+    errorPtsDict = {}
+    rdSet = createRoadSet('49013')
+
     iCursor = arcpy.da.InsertCursor(agrcAddPts_duchesneCo, agrcAddFLDS)
 
     with arcpy.da.SearchCursor(duchesneCoAddPts, duchesneCoAddFLDS) as sCursor_duchesne:
         for row in sCursor_duchesne:
-            if row[0] not in errorList and row[2] not in errorList and len(row[2]) > 1:
-                if row[2].isdigit() and row[3].strip() == '':
+            if row[0] not in errorList and row[2] not in errorList: # and len(row[2]) > 1:
+                if row[2].isdigit() and row[3].strip() == '' and row[2] not in hwyLst and row[2] not in crLst:
                     continue
                 elif row[2][0] == '#':
                     continue
                 else:
-                    addNum = str(row[0]).strip('.0')
+                    addNum = str(row[0]).replace('.0', '')
+                    sName = str(row[2]).translate(None, '.').strip().upper()
+                    sType = returnKey(row[4].upper().strip(), sTypeDir)
                     preDir = returnKey(row[1].upper(), dirs2)
+                    if row[4] == 'Center':
+                        preDir = row[2]
+                        sName = 'CENTER'
+                        sType = 'ST'
                     sufDir = returnKey(row[3].upper(), dirs2)
-                    sType = returnKey(row[4].upper(), sTypeDir)
 
-                    sName = str(row[2]).translate(None, '.').strip()
+                    if row[2].strip() not in rdSet and 'SR ' not in row[2]:
+                        addressErrors = errorPtsDict.setdefault('{} {} {}'.format(addNum, row[1], row[2].strip()), [])
+                        addressErrors.extend(['Street name missing in roads data', row[7]])
+
                     if '(' in sName:
                         if sName[0].isdigit():
                             sName = sName.split('(')[1].strip(')')
@@ -1048,12 +1065,44 @@ def duchesneCounty():
                             sName = sName.split('(')[0].strip('S ').strip('.')
                             sType = returnKey(sName.split()[-1], sTypeDir)
                             sName = sName.rsplit(' ', 1)[0]
+                    if sName == 'N POCO':
+                        sName = 'NORTH POCO'
+                    if sName == 'E RIVER':
+                        sName = 'EAST RIVER'
+                    if sName == 'S MYTON':
+                        sName = 'MYTON'
+                    if sName == 'UINTA CANYON':
+                        sName = 'UINTAH CANYON'
+                    if sName in hwyLst:
+                        sName = 'HWY {}'.format(sName)
+                        sType = ''
+                    if sName in crLst:
+                        sName = 'COUNTY RD {}'.format(sName)
+                        sType = ''
+                    if sName.endswith((' N', ' S', ' E', ' W')):
+                        sufDir = sName[-1]
+                        sName = sName.strip(' {}'.format(sufDir))
+                        sType = ''
+                    if sName.endswith((' West')):
+                        sufDir = 'W'
+                        sName = sName.strip(' West')
                     if 'SR ' in sName:
                         sName = sName.replace('SR ', 'HWY ')
                         sType = ''
                     if 'US ' in sName:
                         sName = 'HWY {}'.format(sName.split()[-1])
                         sType = ''
+                    if sName == 'MAIN':
+                        sType = 'ST'
+                    if sName[0].isdigit() == True:
+                        sType = ''
+                    if sName[0].isdigit() == False:
+                        sufDir = ''
+
+                    if preDir != '' and sufDir != '' and preDir == sufDir:
+                        addressErrors = errorPtsDict.setdefault('{} {} {}'.format(preDir, sName, sufDir), [])
+
+                        addressErrors.extend(['Prefix = Suffix direction', row[7]])
 
                     fullAdd = '{} {} {} {} {}'.format(addNum, preDir, sName, sufDir, sType)
                     fullAdd = ' '.join(fullAdd.split())
@@ -1066,16 +1115,26 @@ def duchesneCounty():
                     iCursor.insertRow(('', '', fullAdd, addNum, '', preDir, sName, sType, sufDir, '', '', '', '', '', '', '49013', \
                                        'UT', '', '', '', parcelID, 'DUCHESNE COUNTY', loadDate, 'COMPLETE', '', modDate, '', '', '', shp))
 
+        errorFlds = createErrorPts(errorPtsDict, cntyFldr, 'Duchesne_ErrorPts.shp', 'ADDRESS', duchesneCoAddPts)
+
     del iCursor
+
+    # inputDict = {
+    # 'AddSystem':['SGID10.LOCATION.AddressSystemQuadrants', 'GRID_NAME'],
+    # 'City':['SGID10.BOUNDARIES.Municipalities', 'SHORTDESC'],
+    # 'ZipCode':['SGID10.BOUNDARIES.ZipCodes', 'ZIP5'],
+    # 'USNG':['SGID10.INDICES.NationalGrid', 'USNG']
+    # }
 
     inputDict = {
     'AddSystem':['SGID10.LOCATION.AddressSystemQuadrants', 'GRID_NAME'],
     'City':['SGID10.BOUNDARIES.Municipalities', 'SHORTDESC'],
-    'ZipCode':['SGID10.BOUNDARIES.ZipCodes', 'ZIP5'],
-    'USNG':['SGID10.INDICES.NationalGrid', 'USNG']
     }
 
     addPolyAttributes(sgid10, agrcAddPts_duchesneCo, inputDict)
+    dupePts = returnDuplicateAddresses(agrcAddPts_duchesneCo, ['UTAddPtID', 'SHAPE@'])
+    updateErrorPts(os.path.join(cntyFldr, 'Duchesne_ErrorPts.shp'), errorFlds, dupePts)
+    findMissingPts('Duchesne', agrcAddPts_duchesneCo)
 
 
 def emeryCounty():
@@ -2674,7 +2733,7 @@ def utahCounty():
     sgidRds = r'Database Connections\dc_agrc@SGID10@sgid.agrc.utah.gov.sde\SGID10.TRANSPORTATION.Roads'
 
     utahCoAddFLDS = ['ADDRNUM', 'ROADPREDIR', 'ROADNAME', 'ROADTYPE', 'ROADPOSTDIR', 'ADDRTYPE', \
-                     'UNITTYPE', 'UNITID', 'LASTUPDATE', 'SHAPE@', 'LASTEDITOR', 'FULLADDR']
+                     'UNITTYPE', 'UNITID', 'LASTUPDATE', 'SHAPE@', 'LASTEDITOR', 'FULLADDR', 'ZIPCODE']
 
     checkRequiredFields(utahCoAddPts, utahCoAddFLDS)
     truncateOldCountyPts(agrcAddPts_utahCo)
@@ -2688,6 +2747,7 @@ def utahCounty():
     addType = {'Building':'Rooftop', 'Parcel':'Parcel Centroid', 'Building Entrance':'Primary Structure Entrance', \
               'Driveway Turn-off':'Driveway Entrance', 'Unit, Condo or Suite':'Residential', 'Other':'Other', 'Unknown':'Unknown'}
     dirList = ['NORTH', 'SOUTH', 'EAST', 'WEST']
+    stExceptions = ['2720 WEST', 'WILD HORSE POINT', 'RED TAILED CRESCENT']
 
     with arcpy.da.SearchCursor(utahCoAddPts, utahCoAddFLDS) as sCursor_utah:
         for row in sCursor_utah:
@@ -2714,14 +2774,14 @@ def utahCounty():
                     if street.split()[0].isdigit() and street.split()[0] != '0':
                         street = street.split()[0]
 
-                        if row[2].split()[-1] in dirList:
+                        if row[2].split()[-1] in dirList and row[2] not in stExceptions:
                             sufDir = row[2].split()[-1][:1]
 
                             if street.isdigit() == True:
                                 sType = ''
 
                         else:
-                            if row[2].split()[-1][:1] in dirs:
+                            if row[2].split()[-1][:1] in dirs: # and row[2]:
                                 sufDir = row[2].split()[-1][:1]
                             else:
                                 sufDir = ''
@@ -2747,9 +2807,9 @@ def utahCounty():
                             sType = returnKey(row[3], sTypeDir)
 
                 # Fix streets with types in street name
-                if returnKey(street.split()[-1], sTypeDir) in sTypeDir and sType == '':
+                if returnKey(street.split()[-1], sTypeDir) in sTypeDir and sType == '' and street not in stExceptions:
                     sType = returnKey(street.split()[-1], sTypeDir)
-                    street = ' '.join(street.split()[:1])
+                    street = ' '.join(street.split()[:-1])
 
                 # Add missing ST
                 missingStSuf = ['CENTER', 'MAIN', 'STATE']
@@ -2812,6 +2872,10 @@ def utahCounty():
                     fullAdd = '{} {} {} {} {} {} {}'.format(addNum, preDir, street, sufDir, sType, unitType, unitId)
                     fullAdd = ' '.join(fullAdd.split())
 
+                if row[12] == '84059':
+                    zip = row[12]
+                else:
+                    zip = ''
                 shp = row[9]
 
                 # -------Error Points---------------
@@ -2829,10 +2893,11 @@ def utahCounty():
                     addressErrors.extend(['bad street type', row[9]])
                 # ------------------------------------
 
-                iCursor.insertRow(('', '', fullAdd, addNum, '', preDir, street, sType, sufDir, '', '', unitType, unitId, '', '', '49049', \
+                iCursor.insertRow(('', '', fullAdd, addNum, '', preDir, street, sType, sufDir, '', '', unitType, unitId, '', zip, '49049', \
                                    'UT', ptLocation, '', '', '', 'UTAH COUNTY', loadDate, status, editor, modDate, '', '', '', shp))
 
-        createErrorPts(errorPtsDict, cntyFldr, 'Utah_ErrorPts.shp', 'ADDRESS', utahCoAddPts)
+        #createErrorPts(errorPtsDict, cntyFldr, 'Utah_ErrorPts.shp', 'ADDRESS', utahCoAddPts)
+        errorFlds = createErrorPts(errorPtsDict, cntyFldr, 'Utah_ErrorPts.shp', 'ADDRESS', utahCoAddPts)
 
     del iCursor
     del sCursor_utah
@@ -2848,6 +2913,8 @@ def utahCounty():
     addPolyAttributes(sgid10, agrcAddPts_utahCo, inputDict)
     addBaseAddress(agrcAddPts_utahCo)
     deleteDuplicatePts(agrcAddPts_utahCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
+    dupePts = returnDuplicateAddresses(agrcAddPts_utahCo, ['UTAddPtID', 'SHAPE@'])
+    updateErrorPts(os.path.join(cntyFldr, 'Utah_ErrorPts.shp'), errorFlds, dupePts)
 
 
 def uintahCounty():
@@ -3518,9 +3585,10 @@ def addPolyAttributes(sgid10, agrcAddPts, polyDict):
             ucursor = arcpy.da.UpdateCursor(addPtFL, ptFLD)
 
             for urow in ucursor:
-                urow[0] = uniquePoly
+                if urow[0] == None or urow[0] == '':
+                    urow[0] = uniquePoly
 
-                ucursor.updateRow(urow)
+                    ucursor.updateRow(urow)
 
             del ucursor
         del scursor
@@ -3543,7 +3611,7 @@ def addPolyAttributes(sgid10, agrcAddPts, polyDict):
 #cacheCounty()  #Complete w/error points
 #carbonCounty() #Complete
 #daggettCounty() #Complete w/error points
-davisCounty()  #Complete
+#davisCounty()  #Complete
 #duchesneCounty()
 #emeryCounty()  #Complete
 #garfieldCounty()  #Complete
@@ -3562,7 +3630,7 @@ davisCounty()  #Complete
 #summitCounty()
 #tooeleCounty()    #Complete
 #uintahCounty()
-#utahCounty() #Complete
+utahCounty() #Complete
 #wasatchCounty()  #Complete w/error points
 #washingtonCounty()  #Complete
 #wayneCounty()
