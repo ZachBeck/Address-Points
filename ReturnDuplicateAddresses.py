@@ -27,9 +27,9 @@ def returnDuplicateAddresses(inPts, fldList):
         return duplicates
 
 
-def updateErrorPts(updatePts, errorFlds, duplicateDictionary):
+def updateErrorPts(updatePts, errorPtsFlds, duplicateDictionary):
 
-    iCursor = arcpy.da.InsertCursor(updatePts, errorFlds)
+    iCursor = arcpy.da.InsertCursor(updatePts, errorPtsFlds)
 
     for d in duplicateDictionary:
         add = duplicateDictionary[d][0]

@@ -1,23 +1,32 @@
 import arcpy
+import re
 from xxhash import xxh64
 
+def removeNone(word):
+    if word == None:
+        word = ''
+    return word
+
 def deleteDuplicatePts(inPts, inFlds):
+    digestDict = {}
+    duplicateLst = []
+    dupAddressPrintLst = []
+    digTrim = re.compile(r'(\d+\.\d{2})(\d+)')
     with arcpy.da.SearchCursor(inPts, inFlds) as sCursor:
-        digestDict = {}
-        duplicateLst = []
-        dupAddressPrintLst = []
         for row in sCursor:
             if row[1] != None:
-                hash = xxh64(str(row[0] + row[1]))
+                coordTrim = digTrim.sub(r'\1', row[1])
+                row0 = removeNone(row[0])
+                hash = xxh64(str(row0 + coordTrim))
                 digest = hash.hexdigest()
                 if digest not in digestDict:
                     digestDict.setdefault(digest)
                 else:
                     duplicateLst.append(row[2])
-                    dupAddressPrintLst.append(row[0])
+                    dupAddressPrintLst.append(row0)
             if row[1] == None:
                 duplicateLst.append(row[2])
-                dupAddressPrintLst.append(row[0])
+                dupAddressPrintLst.append(row0)
 
         print dupAddressPrintLst
 

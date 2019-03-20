@@ -13,7 +13,8 @@ def deleteAddressPts(inCounty, inPoints):
                 'Wasatch': '49051', 'Washington': '49053', 'Wayne': '49055', 'Weber': '49057'}
 
     if inPoints == appAddressPts:
-        sql = """"CountyID" = """ + "'" + fipsDict[inCounty] + "' and " + """"Status" = 'COMPLETE'"""
+        sql = """"CountyID" = """ + "'" + fipsDict[inCounty] + "'"
+        #sql = """"CountyID" = """ + "'" + fipsDict[inCounty] + "' and " + """"Status" = 'COMPLETE'"""
     else:
         sql = """"CountyID" = """ + "'" + fipsDict[inCounty] + "'"
         #sql = """"CountyID" = """ + "'" + fipsDict[inCounty] + "' and " + """"AddSource" <> 'PARK CITY GIS'"""
@@ -33,6 +34,6 @@ appAddressPts = r'Database Connections\DC_AddressAdmin@AddressPointEditing@itdb1
 sgidAddressPts = r'Database Connections\DC_Location@SGID10@sgid.agrc.utah.gov.sde\SGID10.LOCATION.AddressPoints'
 
 
-deleteAddressPts('Davis', sgidAddressPts) #Update input points and SQL query
+deleteAddressPts('Utah', sgidAddressPts) #Update input points and SQL query
 
 
