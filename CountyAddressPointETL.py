@@ -1544,13 +1544,18 @@ def juabCounty():
 
     del iCursor
 
+    # inputDict = {
+    # 'AddSystem':['SGID10.LOCATION.AddressSystemQuadrants', 'GRID_NAME'],
+    # 'City':['SGID10.BOUNDARIES.Municipalities', 'SHORTDESC'],
+    # 'ZipCode':['SGID10.BOUNDARIES.ZipCodes', 'ZIP5'],
+    # 'USNG':['SGID10.INDICES.NationalGrid', 'USNG']
+    # }
     inputDict = {
-    'AddSystem':['SGID10.LOCATION.AddressSystemQuadrants', 'GRID_NAME'],
+    'AddSystem':['SGID10.POLITICAL.UtahHouseDistricts2012', 'DIST'],
     'City':['SGID10.BOUNDARIES.Municipalities', 'SHORTDESC'],
     'ZipCode':['SGID10.BOUNDARIES.ZipCodes', 'ZIP5'],
     'USNG':['SGID10.INDICES.NationalGrid', 'USNG']
     }
-
     addPolyAttributes(sgid10, agrcAddPts_juabCo, inputDict)
     addBaseAddress(agrcAddPts_juabCo)
     deleteDuplicatePts(agrcAddPts_juabCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
@@ -3474,12 +3479,11 @@ def addPolyAttributes(sgid10, agrcAddPts, polyDict):
         polyFLD = polyDict[input][1]
         ptFLD = [input]
 
-        scursor = arcpy.da.SearchCursor(polyFL, polyFLD)
+        scursor = [row[0] for row in arcpy.da.SearchCursor(polyFL, polyFLD)]
+        sortedPolys = sorted(set(scursor))
 
-        for polys in sorted(set(scursor)):
-            uniquePoly = ''.join(polys)
-            sql = """"{}" = '{}'""".format(polyFLD, uniquePoly)
-
+        for poly in sortedPolys:
+            sql = """"{}" = '{}'""".format(polyFLD, poly)
             arcpy.SelectLayerByAttribute_management(polyFL, "NEW_SELECTION", sql)
             arcpy.SelectLayerByLocation_management(addPtFL, 'WITHIN', polyFL, '', 'NEW_SELECTION')
 
@@ -3487,7 +3491,7 @@ def addPolyAttributes(sgid10, agrcAddPts, polyDict):
 
             for urow in ucursor:
                 if urow[0] == None or urow[0] == '':
-                    urow[0] = uniquePoly
+                    urow[0] = poly
 
                     ucursor.updateRow(urow)
 
