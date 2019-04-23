@@ -54,7 +54,7 @@ def findMissingPts(inCountySGID, compareCounty):
     del sCursor
 
     for d in sgidPtDict:
-        #print d
+        #print (d)
         if d not in cntyPtDict:
             notes = 'changed address or missing point 2'
             iCursor.insertRow((d, notes, sgidPtDict[d]))

@@ -3,7 +3,7 @@ import datetime, time
 
 def deleteAddressPts(inCounty, inPoints):
 
-    print 'START ' + str(datetime.datetime.now())
+    print ('START ' + str(datetime.datetime.now()))
 
     fipsDict = {'Beaver': '49001', 'Box Elder': '49003', 'Cache': '49005', 'Carbon': '49007', 'Daggett': '49009', \
                 'Davis': '49011', 'Duchesne': '49013', 'Emery': '49015', 'Garfield': '49017', 'Grand': '49019', \
@@ -19,14 +19,14 @@ def deleteAddressPts(inCounty, inPoints):
         sql = """"CountyID" = """ + "'" + fipsDict[inCounty] + "'"
         #sql = """"CountyID" = """ + "'" + fipsDict[inCounty] + "' and " + """"AddSource" <> 'PARK CITY GIS'"""
 
-    print sql
+    print (sql)
 
     addPts_FL = arcpy.MakeFeatureLayer_management(inPoints, 'addPts_FL', sql)
-    print 'Made Feature Layer ' + sql
+    print ('Made Feature Layer ' + sql)
     arcpy.DeleteFeatures_management(addPts_FL)
     arcpy.Delete_management(addPts_FL)
 
-    print 'END ' + str(datetime.datetime.now())
+    print ('END ' + str(datetime.datetime.now()))
 
 
 
@@ -34,6 +34,6 @@ appAddressPts = r'Database Connections\DC_AddressAdmin@AddressPointEditing@itdb1
 sgidAddressPts = r'Database Connections\DC_Location@SGID10@sgid.agrc.utah.gov.sde\SGID10.LOCATION.AddressPoints'
 
 
-deleteAddressPts('Utah', sgidAddressPts) #Update input points and SQL query
+deleteAddressPts('Wasatch', sgidAddressPts) #Update input points and SQL query
 
 

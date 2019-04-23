@@ -14,7 +14,7 @@ def createErrorPts(dict, outLocation, outFile, fldName, countySrcPts):
     proj = arcpy.Describe(countySrcPts).SpatialReference
 
     arcpy.CreateFeatureclass_management(outLocation, outFile, 'POINT', '', '', '', proj)
-    print 'Created ' + shp_fullPath
+    print ('Created ' + shp_fullPath)
     arcpy.AddField_management(shp_fullPath, fldName, 'TEXT')
     arcpy.AddField_management(shp_fullPath, 'NOTES', 'TEXT')
     arcpy.DeleteField_management(shp_fullPath, 'Id')
