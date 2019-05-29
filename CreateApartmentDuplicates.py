@@ -3,8 +3,8 @@ import re
 import agrc
 from agrc import parse_address
 
-def addBaseAddress(inAddressPoints):
 
+def addBaseAddress(inAddressPoints):
     def returnEmptyIfNull(word):
         if word == None:
             word = ''
@@ -16,7 +16,8 @@ def addBaseAddress(inAddressPoints):
     addressCoordDict = {}
     addressAttributeDict = {}
 
-    flds = ['AddSystem', 'UTAddPtID', 'FullAdd', 'AddNum', 'AddNumSuffix', 'PrefixDir', 'StreetName', 'StreetType', 'SuffixDir', \
+    flds = ['AddSystem', 'UTAddPtID', 'FullAdd', 'AddNum', 'AddNumSuffix', 'PrefixDir', 'StreetName', 'StreetType',
+            'SuffixDir', \
             'UnitType', 'UnitID', 'City', 'ZipCode', 'CountyID', 'State', 'PtType', 'AddSource', 'LoadDate', 'Status', \
             'USNG', 'SHAPE@XY']
 
@@ -38,7 +39,7 @@ def addBaseAddress(inAddressPoints):
                 stripStr = ' # {}'.format(row[10])
             baseAdd = re.sub(stripStr, '', row[1])
 
-            if baseAdd in baseAddSet and  baseAdd not in allAddsDict:
+            if baseAdd in baseAddSet and baseAdd not in allAddsDict:
                 addCoords = addressCoordDict.setdefault(baseAdd, [])
                 addCoords.append(row[20])
                 addAttributes = addressAttributeDict.setdefault(baseAdd, [])
@@ -79,9 +80,11 @@ def addBaseAddress(inAddressPoints):
                     xSum = xSum + x
                     ySum = ySum + y
 
-                xCoord = xSum/count
-                yCoord = ySum/count
+                xCoord = xSum / count
+                yCoord = ySum / count
                 xyCoord = [xCoord, yCoord]
 
-                iCursror.insertRow((addSys, utAddPtID, fullAdd, addNum, addNumSuf,  preDir, sName, sType, sufDir, '', '', city, zip, county, \
-                                    state, ptType, addSrc, loadDate, 'COMPLETE', usng, xyCoord))
+                iCursror.insertRow((addSys, utAddPtID, fullAdd, addNum, addNumSuf, preDir, sName, sType, sufDir, '', '',\
+                                    city, zip, county, state, ptType, addSrc, loadDate, 'COMPLETE', usng, xyCoord))
+
+

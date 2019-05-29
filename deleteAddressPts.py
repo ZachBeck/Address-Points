@@ -30,10 +30,10 @@ def deleteAddressPts(inCounty, inPoints):
 
 
 
-appAddressPts = r'Database Connections\DC_AddressAdmin@AddressPointEditing@itdb104sp.sde\AddressPointEditing.ADDRESSADMIN.AddressPoints'
-sgidAddressPts = r'Database Connections\DC_Location@SGID10@sgid.agrc.utah.gov.sde\SGID10.LOCATION.AddressPoints'
+appAddressPts = r'C:\ZBECK\Addressing\SGID10.sde\AddressPointEditing.ADDRESSADMIN.AddressPoints'
+sgidAddressPts = r'C:\Users\zbeck\AppData\Roaming\ESRI\Desktop10.5\ArcCatalog\DC_Location@SGID10@sgid.agrc.utah.gov.sde\SGID10.LOCATION.AddressPoints'
 
 
-deleteAddressPts('Wasatch', sgidAddressPts) #Update input points and SQL query
+deleteAddressPts('Carbon', sgidAddressPts) #Update input points and SQL query
 
 

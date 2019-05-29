@@ -56,3 +56,28 @@ def updateAddPtID(inPts):
             uCursor.updateRow(urow)
 
     del uCursor
+
+def updateField(inPts, fld, dict):
+    def returnKey(word, dict):
+        if word == None:
+            word = ''
+        for key, value in dict.items():
+            if word == '':
+                return ''
+            if word == key:
+                return key
+            if type(value) is str:
+                if word == value:
+                    return key
+            else:
+                for v in value:
+                    if word == v:
+                        return key
+        return ''
+
+    with arcpy.da.UpdateCursor(inPts, fld) as uCursor:
+        for urow in uCursor:
+            urow[0] = returnKey(urow[0], dict)
+            uCursor.updateRow(urow)
+
+    del uCursor
