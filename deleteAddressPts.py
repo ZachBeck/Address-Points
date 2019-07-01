@@ -34,6 +34,6 @@ appAddressPts = r'C:\ZBECK\Addressing\SGID10.sde\AddressPointEditing.ADDRESSADMI
 sgidAddressPts = r'C:\Users\zbeck\AppData\Roaming\ESRI\Desktop10.5\ArcCatalog\DC_Location@SGID10@sgid.agrc.utah.gov.sde\SGID10.LOCATION.AddressPoints'
 
 
-deleteAddressPts('Carbon', sgidAddressPts) #Update input points and SQL query
+deleteAddressPts('Beaver', sgidAddressPts) #Update input points and SQL query
 
 
