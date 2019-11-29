@@ -31,9 +31,9 @@ def deleteAddressPts(inCounty, inPoints):
 
 
 appAddressPts = r'C:\ZBECK\Addressing\SGID10.sde\AddressPointEditing.ADDRESSADMIN.AddressPoints'
-sgidAddressPts = r'C:\Users\zbeck\AppData\Roaming\ESRI\Desktop10.5\ArcCatalog\DC_Location@SGID10@sgid.agrc.utah.gov.sde\SGID10.LOCATION.AddressPoints'
+sgidAddressPts = r'C:\sde\SGID_internal\SGID_Location.sde\SGID.LOCATION.AddressPoints'
 
 
-deleteAddressPts('Beaver', sgidAddressPts) #Update input points and SQL query
+deleteAddressPts('Iron', sgidAddressPts) #Update input points and SQL query
 
 

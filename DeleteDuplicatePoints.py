@@ -2,6 +2,7 @@ import arcpy
 import re
 from xxhash import xxh64
 
+
 def removeNone(word):
     if word == None:
         word = ''
@@ -16,17 +17,17 @@ def deleteDuplicatePts(inPts, inFlds):
         for row in sCursor:
             if row[1] != None:
                 coordTrim = digTrim.sub(r'\1', row[1])
-                row0 = removeNone(row[0])
-                hash = xxh64(str(row0 + coordTrim))
+                #row0 = removeNone(row[0])
+                hash = xxh64(str(row[0] + coordTrim))
                 digest = hash.hexdigest()
                 if digest not in digestDict:
                     digestDict.setdefault(digest)
                 else:
                     duplicateLst.append(row[2])
-                    dupAddressPrintLst.append(row0)
+                    dupAddressPrintLst.append(row[0])
             if row[1] == None:
                 duplicateLst.append(row[2])
-                dupAddressPrintLst.append(row0)
+                dupAddressPrintLst.append(row[0])
 
         print (dupAddressPrintLst)
 
@@ -37,3 +38,6 @@ def deleteDuplicatePts(inPts, inFlds):
         arcpy.DeleteFeatures_management(duplicatePts_FL)
     else:
         print ('No Duplicates to Delete')
+
+
+
