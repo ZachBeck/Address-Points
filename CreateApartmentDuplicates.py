@@ -17,9 +17,9 @@ def addBaseAddress(inAddressPoints):
     addressAttributeDict = {}
 
     flds = ['AddSystem', 'UTAddPtID', 'FullAdd', 'AddNum', 'AddNumSuffix', 'PrefixDir', 'StreetName', 'StreetType',
-            'SuffixDir', \
-            'UnitType', 'UnitID', 'City', 'ZipCode', 'CountyID', 'State', 'PtType', 'AddSource', 'LoadDate', 'Status', \
-            'USNG', 'SHAPE@XY']
+            'SuffixDir', 'UnitType', 'UnitID', 'City', 'ZipCode', 'CountyID', 'State', 'PtType', 'AddSource', 
+            'LoadDate', 'Status', 'USNG', 'SHAPE@XY']
+    hwy_exceptions = ['OLD HWY 89']
 
     with arcpy.da.SearchCursor(inAddressPoints, flds) as sCursor:
         for row in sCursor:
@@ -63,6 +63,10 @@ def addBaseAddress(inAddressPoints):
                 sName = returnEmptyIfNull(address.streetName)
                 sufDir = returnEmptyIfNull(address.suffixDirection)
                 sType = returnEmptyIfNull(address.suffixType)
+                if sName[:2].isdigit():
+                    sType = ''
+                if sName.isdigit() == False:
+                    sufDir = ''
                 city = addressAttributeDict[key][1]
                 zip = addressAttributeDict[key][2]
                 county = addressAttributeDict[key][3]

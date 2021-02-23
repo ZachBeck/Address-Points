@@ -24,7 +24,7 @@ def deleteDuplicatePts(inPts, inFlds):
                     digestDict.setdefault(digest)
                 else:
                     duplicateLst.append(row[2])
-                    dupAddressPrintLst.append(row[0])
+                    dupAddressPrintLst.append(f'{row[2]} {row[0]}')
             if row[1] == None:
                 duplicateLst.append(row[2])
                 dupAddressPrintLst.append(row[0])

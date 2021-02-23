@@ -22,7 +22,7 @@ def checkInsidePolys(polyFC, polyFLD, pts, ptsFLDS):
         uniquePoly = ''.join(poly)
         sql = """"{}" = '{}'""".format(polyFLD, uniquePoly)
 
-        print '---------------------' + uniquePoly + '-------------------------'
+        print ('---------------------' + uniquePoly + '-------------------------')
 
         arcpy.SelectLayerByAttribute_management(polyFL, "NEW_SELECTION", sql)
         arcpy.SelectLayerByLocation_management(ptsFL, 'WITHIN', polyFL, '', 'NEW_SELECTION')
@@ -56,7 +56,7 @@ def checkOutsidePolys(polyFC, polyFLD, pts, ptsFLDS, coName):
     ptsFL = arcpy.MakeFeatureLayer_management(pts)
     arcpy.SelectLayerByLocation_management(ptsFL, 'WITHIN', polyFL, '', 'NEW_SELECTION', 'INVERT')
     count = int(arcpy.GetCount_management(ptsFL).getOutput(0))
-    print count
+    print (count)
 
     with arcpy.da.UpdateCursor(ptsFL, ptsFLDS) as uCursor_Pts:
         for urow in uCursor_Pts:

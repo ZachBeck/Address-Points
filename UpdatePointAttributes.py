@@ -1,51 +1,52 @@
 import arcpy
 import os
 
-sgid10 = r'C:\ZBECK\Addressing\SGID10.sde'
+sgid = r'C:\sde\SGID_internal\SGID_agrc.sde'
 
 
-def addPolyAttributes(sgid10, pts, polyLyrDict):
+def addPolyAttributes(sgid, in_features, near_layers_dict):
 
-    arcpy.env.workspace = os.path.dirname(pts)
+    arcpy.env.workspace = os.path.dirname(in_features)
     arcpy.env.overwriteOutput = True
 
     nearFLDS = ['IN_FID', 'NEAR_FID', 'NEAR_DIST']
 
-    for lyr in polyLyrDict:
+    for lyr in near_layers_dict:
 
-        polyFC = sgid10 + '\\' + polyLyrDict[lyr][0]
-        print (polyFC)
+        near_features = sgid + '\\' + near_layers_dict[lyr][0]
+        print (near_features)
 
-        nearTBL = '{}_nearTbl'.format(lyr)
+        near_table = '{}_nearTbl'.format(lyr)
 
-        arcpy.GenerateNearTable_analysis(pts, polyFC, nearTBL, '1 Meters', 'NO_LOCATION', 'NO_ANGLE', 'CLOSEST')
+        arcpy.GenerateNearTable_analysis(in_features, near_features, near_table, '1 Meters', 'NO_LOCATION', 'NO_ANGLE', 'CLOSEST')
 
-        pt2Poly_Dict = {}
-        polyDict = {}
+        feature_to_near_features_dict = {}
+        near_features_dict = {}
 
-        polyLyrFLDS = ['OBJECTID', polyLyrDict[lyr][1]]
+        near_feature_flds = ['OBJECTID', near_layers_dict[lyr][1]]
 
-        with arcpy.da.SearchCursor(nearTBL, nearFLDS) as sCursor:
+        with arcpy.da.SearchCursor(near_table, nearFLDS) as sCursor:
             for row in sCursor:
-                pt2Poly_Dict[row[0]] = row[1]
-                polyDict.setdefault(row[1])
-        with arcpy.da.SearchCursor(polyFC, polyLyrFLDS) as sCursor:
+                feature_to_near_features_dict[row[0]] = row[1]
+                near_features_dict.setdefault(row[1])
+        with arcpy.da.SearchCursor(near_features, near_feature_flds) as sCursor:
             for row in sCursor:
-                if row[0] in polyDict:
-                    polyDict[row[0]] = row[1]
+                if row[0] in near_features_dict:
+                    near_features_dict[row[0]] = row[1]
 
         ucursorFLDS = ['OBJECTID', lyr]
-        ucursor = arcpy.da.UpdateCursor(pts, ucursorFLDS)
+        ucursor = arcpy.da.UpdateCursor(in_features, ucursorFLDS)
         for urow in ucursor:
             try:
-                if pt2Poly_Dict[urow[0]] in polyDict:
-                   urow[1] =  polyDict[pt2Poly_Dict[urow[0]]]
+                if feature_to_near_features_dict[urow[0]] in near_features_dict:
+                   urow[1] = near_features_dict[feature_to_near_features_dict[urow[0]]]
             except:
-                urow[1] = ''
+                continue
+                #urow[1] = ''
 
             ucursor.updateRow(urow)
 
-        arcpy.Delete_management(nearTBL)
+        arcpy.Delete_management(near_table)
 
 
 def updateAddPtID(inPts):

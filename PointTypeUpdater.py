@@ -111,7 +111,8 @@ def addPolyAttributesLIR(sgid10, pts, polyLyrDict, lirDict):
                 if pt2Poly_Dict[urow[0]] in polyDict:
                    urow[1] = returnKey(polyDict[pt2Poly_Dict[urow[0]]], lirDict)
             except:
-                urow[1] = ''
+                print(urow[1])
+                #urow[1] = ''
 
             ucursor.updateRow(urow)
 
