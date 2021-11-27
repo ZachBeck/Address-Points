@@ -34,10 +34,18 @@ def deleteDuplicatePts(inPts, inFlds):
     if len(duplicateLst) >= 1:
         sql = '"OBJECTID" IN ({})'.format(', '.join(str(d) for d in duplicateLst))
         duplicatePts_FL = arcpy.MakeFeatureLayer_management(inPts, 'duplicatePts_FL', sql)
-        print ('Deleted {} records'.format(len(duplicateLst)))
+        print ('Deleted {} duplicates'.format(len(duplicateLst)))
         arcpy.DeleteFeatures_management(duplicatePts_FL)
     else:
         print ('No Duplicates to Delete')
+
+def delete_by_query(in_pts, sql):
+    '''Used to delete points that can not be removed with the attributes provided
+       by the county (i.e Park City points in Wasatch County)'''
+    delete_pts_fl = arcpy.MakeFeatureLayer_management(in_pts, 'delete_pts_fl', sql)
+    delete_count = int(arcpy.GetCount_management(delete_pts_fl).getOutput(0))
+    arcpy.DeleteFeatures_management(delete_pts_fl)
+    print(f'Deleted {delete_count} records with {sql}')
 
 
 

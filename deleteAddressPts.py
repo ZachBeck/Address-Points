@@ -13,10 +13,10 @@ def deleteAddressPts(inCounty, inPoints):
                 'Wasatch': '49051', 'Washington': '49053', 'Wayne': '49055', 'Weber': '49057'}
 
     if inPoints == appAddressPts:
-        sql = """"CountyID" = """ + "'" + fipsDict[inCounty] + "'"
+        sql = f'"CountyID" = \'{fipsDict[inCounty]}\''
         #sql = """"CountyID" = """ + "'" + fipsDict[inCounty] + "' and " + """"Status" = 'COMPLETE'"""
     else:
-        sql = """"CountyID" = """ + "'" + fipsDict[inCounty] + "'"
+        sql = f'"CountyID" = \'{fipsDict[inCounty]}\''
         #sql = """"CountyID" = """ + "'" + fipsDict[inCounty] + "' and " + """"AddSource" <> 'PARK CITY GIS'"""
 
     print (sql)
@@ -34,6 +34,6 @@ appAddressPts = r'C:\ZBECK\Addressing\SGID10.sde\AddressPointEditing.ADDRESSADMI
 sgidAddressPts = r'C:\sde\SGID_internal\SGID_Location.sde\SGID.LOCATION.AddressPoints'
 
 
-deleteAddressPts('Garfield', sgidAddressPts) #Update input points and SQL query
+deleteAddressPts('Washington', sgidAddressPts) #Update input points and SQL query
 
 

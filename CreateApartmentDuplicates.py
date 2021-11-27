@@ -18,7 +18,7 @@ def addBaseAddress(inAddressPoints):
 
     flds = ['AddSystem', 'UTAddPtID', 'FullAdd', 'AddNum', 'AddNumSuffix', 'PrefixDir', 'StreetName', 'StreetType',
             'SuffixDir', 'UnitType', 'UnitID', 'City', 'ZipCode', 'CountyID', 'State', 'PtType', 'AddSource', 
-            'LoadDate', 'Status', 'USNG', 'SHAPE@XY']
+            'LoadDate', 'Status', 'ParcelID', 'USNG', 'SHAPE@XY']
     hwy_exceptions = ['OLD HWY 89']
 
     with arcpy.da.SearchCursor(inAddressPoints, flds) as sCursor:
@@ -41,9 +41,9 @@ def addBaseAddress(inAddressPoints):
 
             if baseAdd in baseAddSet and baseAdd not in allAddsDict:
                 addCoords = addressCoordDict.setdefault(baseAdd, [])
-                addCoords.append(row[20])
+                addCoords.append(row[21])
                 addAttributes = addressAttributeDict.setdefault(baseAdd, [])
-                addAttributes.extend([row[0], row[11], row[12], row[13], row[15], row[17], row[19]])
+                addAttributes.extend([row[0], row[11], row[12], row[13], row[15], row[17], row[19], row[20]])
 
     iCursror = arcpy.da.InsertCursor(inAddressPoints, flds)
 
@@ -72,9 +72,10 @@ def addBaseAddress(inAddressPoints):
                 county = addressAttributeDict[key][3]
                 state = 'UT'
                 ptType = 'BASE ADDRESS'
-                addSrc = 'AGRC'
+                addSrc = 'UGRC'
                 loadDate = addressAttributeDict[key][5]
-                usng = addressAttributeDict[key][6]
+                parcel_id = addressAttributeDict[key][6]
+                usng = addressAttributeDict[key][7]
                 coords = value
                 xSum = 0
                 ySum = 0
@@ -89,6 +90,6 @@ def addBaseAddress(inAddressPoints):
                 xyCoord = [xCoord, yCoord]
 
                 iCursror.insertRow((addSys, utAddPtID, fullAdd, addNum, addNumSuf, preDir, sName, sType, sufDir, '', '',\
-                                    city, zip, county, state, ptType, addSrc, loadDate, 'COMPLETE', usng, xyCoord))
+                                    city, zip, county, state, ptType, addSrc, loadDate, 'COMPLETE', parcel_id, usng, xyCoord))
 
 

@@ -3,6 +3,22 @@ import os
 
 sgid = r'C:\sde\SGID_internal\SGID_agrc.sde'
 
+def returnKey(word, d):
+    if word == None:
+        word = ''
+    for key, value in d.items():
+        # if word == '':
+        #     return ''
+        if word == key:
+            return key
+        if type(value) is str:
+            if word == value:
+                return key
+        else:
+            for v in value:
+                if word == v:
+                    return key
+    return ''
 
 def addPolyAttributes(sgid, in_features, near_layers_dict):
 
@@ -36,10 +52,16 @@ def addPolyAttributes(sgid, in_features, near_layers_dict):
 
         ucursorFLDS = ['OBJECTID', lyr]
         ucursor = arcpy.da.UpdateCursor(in_features, ucursorFLDS)
+        
         for urow in ucursor:
             try:
                 if feature_to_near_features_dict[urow[0]] in near_features_dict:
-                   urow[1] = near_features_dict[feature_to_near_features_dict[urow[0]]]
+                    if near_layers_dict[lyr][2] == '':
+                        urow[1] = near_features_dict[feature_to_near_features_dict[urow[0]]]
+                    else:
+                        #print(returnKey(near_features_dict[feature_to_near_features_dict[urow[0]]], near_layers_dict[lyr][2]))
+                        urow[1] = returnKey(near_features_dict[feature_to_near_features_dict[urow[0]]], near_layers_dict[lyr][2])
+                        print(urow[1])
             except:
                 continue
                 #urow[1] = ''
