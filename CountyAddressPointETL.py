@@ -38,7 +38,7 @@ dirs2 = {'N':'NORTH', 'S':'SOUTH', 'E':'EAST', 'W':'WEST'}
 longDirs = ['NORTH', 'SOUTH', 'EAST', 'WEST']
 
 sTypeDir = {'ALY':'ALLEY', 'AVE':'AVENUE', 'BAY':'BAY', 'BND':'BEND', 'BLVD':'BOULEVARD', 'CYN':'CANYON', \
-            'CTR':'CENTER', 'CIR':'CIRCLE', 'COR':'CORNER', 'CT':'COURT', 'CV':'COVE', 'CRK':'CREEK', \
+            'CTR':'CENTER', 'CIR':['CR', 'CIRCLE'], 'COR':'CORNER', 'CT':'COURT', 'CV':'COVE', 'CRK':'CREEK', \
             'CRES':'CRESCENT', 'XING':'CROSSING', 'DR':'DRIVE', 'EST':'ESTATE', 'ESTS':'ESTATES', \
             'EXPY':'EXPRESSWAY', 'FLT':'FLAT', 'FRK':'FORK', 'FWY':'FREEWAY', 'GLN':'GLEN', 'GRV':'GROVE', \
             'HTS':'HEIGHTS','HWY':'HIGHWAY', 'HL':'HILL', 'HOLW':'HOLLOW', 'JCT':'JUNCTION', 'LN':'LANE', \
@@ -74,6 +74,14 @@ leadingSpaceTypes = []
 for t in sTypeDir:
     leadingSpaceTypes.append(' {}'.format(t))
     leadingSpaceTypes.append(' STREET')
+
+class clean_street_name:
+    def __init__(self, words):
+        self.name = ' '.join(words.split()[:-1])
+        self.type = words.split()[-1]
+        self.sdir = words[-1]
+    def fix_road_name(road_name):
+        return clean_street_name(road_name)
 
 def replaceByDictionary(string, dict):
     for i in dict:
@@ -339,7 +347,7 @@ def boxElderCounty():
     cntyFldr = r'C:\ZBECK\Addressing\BoxElder'
 
     boxelderCoAddFLDS = ['FullAddr', 'HouseNum', 'PreDir', 'StreetName', 'StreetType', 'SufDir', 'UnitNumber', 'UnitType', 'City', \
-                         'ZipCode', 'Parcel_ID', 'Structure', 'COMPLEX_NA', 'Use_Classi', 'last_edited_date', 'SHAPE@']
+                         'ZipCode', 'Parcel_ID', 'Structure', 'COMPLEX_NA', 'Use_Classi', 'last_edi_1', 'SHAPE@']
 
     # useDict = {'AGR':'Agricultural', 'COM':'Commercial', 'EDU':'Education', 'GOV':'Government', 'MED':'Other', 'RES':'Residential',\
     #           'MHU':'Residential', 'MOB':'Residential', 'REL':'Other', 'VAC':'Vacant'}
@@ -383,7 +391,9 @@ def boxElderCounty():
                 if sName.endswith((' RD', ' DR', ' ST', ' AVE')):
                     sType = sName[-2:]
                     sName = sName[:-2].strip()
-                    print (sName)
+                if sName[0].isdigit() == True and sName.endswith((' N', ' S', ' E', ' W')):
+                    sufDir = sName[-1]
+                    sName = sName.replace(sName[-2:], '')
 
                 if sName.startswith(('HIGHWAY ')):
                     sName = sName.replace('HIGHWAY', 'HWY')
@@ -777,9 +787,7 @@ def carbonCounty():
                     sufDir = ''
                 if sName == 'MAIN':
                     sType = 'ST'
-                if sName == 'SCENIC VIEW VIEW':
-                    sType = ''
-                    sName = 'SCENIC VIEW'
+
                 if sName == '1777 S HWY 10':
                     sName = 'HWY 10'
 
@@ -791,7 +799,10 @@ def carbonCounty():
                     sType = returnKey(row[6], sTypeDir)
                     sufDir = ''
 
-                if sName == 'HIGHWAY' or 'HIGHWAY 6' in row[2]:
+                if sName == 'SCENIC VIEW':
+                    sType = ''
+
+                if 'HIGHWAY 6' in row[2]:
                     sName = 'HWY 6'
                     if sType != '':
                         addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[2], row[6]), [])
@@ -1217,8 +1228,9 @@ def davisCounty():
         'PtType': ['SGID.CADASTRE.Parcels_Davis_LIR', 'PROP_CLASS', remapLIR]
     }
 
-    fix_residential_type = {'PtType': ['SGID.CADASTRE.Parcels_Davis_LIR', 'PRIMARY_RES']}
-    remap_residential = {'Residential':'Y'}
+    #fix_residential_type = {'PtType': ['SGID.CADASTRE.Parcels_Davis_LIR', 'PRIMARY_RES']}
+    fix_residential_type = {'PtType': ['PLANNING.HousingUnitInventory', 'COUNTY']}
+    remap_residential = {'Residential':'Davis'}
 
     addPolyAttributes(sgid, agrcAddPts_davisCo, inputDict)
     #addPolyAttributesLIR(sgid, agrcAddPts_davisCo, davisLIR, remapLIR)
@@ -1446,7 +1458,7 @@ def emeryCounty():
 
 
 def garfieldCounty():
-    garfieldCoAddPts = r'C:\ZBECK\Addressing\Garfield\GarfieldCounty.gdb\GarfieldAddressPts_2021'
+    garfieldCoAddPts = r'C:\ZBECK\Addressing\Garfield\GarfieldCounty.gdb\GarfieldCountyPts'
     agrcAddPts_garfieldCo = r'C:\ZBECK\Addressing\Garfield\Garfield.gdb\AddressPoints_Garfield'
     cntyFldr = r'C:\ZBECK\Addressing\Garfield'
 
@@ -1465,9 +1477,10 @@ def garfieldCounty():
                 'HOMESTEADE':'HOMESTEAD', 'KINGSS RANCH':'KINGS RANCH', 'KODACHOME':'KODACHROME', 'LEFEVER':'LEFEVRE',
                 'MONKIA':'MONIKA', 'NOTH RUSSEL':'RUSSEL', 'PANSAUGUNT C;LIFFS':'PAUNSAUGUNT CLIFFS',
                 'PINION BRANCH NORTH DRIVE':'PINION BRANCH NORTH', 'PONDERPSA':'PONDEROSA', 'PONDEROSE':'PONDEROSA',
-                'PONDEROSE TRAILS':'PONDEROSA TRAILS', 'RESERVIOR':'RESERVOIR', 'SHANGRA':'SHANGRA LA', 'S0UTHVIEW':'SOUTHVIEW',
-                'SKOTTS CREEK':'SKOOTS CREEK', 'SQAUW BERRY':'SQUAW BERRY', 'TROUT STREET':'TROUT', 'UHIGHWAY 89':'HWY 89',
-                'US':'HWY 89', 'US HIGHWAY 89':'HWY 89', 'WOOKCHUCK':'WOODCHUCK'}
+                'PONDEROSE TRAILS':'PONDEROSA TRAILS', 'RESERVIOR':'RESERVOIR', 'SHANGRA':'SHANGRA LA', 
+                'S0UTHVIEW':'SOUTHVIEW', 'SKOTTS CREEK':'SKOOTS CREEK', 'STATE HIGHWAY 276':'HWY 276', 
+                'STATE HWY 12':'HWY 12', 'SQAUW BERRY':'SQUAW BERRY', 'TROUT STREET':'TROUT', 'UHIGHWAY 89':'HWY 89',
+                'US':'HWY 89', 'US HIGHWAY 89':'HWY 89', 'UTAH STATE':'HWY 12', 'WOOKCHUCK':'WOODCHUCK'}
 
     with arcpy.da.SearchCursor(garfieldCoAddPts, garfieldCoAddFLDS) as sCursor, \
         arcpy.da.InsertCursor(agrcAddPts_garfieldCo, agrcAddFLDS) as iCursor:
@@ -1490,6 +1503,8 @@ def garfieldCounty():
                     sName = fix_name[sName]
 
                 sType = returnKey(row[7], sTypeDir)
+                if 'HWY' in sName:
+                    sType = ''
                 sufDir = returnKey(row[8], dirs)
                 unitId = removeBadValues(row[12], errorList)
                 ptLocation = row[17]
@@ -1643,28 +1658,34 @@ def ironCounty():
     cntyFldr = r'C:\ZBECK\Addressing\Iron'
 
     ironCoAddFLDS = ['AddrNum', 'AddrPD', 'AddrSN', 'AddrST', 'AddrSD', 'UnitType', 'UnitID', 'Date', 'SHAPE@', 'FullAddr']
+    ironCoAddFLDS = ['AddNum', 'PrefixDir', 'StreetName', 'StreetType', 'SuffixDir', 'UnitType', 'UnitID', 'LoadDate', 'SHAPE@', 'FullAdd']
 
     checkRequiredFields(ironCoAddPts, ironCoAddFLDS)
     truncateOldCountyPts(agrcAddPts_ironCo)
 
     errorPtsDict = {}
     rdSet = createRoadSet('49021')
-    fakeStreets = ['BETH', 'KARI', 'RAQUEL', 'RHONDA', 'RONI']
-    fixStreets = {'AAROTIPPETS':'AARON TIPPETS', 'APPLBLOSSOM':'APPLE BLOSSOM', 'AHSDOWFOREST':'ASHDOWN FOREST', 'ASHDOWFOREST':'ASHDOWN FOREST',
-                  'ANTELOPSPRINGS':'ANTELOPE SPRINGS', 'APPLALOOSA':'APPALOOSA', 'APPLEBLOSSOM':'APPLE BLOSSOM', 'ASPERIDGE':'ASPEN RIDGE',
-                  'AVIATON':'AVIATION', 'BEACOHL':'BEACON', 'BLUJAY':'BLUE JAY', 'BUMBLEBESPRING':'BUMBLEBEE SPRING', 'CANYOBREEZE':'CANYON BREEZE',
-                  'CEDAR KNOLLSOUTH':'CEDAR KNOLLS SOUTH', 'COMMERCCENTER':'COMMERCE CENTER', 'COVCANYON':'COVE CANYON', 'COVVIEW':'COVE VIEW',
-                  'COVEREDAGON':'COVERED WAGON', 'COVHEIGHTS':'COVE HEIGHTS', 'DOUBLTREE':'DOUBLE TREE', 'SILVERSPUR':'SILVER SPUR',
-                  'EAGLEROOST':'EAGLES ROOST', 'EAGLRIDGE':'EAGLE RIDGE', 'GLECANYON':'GLEN CANYON', 'GOLDELEAF':'GOLDEN LEAF', 'TOBAGGAN':'TOBOGGAN',
-                  'GREENLAKE':'GREENS LAKE', 'GUIDELIGHT':'GUIDE LIGHT', 'HERITAGHILLS':'HERITAGE HILLS', 'HIDDEHILLS':'HIDDEN HILLS',
-                  'HIDDELAKE':'HIDDEN LAKE', 'HIGH MOUNTAIVIEW':'HIGH MOUNTAIN VIEW', 'HOUSROCK':'HOUSE ROCK', 'LITTLPINTO CREEK':'LITTLE PINTO CREEK',
-                  'LITTLSALT LAKE':'LITTLE SALT LAKE', 'LODGLAKE':'LODGE LAKE', 'LUMDERJACK':'LUMBERJACK', 'KIMBERLEY':'KIMBERLY', 'MAPLCANYON':'MAPLE CANYON', 
-                  'MARBLCANYON':'MARBLE CANYON', 'MARSHALL':'MARSHAL', 'MEADOLAKE':'MEADOW LAKE', 'MOUNTAIVALLEY':'MOUNTAIN VALLEY', 'MOUNTAIVIEW':'MOUNTAIN VIEW', 'MOUNTIAVIEW':'MOUNTAIN VIEW',
-                  'MT VIEW':'MOUNTAIN VIEW', 'MULTRIAN':'MULE TRAIN', 'MULETRAIN':'MULE TRAIN', 'MULTRAIN':'MULE TRAIN', 'NIFTWOOD':'DRIFT WOOD',
-                  'NY LAKES':'DRY LAKES', 'OLD HWY91':'OLD HWY 91', 'OLDIROTOWN':'IRONTOWN', 'PAINTBRUST':'PAINTBRUSH', 'PARADISCANYON':'PARADISE CANYON',
-                  'PINCANYON':'PINE CANYON', 'PINHURST':'PINEHURST', 'PROVIDENC CENTER':'PROVIDENCE CENTER', 'PROVIDENCCENTER':'PROVIDENCE CENTER', 'RIDGVIEW':'RIDGE VIEW',
-                  'ROBBERROOST':'ROBBERS ROOST', 'RUJOLLEY':'RUE JOLLEY', 'SADDLBACK':'SADDLE BACK', 'SCLEWAY':'CIRCLEWAY', 'SUISE':'SUNRISE',
-                  'SHOOTINGAR':'SHOOTING STAR', 'SNOSHOE':'SNOW SHOE', 'SOUTHERVIEW':'SOUTHERN VIEW', 'SPLINTERWOOD':'SPLINTER WOOD', 'TRIPLDUECE':'TRIPLE DUECE'}
+    # fixStreets = {'AAROTIPPETS':'AARON TIPPETS', 'APPLBLOSSOM':'APPLE BLOSSOM', 'AHSDOWFOREST':'ASHDOWN FOREST', 'ASHDOWFOREST':'ASHDOWN FOREST',
+    #               'ANTELOPSPRINGS':'ANTELOPE SPRINGS', 'APPLALOOSA':'APPALOOSA', 'APPLEBLOSSOM':'APPLE BLOSSOM', 'ASPERIDGE':'ASPEN RIDGE',
+    #               'AVIATON':'AVIATION', 'BEACOHL':'BEACON', 'BLUJAY':'BLUE JAY', 'BUMBLEBESPRING':'BUMBLEBEE SPRING', 'CANYOBREEZE':'CANYON BREEZE',
+    #               'CEDAR KNOLLSOUTH':'CEDAR KNOLLS SOUTH', 'COMMERCCENTER':'COMMERCE CENTER', 'COVCANYON':'COVE CANYON', 'COVVIEW':'COVE VIEW',
+    #               'COVEREDAGON':'COVERED WAGON', 'COVHEIGHTS':'COVE HEIGHTS', 'DOUBLTREE':'DOUBLE TREE', 'SILVERSPUR':'SILVER SPUR',
+    #               'EAGLEROOST':'EAGLES ROOST', 'EAGLRIDGE':'EAGLE RIDGE', 'GLECANYON':'GLEN CANYON', 'GOLDELEAF':'GOLDEN LEAF', 'TOBAGGAN':'TOBOGGAN',
+    #               'GREENLAKE':'GREENS LAKE', 'GUIDELIGHT':'GUIDE LIGHT', 'HERITAGHILLS':'HERITAGE HILLS', 'HIDDEHILLS':'HIDDEN HILLS',
+    #               'HIDDELAKE':'HIDDEN LAKE', 'HIGH MOUNTAIVIEW':'HIGH MOUNTAIN VIEW', 'HOUSROCK':'HOUSE ROCK', 'LITTLPINTO CREEK':'LITTLE PINTO CREEK',
+    #               'LITTLSALT LAKE':'LITTLE SALT LAKE', 'LODGLAKE':'LODGE LAKE', 'LUMDERJACK':'LUMBERJACK', 'KIMBERLEY':'KIMBERLY', 'MAPLCANYON':'MAPLE CANYON', 
+    #               'MARBLCANYON':'MARBLE CANYON', 'MARSHALL':'MARSHAL', 'MEADOLAKE':'MEADOW LAKE', 'MOUNTAIVALLEY':'MOUNTAIN VALLEY', 'MOUNTAIVIEW':'MOUNTAIN VIEW', 'MOUNTIAVIEW':'MOUNTAIN VIEW',
+    #               'MT VIEW':'MOUNTAIN VIEW', 'MULTRIAN':'MULE TRAIN', 'MULETRAIN':'MULE TRAIN', 'MULTRAIN':'MULE TRAIN', 'NIFTWOOD':'DRIFT WOOD',
+    #               'NY LAKES':'DRY LAKES', 'OLD HWY91':'OLD HWY 91', 'OLDIROTOWN':'IRONTOWN', 'PAINTBRUST':'PAINTBRUSH', 'PARADISCANYON':'PARADISE CANYON',
+    #               'PINCANYON':'PINE CANYON', 'PINHURST':'PINEHURST', 'PROVIDENC CENTER':'PROVIDENCE CENTER', 'PROVIDENCCENTER':'PROVIDENCE CENTER',
+    #               'PROVIDENICE CENTER':'PROVIDENCE CENTER', 'RIDGVIEW':'RIDGE VIEW','ROBBERROOST':'ROBBERS ROOST', 'RUJOLLEY':'RUE JOLLEY',
+    #               'SADDLBACK':'SADDLE BACK', 'SCLEWAY':'CIRCLEWAY', 'SUISE':'SUNRISE', 'SHOOTINGAR':'SHOOTING STAR', 'SNOSHOE':'SNOW SHOE',
+    #               'SOUTHERVIEW':'SOUTHERN VIEW', 'SPLINTERWOOD':'SPLINTER WOOD', 'TIMBERNEST':'TIMBERCREST', 'TRIPLDUECE':'TRIPLE DUECE'}
+    fixStreets = {'HALFCLE':'HALF CIRCLE', 'IROTOWLOOKOUT':'IRON TOWN LOOKOUT',  'JACKSOPOINT':'JACKSON POINT',
+                  'LITTLCREEK CANYON':'LITTLE CREEK CANYON', 'PROVIDENICE CENTER':'PROVIDENCE CENTER', 'VAQUERO WAYM':'VAQUERO WAY',
+                  'VASLES':'VASELS', 'VASSELS':'VASELS'}
+    fullname_roads = ['5300 N', 'ANTELOPE RD', 'CEDAR BLUFF DR', 'GAP RD', 'GRAND VW', 'GRIMSHAW LN', 'IRON SPRINGS RD', 'LUND HWY',
+                      'MIDVALLEY RD', 'MINERSVILLE HWY', 'SKI VIEW DR', 'TIPPLE RD', 'VAQUERO WAY',  'WECCO RD']
 
     iCursor = arcpy.da.InsertCursor(agrcAddPts_ironCo, agrcAddFLDS)
 
@@ -1678,7 +1699,7 @@ def ironCounty():
             sType = returnKey(row[3], sTypeDir)
 
             if row[2] not in errorList:
-                sName = row[2]
+                sName = row[2].upper()
 
                 if sName[:2] == 'SR' and sName[2].isdigit():
                     sName = sName.replace('SR', 'HWY ')
@@ -1702,6 +1723,15 @@ def ironCounty():
 
             sufDir = returnKey(row[4], dirs)
 
+            if sName in fullname_roads:
+                long_sname = clean_street_name(sName)
+                sName = long_sname.name
+                sType = long_sname.type
+                if sName.isdigit() == True:
+                    sType = ''
+                    sufDir = long_sname.sdir
+
+
             if sName == 'COVERED WAGON':
                 sType = 'DR'
                 sufDir = ''
@@ -1709,19 +1739,9 @@ def ironCounty():
             landmark = ''
             unitType = returnKey(row[5], unitTypeDir)
             unitID = removeBadValues(row[6], errorList)
-            mDate = row[7]
+            mDate = None
             loadDate = today
             shp = row[8]
-
-            if sName in fakeStreets:
-                addNum = '1435'
-                preDir = 'W'
-                sName = '200'
-                sufDir = 'S'
-                sType = ''
-                unitType = 'TRLR'
-                unitID = row[0]
-                landmark = 'Foothills RV Park'
 
             if unitType == '' and unitID != '':
                 fullAdd = '{} {} {} {} {} # {}'.format(addNum, preDir, sName, sType, sufDir, unitID)
@@ -1733,7 +1753,7 @@ def ironCounty():
             fullAdd = ' '.join(fullAdd.split())
 
             iCursor.insertRow(('', '', fullAdd, addNum, '', preDir, sName, sType, sufDir, landmark, '', unitType, unitID, '', '', '49021', \
-                              'UT', '', '', '', '', 'IRON COUNTY', loadDate, 'COMPLETE', '', mDate, '', '', '', shp))
+                               'UT', '', '', '', '', 'IRON COUNTY', loadDate, 'COMPLETE', '', mDate, '', '', '', shp))
 
         errorFlds = createErrorPts(errorPtsDict, cntyFldr, 'Iron_ErrorPts.shp', ironCoAddFLDS[9], ironCoAddPts)
 
@@ -1924,7 +1944,7 @@ def kaneCounty():
                     fullAdd = f'{addNum} {preDir} {streetName} {sufDir} {streetType} # {unitId}'
                     #fullAdd = ' '.join(fullAdd.split())
                 else:
-                    fullAdd = f'{addNum} {preDir} {streetName} {sufDir} {streetType} {unitId}'
+                    fullAdd = f'{addNum} {preDir} {streetName} {sufDir} {streetType} {unitType} {unitId}'
                     #fullAdd = ' '.join(fullAdd.split())
 
             else:
@@ -1970,8 +1990,8 @@ def kaneCounty():
     addBaseAddress(agrcAddPts_kaneCo)
 
 
-def millardCounty():
-    millardCoAddPts = r'C:\ZBECK\Addressing\Millard\MillardSource.gdb\Millard_Addresses_July2021'
+def millardCountyOLD():
+    millardCoAddPts = r'C:\ZBECK\Addressing\Millard\MillardSource.gdb\Millard_Address_Points_Dec2021'
     agrcAddPts_millardCo = r'C:\ZBECK\Addressing\Millard\Millard.gdb\AddressPoints_Millard'
     cntyFldr = r'C:\ZBECK\Addressing\Millard'
 
@@ -2081,7 +2101,7 @@ def millardCounty():
                                    '', '', '49027', 'UT', 'Unknown', 'Unknown', 'Unknown', '', 'MILLARD COUNTY', today, 'COMPLETE', '', None,\
                                    '', '', '', shp))
 
-        createErrorPts(errorPtsDict, cntyFldr, 'MillardCounty_ErrorPts.shp', 'ADDRESS', millardCoAddPts)
+        error_pts = createErrorPts(errorPtsDict, cntyFldr, 'Millard_ErrorPts.shp', 'ADDRESS', millardCoAddPts)
 
     del iCursor
 
@@ -2097,6 +2117,117 @@ def millardCounty():
     updateAddPtID(agrcAddPts_millardCo)
     addBaseAddress(agrcAddPts_millardCo)
     deleteDuplicatePts(agrcAddPts_millardCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
+    dupePts = returnDuplicateAddresses(agrcAddPts_millardCo, ['UTAddPtID', 'SHAPE@'])
+    updateErrorPts(os.path.join(cntyFldr, 'Millard_ErrorPts.shp'), error_pts, dupePts)
+
+def millardCounty():
+    millardCoAddPts = r'C:\ZBECK\Addressing\Millard\MillardSource.gdb\Millard_AddressCAD_Jan_2022'
+    agrcAddPts_millardCo = r'C:\ZBECK\Addressing\Millard\Millard.gdb\AddressPoints_Millard'
+    cntyFldr = r'C:\ZBECK\Addressing\Millard'
+
+    millardCoAddFLDS = ['NUMB', 'PREDIR', 'STREETNAME', 'STREETTYPE', 'UNIT_TYPE', 'UNIT_ID', 'SHAPE@']
+
+    name_types = (' AVE', ' DR', ' LANE', ' LN', ' RD', ' WAY')
+    fix_names = {'8430 SOUTH (SANDHILLS RD)':'SANDHILLS RD', 'BIRCH DR (450 SOUTH)':'BIRCH DR',
+                 'OLDFIELD':'OLD FIELD', 'US HIGHWAY 50':'HWY 50', 'TAMERIX':'TAMARIX'}
+
+    errorPtsDict = {}
+    rdSet = createRoadSet('49027')
+
+    checkRequiredFields(millardCoAddPts, millardCoAddFLDS)
+    truncateOldCountyPts(agrcAddPts_millardCo)
+
+    with arcpy.da.SearchCursor(millardCoAddPts, millardCoAddFLDS) as sCursor_millardCo, \
+        arcpy.da.InsertCursor(agrcAddPts_millardCo, agrcAddFLDS) as iCursor:
+
+        for row in sCursor_millardCo:
+            if row[0] != '' and row[2] != '':
+
+                addNum = row[0]
+                sType = returnKey(row[3], sTypeDir)
+                predir = row[1].strip()
+                unitType = returnKey(row[4].strip(), unitTypeDir)
+                unitId = row[5].strip()
+
+                if row[2][1].isdigit() == True:
+                    sName = row[2].split()[0]
+                    sufdir = returnKey(row[2].split()[1], dirs)
+                    sType = ''
+                else:
+                    sName = row[2].upper()
+                    sType = returnKey(row[3], sTypeDir)
+                    sufdir = ''
+
+
+                if sName in fix_names:
+                    sName = fix_names[sName]
+                
+                if sName.startswith('HIGHWAY'):
+                    sName = sName.replace('HIGHWAY', 'HWY')
+                if sName.endswith('HIGHWAY'):
+                    sType = 'HWY'
+                    sName = sName[:-8]
+                if sName.startswith('HWY'):
+                    sType = ''
+                
+
+
+                if sName.endswith((name_types)):
+                    sType = returnKey(sName.split()[-1], sTypeDir)
+                    sName = ' '.join(sName.split()[:-1]).strip()
+
+                if 'O' in addNum:
+                    addNum = addNum.replace('O', '0')
+                addNum = re.sub('[^0-9]', '', addNum)
+
+                if unitType == '' and unitId != '':
+                    fulladd = f'{addNum} {predir} {sName} {sufdir} {sType} # {unitId}'
+                else:
+                    fulladd = f'{addNum} {predir} {sName} {sufdir} {sType} {unitType} {unitId}'
+
+                fulladd = ' '.join(fulladd.split())
+ 
+
+                shp = row[6]
+
+                iCursor.insertRow(('', '', fulladd, addNum, '', predir, sName, sType, sufdir, '', '', unitType, unitId,\
+                                   '', '', '49027', 'UT', 'Unknown', 'Unknown', 'Unknown', '', 'MILLARD COUNTY', today, 'COMPLETE', '', None,\
+                                   '', '', '', shp))
+
+                if predir == sufdir:
+                    addressErrors = errorPtsDict.setdefault(fulladd, [])
+                    addressErrors.extend(['pre and post directions match', row[6]])
+                if 'HWY' not in sName and sName not in rdSet:
+                    addressErrors = errorPtsDict.setdefault(f'{row[2]} | {fulladd}', [])
+                    addressErrors.extend(['street name not found in roads', row[6]])
+                if predir == '' and sufdir != '':
+                    addressErrors = errorPtsDict.setdefault(f'NSEW | {fulladd}'.format(fulladd, row[0]), [])
+                    addressErrors.extend(['prefix direction is missing', row[6]])
+                if row[0].isdigit() == False:
+                    addressErrors = errorPtsDict.setdefault(f'{row[0]} | {fulladd}', [])
+                    addressErrors.extend(['bad house number', row[6]])
+
+
+        error_pts = createErrorPts(errorPtsDict, cntyFldr, 'Millard_ErrorPts.shp', 'ADDRESS', millardCoAddPts)
+
+    inputDict = {
+    'AddSystem':['SGID.LOCATION.AddressSystemQuadrants', 'GRID_NAME', ''],
+    'City':['SGID.BOUNDARIES.Municipalities', 'SHORTDESC', ''],
+    'ZipCode':['SGID.BOUNDARIES.ZipCodes', 'ZIP5', ''],
+    'ParcelID':['SGID.CADASTRE.Parcels_Millard_LIR', 'PARCEL_ID', ''],
+    'USNG':['SGID.INDICES.NationalGrid', 'USNG', '']
+    }
+
+    addPolyAttributes(sgid, agrcAddPts_millardCo, inputDict)
+    updateAddPtID(agrcAddPts_millardCo)
+    addBaseAddress(agrcAddPts_millardCo)
+    deleteDuplicatePts(agrcAddPts_millardCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
+    dupePts = returnDuplicateAddresses(agrcAddPts_millardCo, ['UTAddPtID', 'SHAPE@'])
+    updateErrorPts(os.path.join(cntyFldr, 'Millard_ErrorPts.shp'), error_pts, dupePts)
+
+
+
+
 
 
 def morganCounty():
@@ -2105,7 +2236,7 @@ def morganCounty():
     cntyFldr = r'C:\ZBECK\Addressing\Morgan'
 
     #morganCoAddFLDS = ['ADDRNUM', 'FULLNAME', 'UNITTYPE', 'UNITID', 'LASTUPDATE', 'SHAPE@', 'FULLADDR', 'SERIAL']
-    morganCoAddFLDS = ['addrnum', 'fullname', 'unittype', 'unitid', 'last_edi_1', 'SHAPE@', 'fulladdr', 'Serial']
+    morganCoAddFLDS = ['addrnum', 'fullname', 'unittype', 'unitid', 'last_edited_date', 'SHAPE@', 'fulladdr', 'Serial']
 
     checkRequiredFields(morganCoAddPts, morganCoAddFLDS)
     truncateOldCountyPts(agrcAddPts_morganCo)
@@ -2152,6 +2283,12 @@ def morganCounty():
                     sType = ''
             else:
                 continue
+
+            if sName == '5800' and addNum > '4399':
+                sName = 'POWDER HORN'
+                sType = 'DR'
+                sufDir = ''
+            sName = sName.replace('POWDERHORN', 'POWDER HORN')
 
             if row[2] not in errorList:
                 unitType = returnKey(row[2].upper(), unitTypeDir)
@@ -2798,7 +2935,7 @@ def sanpeteCounty():
 
 
 def sevierCounty():
-    sevierCoAddPts = r'C:\ZBECK\Addressing\Sevier\SevierCounty.gdb\SevierAddressPts'
+    sevierCoAddPts = r'C:\ZBECK\Addressing\Sevier\SevierCounty.gdb\SC911AddressPts_041822'
     agrcAddPts_sevierCo = r'C:\ZBECK\Addressing\Sevier\Sevier.gdb\AddressPoints_Sevier'
 
     sevierCoAddFLDS = ['NUMBER', 'Pre', 'Name', 'Dir', 'Type', 'Unit', 'PARCEL__', 'SHAPE@', 'ADDRESS']
@@ -3556,7 +3693,7 @@ def utahCounty():
 
 
 def uintahCounty():
-    uintahCoAddPts = r'C:\ZBECK\Addressing\Uintah\UintahCounty.gdb\Uintah_MAL_2021'
+    uintahCoAddPts = r'C:\ZBECK\Addressing\Uintah\UintahCounty.gdb\Uintah_MAL_2022'
     agrcAddPts_uintahCo = r'C:\ZBECK\Addressing\Uintah\Uintah.gdb\AddressPoints_Uintah'
     cntyFldr = r'C:\ZBECK\Addressing\Uintah'
 
@@ -3674,7 +3811,7 @@ def wasatchCounty():
 
     rdSet = createRoadSet('49051')
 
-    wasatchCoAddPts = r'C:\ZBECK\Addressing\Wasatch\WasatchCounty.gdb\WC_AddressPoints'
+    wasatchCoAddPts = r'C:\ZBECK\Addressing\Wasatch\WasatchCounty.gdb\WC_ADDRESS'
     agrcAddPts_wasatchCo = r'C:\ZBECK\Addressing\Wasatch\Wasatch.gdb\AddressPoints_Wasatch'
     cntyFldr = r'C:\ZBECK\Addressing\Wasatch'
 
@@ -4183,7 +4320,7 @@ def weberCounty():
                 ptType = returnKey(str(row[8]), ptTypeDict)
 
                 unitTypeRaw = removeBadValues(row[15].upper(), badUnits).strip('#').strip()
-                unitId = removeBadValues(row[16].upper(), badUnits).strip('#').strip().replace('BLDG ', '')
+                unitId = removeBadValues(row[16].upper(), badUnits).strip('#').strip().replace('BLDG ', '').strip()
 
                 unitSearch = re.search(reUnits, unitTypeRaw)
                 if unitSearch != None:
@@ -4233,6 +4370,9 @@ def weberCounty():
                             unitId = row[16].split()[-1]
                         # else:
                         #     unitType = ''
+
+                unitId = unitId.replace('PKWY ', '').strip()
+
                 if row[15] == 'BLDG' and ' ' not in row[16]:
                     unitType = ''
 
@@ -4328,7 +4468,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #cacheCounty()  #Complete w/error points
 #carbonCounty() #Complete
 #daggettCounty() #Complete w/error points
-#davisCounty()  #Complete
+davisCounty()  #Complete
 #duchesneCounty()
 #emeryCounty()  #Complete
 #garfieldCounty()  #Complete
@@ -4346,7 +4486,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #sanpeteCounty()
 #sevierCounty()
 #summitCounty()
-tooeleCounty()    #Complete
+#tooeleCounty()    #Complete
 #uintahCounty()
 #utahCounty() #Complete
 #wasatchCounty()  #Complete w/error points
