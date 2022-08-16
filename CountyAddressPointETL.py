@@ -4496,7 +4496,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 
 
 
-#beaverCounty()   #Complete w/error points
+beaverCounty()   #Complete w/error points
 #boxElderCounty()  #Complete w/error points
 #cacheCounty()  #Complete w/error points
 #carbonCounty() #Complete
@@ -4521,7 +4521,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #summitCounty()
 #tooeleCounty()    #Complete
 #uintahCounty()
-utahCounty() #Complete
+#utahCounty() #Complete
 #wasatchCounty()  #Complete w/error points
 #washingtonCounty()  #Complete
 #wayneCounty()
