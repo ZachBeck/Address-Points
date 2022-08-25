@@ -3302,8 +3302,8 @@ def tooeleCounty():
     agrcAddPts_tooeleCo = r'C:\ZBECK\Addressing\Tooele\Tooele.gdb\AddressPoints_Tooele'
     cntyFldr = r'C:\ZBECK\Addressing\Tooele'
 
-    tooeleCoAddFLDS = ['HouseAddr', 'FullAddr', 'HouseNum', 'PreDir', 'StreetName', 'StreetType', 'SufDir', \
-                       'UnitNumber', 'City', 'Parcel_ID', 'Structure', 'SHAPE@', 'OBJECTID', 'SP_UnitType']
+    tooeleCoAddFLDS = ['HouseAddr', 'FullAddr', 'HouseNum', 'PreDir', 'StreetName', 'StreetType', 'SufDir', 
+                       'UnitNumber', 'City', 'Parcel_ID', 'Structure', 'SHAPE@', 'OBJECTID', 'SP_UnitTyp']
 
     checkRequiredFields(tooeleCoAddPts, tooeleCoAddFLDS)
     truncateOldCountyPts(agrcAddPts_tooeleCo)
@@ -3335,6 +3335,8 @@ def tooeleCounty():
     with arcpy.da.SearchCursor(tooeleCoAddPts, tooeleCoAddFLDS) as sCursor, \
         arcpy.da.InsertCursor(agrcAddPts_tooeleCo, agrcAddFLDS) as iCursor:
         for row in sCursor:
+            #cleaned_address = removeNone(row[0])
+            #address = parse_address.parse(row[0])
             sufDir = ''
             addNumSuf = ''
 
@@ -3426,17 +3428,6 @@ def tooeleCounty():
                                        unitType, unitID, city, '', '49045', 'UT', '', '', structure, parcelID, \
                                        'TOOELE COUNTY', loadDate, 'COMPLETE', '', None, '', '', '', shp))
 
-                    # addNum = addNumRAW.split(separator.group(0))[1]
-                    # print ('{} second grp'.format(addNum))
-                    # if addNum[0].isdigit():
-                    #     fullAdd = '{} {} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName, sufDir, sType, unitType, unitID)
-                    #     fullAdd = ' '.join(fullAdd.split())
-                    #     iCursor.insertRow(('', '', fullAdd, addNum, addNumSuf, preDir, sName, sType, sufDir, '', '', \
-                    #                        unitType, unitID, city, '', '49045', 'UT', '', '', structure, parcelID, \
-                    #                        'TOOELE COUNTY', loadDate, 'COMPLETE', '', None, '', '', '', shp))
-                    # else:
-                    #     continue
-
                 else:
                     if '#' in addNumRAW:
                         addNum = addNumRAW.strip('#')
@@ -3452,8 +3443,22 @@ def tooeleCounty():
                                            'TOOELE COUNTY', loadDate, 'COMPLETE', '', None, '', '', '', shp))
 
                     elif addNumRAW[0].isdigit() == False:
-                        print (row[12])
-                        continue
+                        print (f'{row[0]} {row[2]}   FIX ME')
+                        if addNumRAW[1].isdigit() == True:
+                            address = parse_address.parse(row[0])
+                            addNum = address.houseNumber
+                            preDir = address.prefixDirection
+                            sName = address.streetName
+                            sufDir = address.suffixDirection
+                            unitID = row[7]
+                            shp = row[11]
+                            fullAdd = f'{addNum} {preDir} {sName} {sufDir} # {unitID}'
+                            print(f'{fullAdd}   FIXED')
+                            iCursor.insertRow(('', '', fullAdd, addNum, addNumSuf, preDir, sName, sType, sufDir, '', '', \
+                                           unitType, unitID, city, '', '49045', 'UT', '', '', structure, parcelID, \
+                                           'TOOELE COUNTY', loadDate, 'COMPLETE', '', None, '', '', '', shp))
+                        else:
+                            continue
 
                     else:
                         addNum = addNumRAW.strip()
@@ -4496,7 +4501,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 
 
 
-beaverCounty()   #Complete w/error points
+#beaverCounty()   #Complete w/error points
 #boxElderCounty()  #Complete w/error points
 #cacheCounty()  #Complete w/error points
 #carbonCounty() #Complete
@@ -4519,7 +4524,7 @@ beaverCounty()   #Complete w/error points
 #sanpeteCounty()
 #sevierCounty()
 #summitCounty()
-#tooeleCounty()    #Complete
+tooeleCounty()    #Complete
 #uintahCounty()
 #utahCounty() #Complete
 #wasatchCounty()  #Complete w/error points
