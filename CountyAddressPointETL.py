@@ -1,3 +1,4 @@
+from dataclasses import _MISSING_TYPE
 import arcpy
 import datetime, time
 import sys
@@ -3297,6 +3298,13 @@ def tooeleCounty():
         return street
 
     types = [' LOOP', ' ST', ' RD', ' PARKWAY', ' PKWY', ' RD', ' LANE', ' LN', ' CT', ' CIR', ' COVE', ' CR', ' DR']
+    add_type = {'1ST':'ST', '2ND':'ST', '3RD':'ST', '4TH':'ST', '5TH':'ST', '6TH':'ST', '7TH':'ST',
+                     '8TH':'ST', '9TH':'ST', 'BOWERY':'ST', 'BROOK':'AVE', 'CENTER':'ST', 'CHURCH':'ST',
+                     'CLARK':'ST', 'COLEMAN':'ST', 'COOLEY':'ST', 'DAVIS':'LN', 'GARDEN':'ST', 'GREYSTONE':'WAY',
+                     'GYPSUM':'DR', 'HIDDEN RIVER':'TRL', 'MAIN':'ST', 'MAPLE':'ST', 'NELSON':'AVE', 'OPAL':'LN',
+                     'PINE':'ST', 'PINYON':'DR', 'ROCKWOOD':'WAY', 'SEVERE':'ST', 'SHEEP ROCK':'TRL', 'SHERMAN':'ST',
+                     'SNIVELY':'CT', 'TAHOE':'ST', 'VIA LA COSTA':'ST', }
+
 
     tooeleCoAddPts = r'C:\ZBECK\Addressing\Tooele\TooeleCountyAddressPts.gdb\AddressMaster'
     agrcAddPts_tooeleCo = r'C:\ZBECK\Addressing\Tooele\Tooele.gdb\AddressPoints_Tooele'
@@ -3308,12 +3316,13 @@ def tooeleCounty():
     checkRequiredFields(tooeleCoAddPts, tooeleCoAddFLDS)
     truncateOldCountyPts(agrcAddPts_tooeleCo)
 
-    routeDict = {'HWY 36':['STATE HWY 36', 'SR36 HWY', 'STATE RTE 36', 'SR 36', 'SR36', 'SR36 ', 'HGIHWAY 36', 'UTAH STATE HWY-36'], \
-                 'HWY 138':['SR-138 HWY', 'STATE HWY 138', 'SR-138', 'SR 138', 'SR138', 'SR38'], 'HWY 196':['SR196', 'STATHWY 196'],\
-                 'LINCOLN HWY':['LINCOLN HWY RTE 1913', 'LINCOLN HWY RTE 1919'], \
+    routeDict = {'HWY 36':['STATE HWY 36', 'SR36 HWY', 'STATE RTE 36', 'SR 36', 'SR36', 'SR36 ', 'HGIHWAY 36', 'UTAH STATE HWY-36',
+                 'N UTAH STATE HWY-36'],
+                 'HWY 138':['SR-138 HWY', 'STATE HWY 138', 'SR-138', 'SR 138', 'SR138', 'SR38'], 'HWY 196':['SR196', 'STATHWY 196'],
+                 'LINCOLN HWY':['LINCOLN HWY RTE 1913', 'LINCOLN HWY RTE 1919'],
                  'HWY 112':['SR 112', 'SR-112', 'SR112', 'STATHWY 112', 'STATE HWY 112'], 'HWY 199':['SR199'], 'HWY 73':['SR73']}
 
-    separatorList = ['/', '-', '&', '\(', '\?']
+    separatorList = ['/', '-', '&', '\(', '\?', ' T']
     findSeparator = re.compile('|'.join(separatorList))
 
     errorPtsDict = {}
@@ -3335,8 +3344,6 @@ def tooeleCounty():
     with arcpy.da.SearchCursor(tooeleCoAddPts, tooeleCoAddFLDS) as sCursor, \
         arcpy.da.InsertCursor(agrcAddPts_tooeleCo, agrcAddFLDS) as iCursor:
         for row in sCursor:
-            #cleaned_address = removeNone(row[0])
-            #address = parse_address.parse(row[0])
             sufDir = ''
             addNumSuf = ''
 
@@ -3380,6 +3387,8 @@ def tooeleCounty():
 
                 if sName in fixNames:
                     sName = fixNames[sName]
+                if sName in add_type and sType == '':
+                    sType = add_type[sName]
 
                 unitID = removeBadValues((row[7]), errorList).upper().strip('#').strip('(').strip(')')
                 unitType = returnKey(row[13], unitTypeDir).upper()
@@ -3390,7 +3399,7 @@ def tooeleCounty():
                 # if findUnit:
                 #     unitType = findUnit.group(0).strip()
 
-                city = removeBadValues(row[8], errorList)
+                city = ''
                 parcelID = removeBadValues(row[9], errorList)
                 structure = removeBadValues(row[10], errorList)
                 loadDate = today
@@ -3499,6 +3508,7 @@ def tooeleCounty():
 
     inputDict = {
     'AddSystem':['SGID.LOCATION.AddressSystemQuadrants', 'GRID_NAME', ''],
+    'City':['SGID.BOUNDARIES.Municipalities', 'SHORTDESC', ''],
     'ZipCode':['SGID.BOUNDARIES.ZipCodes', 'ZIP5', ''],
     'USNG':['SGID.INDICES.NationalGrid', 'USNG', '']
     }
