@@ -1,6 +1,7 @@
 from dataclasses import _MISSING_TYPE
 import arcpy
 import datetime, time
+from pathlib import Path
 import sys
 import re
 import os
@@ -1225,7 +1226,8 @@ def davisCounty():
         'ZipCode':['SGID.BOUNDARIES.ZipCodes', 'ZIP5', ''],
         'USNG':['SGID.INDICES.NationalGrid', 'USNG', ''],
         'CountyID':['SGID.BOUNDARIES.Counties', 'FIPS_STR', ''],
-        'PtType': ['SGID.CADASTRE.Parcels_Davis_LIR', 'PROP_CLASS', remapLIR]
+        'PtType': ['SGID.CADASTRE.Parcels_Davis_LIR', 'PROP_CLASS', remapLIR],
+        'ParcelID':['SGID.CADASTRE.Parcels_Davis', 'PARCEL_ID', '']
     }
 
     #fix_residential_type = {'PtType': ['SGID.CADASTRE.Parcels_Davis_LIR', 'PRIMARY_RES']}
@@ -1463,7 +1465,7 @@ def emeryCounty():
 
 
 def garfieldCounty():
-    garfieldCoAddPts = r'C:\ZBECK\Addressing\Garfield\GarfieldCounty.gdb\GarfieldCountyPts'
+    garfieldCoAddPts = r'C:\sde\AddressAdmin@AddressPointEditing@agrc.utah.gov.sde\AddressPointEditing.ADDRESSADMIN.AddressPoints'
     agrcAddPts_garfieldCo = r'C:\ZBECK\Addressing\Garfield\Garfield.gdb\AddressPoints_Garfield'
     cntyFldr = r'C:\ZBECK\Addressing\Garfield'
 
@@ -1487,7 +1489,8 @@ def garfieldCounty():
                 'STATE HWY 12':'HWY 12', 'SQAUW BERRY':'SQUAW BERRY', 'TROUT STREET':'TROUT', 'UHIGHWAY 89':'HWY 89',
                 'US':'HWY 89', 'US HIGHWAY 89':'HWY 89', 'UTAH STATE':'HWY 12', 'WOOKCHUCK':'WOODCHUCK'}
 
-    with arcpy.da.SearchCursor(garfieldCoAddPts, garfieldCoAddFLDS) as sCursor, \
+    sql = f'"CountyID" = \'49017\''
+    with arcpy.da.SearchCursor(garfieldCoAddPts, garfieldCoAddFLDS, sql) as sCursor, \
         arcpy.da.InsertCursor(agrcAddPts_garfieldCo, agrcAddFLDS) as iCursor:
         for row in sCursor:
             if row[3] in errorList or row[6] in errorList:
@@ -1800,99 +1803,74 @@ def ironCounty():
 
 
 def juabCounty():
-    juabCoAddPts = r'C:\ZBECK\Addressing\Juab\JuabCo_20190213.gdb\Address_AGRCSchema'
+    juabCoAddPts = r'C:\ZBECK\Addressing\Juab\JuabCounty.gdb\Juab_addpts_20220728_UGRC_edits'
     agrcAddPts_juabCo = r'C:\ZBECK\Addressing\Juab\Juab.gdb\AddressPoints_Juab'
 
-    juabCoAddFLDS = ['FullAdd', 'AddNum', 'AddNumSuffix', 'PrefixDir', 'StreetName', 'StreetType', 'LandmarkName', 'Building', \
-                     'UnitType', 'UnitID', 'PtLocation', 'PtType', 'Structure', 'ParcelID', 'AddSource', 'SHAPE@']
-
-    streetNameTypes = {'ALY':['JARVIS'],
-                       'AVE':['AJAX', 'ARLINGTON', 'HATFIELD', 'OPEX'],
-                       'DR':['BERNINI', 'CLARK', 'DEPRIZIN', 'DUBLIN', 'KNIGHT', 'STACK', 'UDALL'],
-                       'RD':['BRAY', 'BUTLER', 'CARLSON', 'HAULAGE', 'JONES', 'MOUNTAIN RIDGE', 'NORTH RIDGE'],
-                       'ROW':['LEADVILLE', 'NORTH LEADVILLE'],
-                       'SQ':['WILDE'],
-                       'ST':['BECK', 'CENTER', 'CHIEF', 'CHURCH', 'EAGLE', 'GODIVA', 'IRON & O\'CONNOR', 'LAST CHANCE', \
-                             'MCCHRYSTAL', 'POPE', 'RAILROAD', 'RICHINS', 'SHRIVER', 'SPRING']}
+    juabCoAddFLDS = ['FullAdd', 'AddNum', 'AddNumSuff', 'PrefixDir', 'StreetName', 'StreetType', 'SuffixDir', 
+                     'LandmarkNa', 'Building', 'UnitType', 'UnitID', 'PtLocation', 'PtType', 'Structure', 'ParcelID',
+                     'AddSource', 'SHAPE@']
+    
+    remap_pt_location = {'Water Tank':'Other', 'Well':'Other'}
+    remap_hwy = {'HIGHWAY 78':'HWY 78', 'HIGHWAY 132':'HWY 132'}
 
     checkRequiredFields(juabCoAddPts, juabCoAddFLDS)
     truncateOldCountyPts(agrcAddPts_juabCo)
 
-    iCursor = arcpy.da.InsertCursor(agrcAddPts_juabCo, agrcAddFLDS)
+    with arcpy.da.SearchCursor(juabCoAddPts, juabCoAddFLDS) as scursor, \
+        arcpy.da.InsertCursor(agrcAddPts_juabCo, agrcAddFLDS) as icursor:
 
-    with arcpy.da.SearchCursor(juabCoAddPts, juabCoAddFLDS) as sCursor:
-        for row in sCursor:
-            if row[0][0].isdigit():# and row[0] not in errorList:
-                address = parse_address.parse(row[0])
-                addNum = address.houseNumber.replace('*', '')
-                addNumSuf = formatValues(row[2], addNumSufList)
-                preDir = address.prefixDirection
+        for row in scursor:
+            if row[1] and row[4] not in errorList:
+                add_num = row[1].strip()
+                pre_dir = row[3].strip()
+                street_name = row[4].strip()
+                street_type = row[5].strip()
 
-                sufDir = removeBadValues(address.suffixDirection, errorList)
+                if street_name == 'SHEEPLANE':
+                    street_name = 'SHEEP'
+                    street_type = 'LN'
+                if street_name in remap_hwy:
+                    street_name = remap_hwy[street_name]
+                if street_name.startswith('HWY'):
+                    street_type = ''
 
-                if '#' in row[0]:
-                    if row[4][-2] == ' ':
-                        sName = row[4][:3]
-                        sufDir = row[4][-1]
-                    else:
-                        sName = row[4]
+                suf_dir = row[6].strip()
+                landmark = row[7].upper().strip()
+                unit_type = ''
+                unit_id = row[10].strip()
+
+                pt_location = row[11].strip()
+                if pt_location in remap_pt_location:
+                    pt_location = remap_pt_location[pt_location]
+
+                pt_type = row[12].strip()
+                structure = row[13].strip()
+                load_date = today
+
+                if unit_id != '':
+                    full_add = f'{add_num} {pre_dir} {street_name} {suf_dir} {street_type} # {unit_id}'
                 else:
-                    sName = address.streetName
+                    full_add = f'{add_num} {pre_dir} {street_name} {suf_dir} {street_type}'
 
-                sType = removeNone(row[5]).strip()
-                if sType in errorList:
-                    sType = returnKey(sName, streetNameTypes)
-                if sType == '':
-                    sType = removeNone(address.suffixType)
+                full_add = ' '.join(full_add.split())
 
-                if sName == 'MAIN' and sType == 'HWY':
-                    sType = 'ST'
-                if 'HWY' in sName:
-                    sType = ''
+                shp = row[16]
 
-                if row[0].endswith('CENTER'):
-                    sName = 'CENTER'
-                    sType = 'ST'
-                if preDir in errorList:
-                    preDir = removeBadValues(removeNone(row[3]), errorList)
-                if preDir in errorList and row[0].split()[1] in dirs:
-                    preDir = row[0].split()[1]
-
-                landmark = removeBadValues(row[6], errorList)
-                building = removeBadValues(row[7], errorList)
-                unitType = removeBadValues(row[8], errorList)
-                unitId_hash = formatUnitID(row[9])
-                unitId = unitId_hash.strip('# ')
-                if unitId == '' and '#' in row[0]:
-                    unitId = row[0][-2].strip('#')
-                ptLocation = row[10]
-                ptType = row[11]
-                structure = row[12]
-                parcel = row[13]
-                source = 'JUAB COUNTY'
-                loadDate = today
-                modDate = None
-
-                fulladd = '{} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName, sufDir, sType, unitId_hash)
-                fulladd = ' '.join(fulladd.split())
-
-                shp = row[15]
-
-                iCursor.insertRow(('', '', fulladd, addNum, addNumSuf, preDir, sName, sType, sufDir, landmark, building, \
-                                   unitType, unitId, '', '', '49023', 'UT', ptLocation, ptType, structure, parcel, \
-                                   source, loadDate, 'COMPLETE', '', modDate, '', '', '', shp))
-
-    del iCursor
+                icursor.insertRow(('', '', full_add, add_num, '', pre_dir, street_name, street_type, suf_dir, landmark, '',
+                                   unit_type, unit_id, '', '', '49023', 'UT', pt_location, pt_type, structure, '',
+                                   'JUAB COUNTY', load_date, 'COMPLETE', '', None, '', '', '', shp))
 
     inputDict = {
     'AddSystem':['SGID.LOCATION.AddressSystemQuadrants', 'GRID_NAME', ''],
     'City':['SGID.BOUNDARIES.Municipalities', 'SHORTDESC', ''],
     'ZipCode':['SGID.BOUNDARIES.ZipCodes', 'ZIP5', ''],
-    'USNG':['SGID.INDICES.NationalGrid', 'USNG', '']
+    'USNG':['SGID.INDICES.NationalGrid', 'USNG', ''],
+    'ParcelID':['SGID.CADASTRE.Parcels_Juab', 'PARCEL_ID', '']
     }
 
     addPolyAttributes(sgid, agrcAddPts_juabCo, inputDict)
     addBaseAddress(agrcAddPts_juabCo)
+    updateAddPtID(agrcAddPts_juabCo)
     deleteDuplicatePts(agrcAddPts_juabCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
 
 
@@ -2886,6 +2864,73 @@ def saltLakeCounty():
     dupePts = returnDuplicateAddresses(agrcAddPts_SLCO, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'SaltLake_ErrorPts.shp'), errorFlds, dupePts)
 
+def SanJuanCounty():
+    sanjuanCoAddPts = r'C:\sde\AddressAdmin@AddressPointEditing@agrc.utah.gov.sde\AddressPointEditing.ADDRESSADMIN.AddressPoints'
+    agrcAddPts_sanjuanCo = r'C:\ZBECK\Addressing\SanJuan\SanJuan.gdb\AddressPoints_SanJuan'
+
+    truncateOldCountyPts(agrcAddPts_sanjuanCo)
+
+    sanjuan_fields = ['AddSystem', 'UTAddPtID', 'FullAdd', 'AddNum', 'AddNumSuffix', 'PrefixDir', 'StreetName', 'StreetType', \
+                      'SuffixDir', 'LandmarkName', 'Building', 'UnitType', 'UnitID', 'City', 'ZipCode', 'CountyID', 'State', \
+                      'PtLocation', 'PtType', 'Structure', 'ParcelID', 'AddSource', 'LoadDate', 'Status', 'Editor', \
+                      'ModifyDate', 'StreetAlias', 'Notes', 'SHAPE@']
+
+    fix_hwy = {'HIGHWAY 191':'HWY 191', 'HIGHWAY 46':'HWY 46', 'HIGHWAY 491':'HWY 191', 'SR 211':'HWY 211',
+               'SR 46':'HWY 46', 'SR 95':'HWY 95', 'US 191':'HWY 191'}
+
+    sql = f'"CountyID" = \'49037\''
+    with arcpy.da.SearchCursor(sanjuanCoAddPts, sanjuan_fields, sql) as scursor,\
+        arcpy.da.InsertCursor(agrcAddPts_sanjuanCo, agrcAddFLDS) as icursor:
+        for row in scursor:
+            if row[3] not in errorList:
+                add_num = row[3]
+                add_num_suf = removeNone(row[4])
+                pre_dir = row[5]
+                street_name = row[6].upper()
+                street_type = removeNone(row[7])
+
+                if street_name in fix_hwy:
+                    street_name = fix_hwy[street_name]
+                    street_type = ''
+
+                suf_dir = removeNone(row[8])
+                unit_type = removeNone(row[11])
+                unit_id = removeNone(row[12]).strip()
+                pt_location = removeNone(row[17])
+                pt_type = removeNone(row[18])
+                structure = removeNone(row[19])
+                parcel_id = removeNone(row[20])
+                load_date = today
+                mod_date = row[25]
+                shp = row[28]
+
+                if unit_type != '':
+                    full_address = f'{add_num} {add_num_suf} {pre_dir} {street_name} {street_type} {suf_dir} {unit_type} {unit_id}'
+                elif unit_id != '':
+                    full_address = f'{add_num} {add_num_suf} {pre_dir} {street_name} {street_type} {suf_dir} # {unit_id}'
+                else:
+                    full_address = f'{add_num} {add_num_suf} {pre_dir} {street_name} {street_type} {suf_dir}'
+
+                full_address = ' '.join(full_address.split())
+
+                icursor.insertRow(('', '', full_address, add_num, add_num_suf, pre_dir, street_name, street_type, suf_dir,
+                                   '', '', unit_type, unit_id, '', '', '49037', 'UT', pt_location, pt_type, structure, parcel_id,
+                                   'SAN JUAN COUNTY', load_date, 'COMPLETE', '', mod_date, '', '', '', shp))
+
+    inputDict = {
+        'AddSystem':['SGID.LOCATION.AddressSystemQuadrants', 'GRID_NAME', ''],
+        'City':['SGID.BOUNDARIES.Municipalities', 'SHORTDESC', ''],
+        'ZipCode':['SGID.BOUNDARIES.ZipCodes', 'ZIP5', ''],
+        'USNG':['SGID.INDICES.NationalGrid', 'USNG', ''],
+        'ParcelID':['SGID.CADASTRE.Parcels_SanJuan', 'PARCEL_ID', '']
+        }
+
+    addPolyAttributes(sgid, agrcAddPts_sanjuanCo, inputDict)
+    updateAddPtID(agrcAddPts_sanjuanCo)
+    addBaseAddress(agrcAddPts_sanjuanCo)
+    deleteDuplicatePts(agrcAddPts_sanjuanCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
+
+
 
 def sanpeteCounty():
     sanpeteCoAddPts = r'C:\ZBECK\Addressing\Sanpete\SanpeteCounty.gdb\SanpeteAddressPts_07212021'
@@ -3123,7 +3168,6 @@ def summitCounty():
 
             building = removeBadValues(row[8], errorList)
             modified = row[10]
-            parcelID = removeNone(row[11])
             if len(parcelID) < 7:
                 parcelID = ''
             loadDate = today
@@ -3145,7 +3189,7 @@ def summitCounty():
             # ------------------------------------
 
             iCursor.insertRow(('', '', fullAdd, addNum, addNumSuf, preDir, sName, sType, sufDir, '', building, \
-                              '', unitNum.strip('# '), '', '', '49043', 'UT', '', ptType, '', parcelID, 'SUMMIT COUNTY', \
+                              '', unitNum.strip('# '), '', '', '49043', 'UT', '', ptType, '', '', 'SUMMIT COUNTY', \
                                loadDate, 'COMPLETE', '', modified, '', '', '', shp))
 
         errorPts = createErrorPts(errorPtsDict, cntyFldr, 'Summit_ErrorPts.shp', 'ADDRESS', summitCoAddPts)
@@ -3156,7 +3200,8 @@ def summitCounty():
     'AddSystem':['SGID.LOCATION.AddressSystemQuadrants', 'GRID_NAME', ''],
     'City':['SGID.BOUNDARIES.Municipalities', 'SHORTDESC', ''],
     'ZipCode':['SGID.BOUNDARIES.ZipCodes', 'ZIP5', ''],
-    'USNG': ['SGID.INDICES.NationalGrid', 'USNG', '']
+    'USNG': ['SGID.INDICES.NationalGrid', 'USNG', ''],
+    'ParcelID':['SGID.CADASTRE.Parcels_Summit', 'PARCEL_ID', '']
     }
 
     addPolyAttributes(sgid, agrcAddPts_summitCo, inputDict)
@@ -3202,7 +3247,7 @@ def summitCounty():
         badRow = ['', ' ', None]
 
         with arcpy.da.SearchCursor(PCandCounty_points, PCandCounty_FLDS) as sCursor, \
-                arcpy.da.InsertCursor(agrcAddPts_PC, agrcAddFLDS) as iCursor:
+            arcpy.da.InsertCursor(agrcAddPts_PC, agrcAddFLDS) as iCursor:
             for row in sCursor:
                 if row[7] == 'Park City' and row[0] not in badRow:
                     addNum = row[0]
@@ -3498,9 +3543,6 @@ def tooeleCounty():
                 print (row[12])
                 print ('what to do?')
 
-            # if addNum.isdigit() == False:
-            #     print ('{} remainder'.format(addNum))
-
         errorPts = createErrorPts(errorPtsDict, cntyFldr, 'Tooele_ErrorPts.shp', 'ADDRESS', tooeleCoAddPts)
 
     del iCursor
@@ -3715,7 +3757,8 @@ def utahCounty():
                 'AddSystem':['SGID.BOUNDARIES.Municipalities', 'SHORTDESC', ''],
                 'City':['SGID.BOUNDARIES.Municipalities', 'SHORTDESC', ''],
                 'ZipCode':['SGID.BOUNDARIES.ZipCodes', 'ZIP5', ''],
-                'USNG':['SGID.INDICES.NationalGrid', 'USNG', '']
+                'USNG':['SGID.INDICES.NationalGrid', 'USNG', ''],
+                'ParcelID':['SGID.CADASTRE.Parcels_Utah', 'PARCEL_ID', '']
                 }
 
     utah_parcelsLIR = {'PtType': ['SGID.CADASTRE.Parcels_Utah_LIR', 'PROP_CLASS']}
@@ -4189,52 +4232,6 @@ def wayneCounty():
                                    '', '', '', shp))
 
 
-    # with arcpy.da.SearchCursor(wayneCoAddPts, wayneCoAddFLDS) as sCursor:
-    #     for row in sCursor:
-    #
-    #         unitType = ''
-    #         unitID = ''
-    #
-    #         if row[2] not in errorList:
-    #             address = parse_address.parse(row[2])
-    #             fullAdd = ' '.join(row[2].split())
-    #
-    #             addNum = address.houseNumber
-    #             preDir = address.prefixDirection
-    #             if preDir == None:
-    #                 preDir = ''
-    #             sName = address.streetName
-    #             if sName.startswith('SR '):
-    #                 sName = sName.replace('SR ', 'HIGHWAY ')
-    #                 fullAdd = fullAdd.replace('SR ', 'HIGHWAY ')
-    #             sufDir = address.suffixDirection
-    #             if sufDir == None:
-    #                 sufDir = ''
-    #             sType = address.suffixType
-    #             if sType == None:
-    #                 sType = ''
-    #             if ' UNIT ' in row[2]:
-    #                 unitType = 'UNIT'
-    #                 unitID = row[2].split()[-1]
-    #             if 'SUITE ' in row[5]:
-    #                 unitType = 'STE'
-    #                 unitID = row[5].strip('SUITE ')[0]
-    #                 if ' SUITE ' not in row[2]:
-    #                     fullAdd = '{} {}'.format(fullAdd, unitType)
-    #                 fullAdd = '{} {}'.format(fullAdd, unitID).replace('{} {}'.format('SUITE', unitID), 'STE')
-    #
-    #
-    #             ptType = returnKey(row[3], ptTypeDict)
-    #             modDate = None
-    #             loadDate = today
-    #             source = 'WAYNE COUNTY'
-    #             shp = row[4]
-    #
-    #             iCursor.insertRow(('', '', fullAdd, addNum, '', preDir, sName, sType, sufDir, '', '', unitType, \
-    #                                unitID, '', '', '49055', 'UT', '', ptType, '', '', 'WAYNE COUNTY', loadDate, 'COMPLETE', \
-    #                                '', modDate, '', '', '', shp))
-
-
     errorPts = createErrorPts(errorPtsDict, cntyFldr, 'Wayne_ErrorPts.shp', 'Address', wayneCoAddPts)
 
     polyAttributesDict = {
@@ -4519,7 +4516,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #davisCounty()  #Complete
 #duchesneCounty()
 #emeryCounty()  #Complete
-#garfieldCounty()  #Complete
+garfieldCounty()  #Complete
 #grandCounty()
 #ironCounty()   #Complete
 #juabCounty()
@@ -4531,10 +4528,11 @@ def checkRequiredFields(inCounty, requiredFlds):
 #piuteCounty()
 #richCounty()    #Complete
 #saltLakeCounty() #Complete w/error points
+#SanJuanCounty()
 #sanpeteCounty()
 #sevierCounty()
 #summitCounty()
-tooeleCounty()    #Complete
+#tooeleCounty()    #Complete
 #uintahCounty()
 #utahCounty() #Complete
 #wasatchCounty()  #Complete w/error points
