@@ -34,6 +34,6 @@ appAddressPts = r'C:\ZBECK\Addressing\SGID10.sde\AddressPointEditing.ADDRESSADMI
 sgidAddressPts = r'C:\sde\SGID_internal\SGID_Location.sde\SGID.LOCATION.AddressPoints'
 
 
-deleteAddressPts('Summit', sgidAddressPts) #Update input points and SQL query
+deleteAddressPts('Uintah', sgidAddressPts) #Update input points and SQL query
 
 

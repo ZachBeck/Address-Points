@@ -180,7 +180,7 @@ def formatAddressNumber(addNum):
 
 def removeDuplicateWords(words):
     slist = words.split()
-    return " ".join(sorted(set(slist), key=slist.index))
+    return ' '.join(sorted(set(slist), key=slist.index))
 
 def truncateOldCountyPts(inPts):
     pointCount = int(arcpy.GetCount_management(inPts).getOutput(0))
@@ -1990,6 +1990,8 @@ def kaneCounty():
 
     addPolyAttributes(sgid, agrcAddPts_kaneCo, inputDict)
     addBaseAddress(agrcAddPts_kaneCo)
+    updateAddPtID(agrcAddPts_kaneCo)
+    deleteDuplicatePts(agrcAddPts_kaneCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
 
 
 def millardCountyOLD():
@@ -2173,7 +2175,6 @@ def millardCounty():
                     sType = ''
                 
 
-
                 if sName.endswith((name_types)):
                     sType = returnKey(sName.split()[-1], sTypeDir)
                     sName = ' '.join(sName.split()[:-1]).strip()
@@ -2226,8 +2227,6 @@ def millardCounty():
     deleteDuplicatePts(agrcAddPts_millardCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
     dupePts = returnDuplicateAddresses(agrcAddPts_millardCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Millard_ErrorPts.shp'), error_pts, dupePts)
-
-
 
 
 
@@ -3782,7 +3781,7 @@ def utahCounty():
     updateErrorPts(os.path.join(cntyFldr, 'Utah_ErrorPts.shp'), errorPts, dupePts)
 
 
-def uintahCounty():
+def uintahCounty_oldSchema():
     uintahCoAddPts = r'C:\ZBECK\Addressing\Uintah\UintahCounty.gdb\Uintah_MAL_2022'
     agrcAddPts_uintahCo = r'C:\ZBECK\Addressing\Uintah\Uintah.gdb\AddressPoints_Uintah'
     cntyFldr = r'C:\ZBECK\Addressing\Uintah'
@@ -3896,6 +3895,114 @@ def uintahCounty():
     dupePts = returnDuplicateAddresses(agrcAddPts_uintahCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Uintah_ErrorPts.shp'), errorPts, dupePts)
 
+def uintahCounty():
+    uintahCoAddPts = r'C:\ZBECK\Addressing\Uintah\UintahCounty.gdb\Uintah_MAL_2022'
+    agrcAddPts_uintahCo = r'C:\ZBECK\Addressing\Uintah\Uintah.gdb\AddressPoints_Uintah'
+    cntyFldr = r'C:\ZBECK\Addressing\Uintah'
+
+    sgidRds = r'C:\sde\SGID_internal\SGID_agrc.sde\SGID.TRANSPORTATION.Roads'
+
+    uintahCoAddFLDS = ['FullAdd', 'AddNum', 'PrefixDir', 'StreetName', 'StreetType', 'SuffixDir', 'LandmarkNa',
+                       'Building', 'UnitType', 'UnitID', 'City', 'ZipCode', 'PtLocation', 'PtType', 'Structure',
+                       'ParcelID', 'EDIT_DATE', 'SHAPE@']
+
+    fix_name = {'AMEIAL EARHART':'AMELIA EARHART', 'AMEILA EARHART':'AMELIA EARHART', 'HIGWAY 40':'HWY 40',
+                'HIWY 40':'HWY 40', 'HW 40':'HWY 40', 'HWY 40 STE A-B':'HWY 40', 'US':'HWY 40',
+                'US 149':'HWY 149', 'WARRENDRAW':'WARREN DRAW'}
+
+    checkRequiredFields(uintahCoAddPts, uintahCoAddFLDS)
+    truncateOldCountyPts(agrcAddPts_uintahCo)
+
+    errorPtsDict = {}
+    rdSet = createRoadSet('49047')
+    loadDate = today
+
+    with arcpy.da.SearchCursor(uintahCoAddPts, uintahCoAddFLDS) as scursor, \
+        arcpy.da.InsertCursor(agrcAddPts_uintahCo, agrcAddFLDS) as icursor:
+        for row in scursor:
+            if row[1] not in errorList and row[3] not in errorList:
+                add_num = row[1]
+                pre_dir = returnKey(row[2], dirs)
+                street_name = row[3]
+                street_type = returnKey(row[4], sTypeDir)
+                suf_dir = row[5].strip()
+
+                if street_name == '7500E':
+                    street_name = '7500'
+                    suf_dir = 'E'
+
+                if street_name in fix_name:
+                    street_name = fix_name[street_name]
+
+                unit_id = row[9].strip()
+                if row[8].isdigit() == False:
+                    unit_type = returnKey(row[8], unitTypeDir)
+                else:
+                    unit_type = ''
+                    unit_id = row[8].strip()
+  
+            elif row[0] not in errorList:
+                address = parse_address.parse(row[0])
+                add_num = address.houseNumber
+                pre_dir = removeNone(address.prefixDirection)
+                street_name = address.streetName
+                street_type = removeNone(address.suffixType)
+                suf_dir = removeNone(address.suffixDirection).strip()
+
+                if street_name == 'MAIN ST' or street_name == 'MAIN':
+                    street_name = 'MAIN'
+                    street_type = 'ST'
+
+                if street_name in fix_name:
+                    street_name = fix_name[street_name]
+
+                unit_id = row[9].strip()
+                if row[8].isdigit() == False:
+                    unit_type = returnKey(row[8], unitTypeDir)
+                else:
+                    unit_type = ''
+                    unit_id = row[8].strip()
+
+                if unit_type == '' and unit_id != '':
+                    full_add = f'{add_num} {pre_dir} {street_name} {street_type} {suf_dir} # {unit_id}'
+                else:
+                    full_add = f'{add_num} {pre_dir} {street_name} {street_type} {suf_dir} {unit_type} {unit_id}'
+                full_add = ' '.join(full_add.split())
+
+            else:
+                continue
+
+            if unit_type == '' and unit_id != '':
+                    full_add = f'{add_num} {pre_dir} {street_name} {street_type} {suf_dir} # {unit_id}'
+            else:
+                full_add = f'{add_num} {pre_dir} {street_name} {street_type} {suf_dir} {unit_type} {unit_id}'
+                full_add = ' '.join(full_add.split())
+
+            pt_type = row[13]
+            load_date = today
+            mod_date = row[16]
+            shp = row[17]
+
+            icursor.insertRow(('', '', full_add, add_num, '', pre_dir, street_name, street_type, suf_dir, '', '', unit_type, unit_id, '',
+                                '', '49047', 'UT', '', pt_type, '', '', 'UINTAH COUNTY', load_date, 'COMPLETE', '', mod_date, '', '', '', shp))
+
+        errorPts = createErrorPts(errorPtsDict, cntyFldr, 'Uintah_ErrorPts.shp', 'ADDRESS', uintahCoAddPts)
+
+    inputDict = {
+    'AddSystem':['SGID.LOCATION.AddressSystemQuadrants', 'GRID_NAME', ''],
+    'ParcelID':['SGID.CADASTRE.Parcels_Uintah', 'PARCEL_ID', ''],
+    'City':['SGID.BOUNDARIES.Municipalities', 'SHORTDESC', ''],
+    'ZipCode':['SGID.BOUNDARIES.ZipCodes', 'ZIP5', ''],
+    'USNG':['SGID.INDICES.NationalGrid', 'USNG', '']      
+    }
+
+    addPolyAttributes(sgid, agrcAddPts_uintahCo, inputDict)
+    updateAddPtID(agrcAddPts_uintahCo)
+    addBaseAddress(agrcAddPts_uintahCo)
+    deleteDuplicatePts(agrcAddPts_uintahCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
+    dupePts = returnDuplicateAddresses(agrcAddPts_uintahCo, ['UTAddPtID', 'SHAPE@'])
+    updateErrorPts(os.path.join(cntyFldr, 'Uintah_ErrorPts.shp'), errorPts, dupePts)
+
 
 def wasatchCounty():
 
@@ -3997,7 +4104,7 @@ def wasatchCounty():
 
                 iCursor.insertRow(
                     ('', '', fullAdd, addNum, '', preDir, sName, sType, sufDir, '', '', unitType, unitID, '',
-                     '', '49051', 'UT', '', '', structure, parcelID, 'Wasatch County', loadDate, 'COMPLETE', \
+                     '', '49051', 'UT', '', '', structure, parcelID, 'WASATCH COUNTY', loadDate, 'COMPLETE', \
                      '', None, '', '', '', shp))
 
         errorFlds = createErrorPts(errorPtsDict, cntyFldr, 'Wasatch_ErrorPts.shp', wasatchCoAddFLDS[1], wasatchCoAddPts)
@@ -4140,7 +4247,8 @@ def washingtonCounty():
     'AddSystem':['SGID.LOCATION.AddressSystemQuadrants', 'GRID_NAME', ''],
     'City':['SGID.BOUNDARIES.Municipalities', 'SHORTDESC', ''],
     'ZipCode':['SGID.BOUNDARIES.ZipCodes', 'ZIP5', ''],
-    'USNG':['SGID.INDICES.NationalGrid', 'USNG', '']
+    'USNG':['SGID.INDICES.NationalGrid', 'USNG', ''],
+    'ParcelID':['SGID.CADASTRE.Parcels_Washington', 'PARCEL_ID', '']
     }
 
     washington_parcelsLIR = {'PtType': ['SGID.CADASTRE.Parcels_Washington_LIR', 'PROP_CLASS']}
@@ -4516,7 +4624,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #davisCounty()  #Complete
 #duchesneCounty()
 #emeryCounty()  #Complete
-garfieldCounty()  #Complete
+#garfieldCounty()  #Complete
 #grandCounty()
 #ironCounty()   #Complete
 #juabCounty()
@@ -4533,7 +4641,7 @@ garfieldCounty()  #Complete
 #sevierCounty()
 #summitCounty()
 #tooeleCounty()    #Complete
-#uintahCounty()
+uintahCounty()
 #utahCounty() #Complete
 #wasatchCounty()  #Complete w/error points
 #washingtonCounty()  #Complete
