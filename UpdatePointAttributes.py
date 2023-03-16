@@ -75,32 +75,36 @@ def updateAddPtID(inPts):
     flds = ['AddSystem', 'UTAddPtID', 'FullAdd']
     with arcpy.da.UpdateCursor(inPts, flds) as uCursor:
         for urow in uCursor:
-            urow[1] = urow[0] + ' | ' + urow[2]
+            urow[1] = f'{urow[0]} | {urow[2]}'
             uCursor.updateRow(urow)
 
     del uCursor
 
 def updateField(inPts, fld, dict):
-    def returnKey(word, dict):
-        if word == None:
-            word = ''
-        for key, value in dict.items():
-            if word == '':
-                return ''
-            if word == key:
-                return key
-            if type(value) is str:
-                if word == value:
-                    return key
-            else:
-                for v in value:
-                    if word == v:
-                        return key
-        return ''
+    # def returnKey(word, dict):
+    #     if word == None:
+    #         word = ''
+    #     for key, value in dict.items():
+    #         if word == '':
+    #             return ''
+    #         if word == key:
+    #             return key
+    #         if type(value) is str:
+    #             if word == value:
+    #                 return key
+    #         else:
+    #             for v in value:
+    #                 if word == v:
+    #                     return key
+    #     return ''
 
     with arcpy.da.UpdateCursor(inPts, fld) as uCursor:
         for urow in uCursor:
-            urow[0] = returnKey(urow[0], dict)
-            uCursor.updateRow(urow)
+            if urow[0] in dict:
+                print(f'Changed {urow[0]} to {dict[urow[0]]}')
+                urow[0] = dict[urow[0]]
+            # urow[0] = returnKey(urow[0], dict)
+                uCursor.updateRow(urow)
+                
 
     del uCursor
