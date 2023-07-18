@@ -2130,6 +2130,7 @@ def millardCountyOLD():
     dupePts = returnDuplicateAddresses(agrcAddPts_millardCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Millard_ErrorPts.shp'), error_pts, dupePts)
 
+
 def millardCounty():
     millardCoAddPts = r'..\Millard\MillardSource.gdb\Millard_AddressCAD_Jan_2022'
     agrcAddPts_millardCo = r'..\Millard\Millard.gdb\AddressPoints_Millard'
@@ -2233,8 +2234,6 @@ def millardCounty():
     deleteDuplicatePts(agrcAddPts_millardCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
     dupePts = returnDuplicateAddresses(agrcAddPts_millardCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Millard_ErrorPts.shp'), error_pts, dupePts)
-
-
 
 
 def morganCounty():
@@ -2463,7 +2462,6 @@ def piuteCounty():
     updateErrorPts(os.path.join(cntyFldr, 'Piute_ErrorPts.shp'), errorFlds, dupePts)
 
 
-
 def richCounty():
 
     richCoAddPts = r'..\Rich\RichCounty.gdb\AddressPoints'
@@ -2588,7 +2586,6 @@ def richCounty():
     deleteDuplicatePts(agrcAddPts_richCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
     dupePts = returnDuplicateAddresses(agrcAddPts_richCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Rich_ErrorPts.shp'), errorPts, dupePts)
-
 
 
 def saltLakeCounty():
@@ -2872,6 +2869,7 @@ def saltLakeCounty():
     dupePts = returnDuplicateAddresses(agrcAddPts_SLCO, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'SaltLake_ErrorPts.shp'), errorFlds, dupePts)
 
+
 def SanJuanCounty():
     sanjuanCoAddPts = r'C:\sde\AddressAdmin@AddressPointEditing@agrc.utah.gov.sde\AddressPointEditing.ADDRESSADMIN.AddressPoints'
     agrcAddPts_sanjuanCo = r'..\SanJuan\SanJuan.gdb\AddressPoints_SanJuan'
@@ -2938,7 +2936,6 @@ def SanJuanCounty():
     updateAddPtID(agrcAddPts_sanjuanCo)
     addBaseAddress(agrcAddPts_sanjuanCo)
     deleteDuplicatePts(agrcAddPts_sanjuanCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
-
 
 
 def sanpeteCounty():
@@ -3575,7 +3572,6 @@ def tooeleCounty():
     dupePts = returnDuplicateAddresses(agrcAddPts_tooeleCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Tooele_ErrorPts.shp'), errorPts, dupePts)
     
-
 
 def utahCounty():
 
