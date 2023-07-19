@@ -79,17 +79,20 @@ for t in sTypeDir:
 
 class clean_street_name:
     def __init__(self, words):
+
+        directions = ['N', 'S', 'E', 'W', 'NORTH', 'SOUTH', 'EAST', 'WEST']
+
         self.name = ' '.join(words.split()[:-1])
-        self.type = returnKey(words.split()[-1], sTypeDir)
-        self.sdir = returnKey(words[-1], dirs)
+        
+        if words.split()[-1] in directions:
+          self.direction = returnKey(words[-1], dirs)
+          self.type = ''
+        else:
+          self.type = returnKey(words.split()[-1], sTypeDir)
+          self.direction = ''
+
     def fix_road_name(road_name):
         return clean_street_name(road_name)
-
-def replaceByDictionary(string, dict):
-    for i in dict:
-        if i in string:
-            return string.replace(i, dict[i])
-    return string
 
 def checkWord(word, d):
     for key, value in d.items():
@@ -1586,6 +1589,8 @@ def grandCounty():
                 'KANE PRINGS':'KANE SPRINGS', 'MULBERRY': 'MULLBERRY', 'S HWY':'HWY 191', 'SR 279':'HWY 279', 
                 'SR 313':'HWY 313', 'SR 94':'HWY 94', 'RIM SHADOW':'RIMSHADOW', 'S HWY 191':'HWY 191',
                 'SUNNY DALE':'SUNNYDALE', 'VAKKEY VIEW':'VALLEY VIEW', 'ZIMMERMZN':'ZIMMERMAN'}
+    
+    long_names = ['100 N', '400 N', 'CASTLE VALLEY DR']
 
     with arcpy.da.SearchCursor(grandCoAddPts, grandCoAddFLDS) as sCursor, \
         arcpy.da.InsertCursor(agrcAddPts_grandCo, agrcAddFLDS) as iCursor:
@@ -1598,7 +1603,7 @@ def grandCounty():
                     addressErrors = errorPtsDict.setdefault(row[16], [])
                     addressErrors.extend(['bad street name', row[15]])
                     continue
-                sName = removeNone(row[3]).upper()
+                sName = row[3].upper()
                 sName = sName.replace(u'\xd1', 'N')
                 if sName not in rdSet:
                     if row[0] != None:
@@ -1621,6 +1626,15 @@ def grandCounty():
                     else:
                         addressErrors = errorPtsDict.setdefault(row[16], [])
                         addressErrors.extend(['suffix direction missing?', row[15]])
+
+                if sName in long_names:
+                    fix_long_name = clean_street_name(sName)
+                    sName = fix_long_name.name
+                    print(sName)
+                    sufDir = fix_long_name.direction
+                    print(sufDir)
+                    sType = fix_long_name.type
+                    print(sType)
 
                 unitId = removeNone(row[7]).strip('#').strip()
 
@@ -1998,137 +2012,6 @@ def kaneCounty():
     addBaseAddress(agrcAddPts_kaneCo)
     updateAddPtID(agrcAddPts_kaneCo)
     deleteDuplicatePts(agrcAddPts_kaneCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
-
-
-def millardCountyOLD():
-    millardCoAddPts = r'..\Millard\MillardSource.gdb\Millard_Address_Points_Dec2021'
-    agrcAddPts_millardCo = r'..\Millard\Millard.gdb\AddressPoints_Millard'
-    cntyFldr = r'..\Millard'
-
-    millardCoAddFLDS = ['FULLADDR', 'UNIT_TYPE', 'UNIT_ID', 'ADDRNUM', 'SHAPE@', 'OBJECTID']
-
-    errorPtsDict = {}
-    rdSet = createRoadSet('49027')
-
-    checkRequiredFields(millardCoAddPts, millardCoAddFLDS)
-    truncateOldCountyPts(agrcAddPts_millardCo)
-
-    replaceDict = {'NORTH ST':'N', 'NORTH RD':'N', 'SOUTH ST':'S', 'SOUTH RD':'S', 'EAST ST':'E', 'WEST ST':'W',\
-                   'WEST RD':'W', 'HIGHWAY':'HWY'}
-    rdExceptions = ['E NORTH RD', 'W NORTH RD', 'E SOUTH RD']
-    fix_name = {'TAMERIX':'TAMARIX', 'US':'HWY 50', 'NORTH':'NORTH LANE', 'SOUTH':'SOUTH LANE'}
-    fix_type = {'NORTH LANE':'RD','SOUTH LANE':'RD'}
-    add_predir = {'141 400 N':'W', '30 200 W':'S', '195 200 N':'E'}
-
-    def checkExceptions(word, lst):
-        for i in lst:
-            if i in word:
-                return True
-
-    with arcpy.da.SearchCursor(millardCoAddPts, millardCoAddFLDS) as sCursor_millardCo, \
-        arcpy.da.InsertCursor(agrcAddPts_millardCo, agrcAddFLDS) as iCursor:
-
-        for row in sCursor_millardCo:
-
-            if row[0] != '' and row[0][0].isdigit() == True:
-                unitType = row[1].strip()
-                unitId = row[2].strip()
-
-                modifiedAddress = replaceByDictionary(row[0], replaceDict)
-                if unitType not in errorList and unitType in row[0]:
-                    #remove unitTypes from address
-                    modifiedAddress = replaceByDictionary(row[0].split(row[1])[0].strip(), replaceDict)
-                if 'CENTER' in modifiedAddress and ' ST' not in modifiedAddress:
-                    addressErrors = errorPtsDict.setdefault(row[0], [])
-                    addressErrors.extend(['missing street type', row[4]])
-                    modifiedAddress = modifiedAddress + ' ST'
-
-                if '(' in modifiedAddress:
-                    addressErrors = errorPtsDict.setdefault(row[0], [])
-                    addressErrors.extend(['bad address', row[4]])
-                    modifiedAddress = modifiedAddress.split(' (')[0]
-
-                address = parse_address.parse(modifiedAddress)
-                addNum = address.houseNumber.replace('O', '0').strip('-')
-                if addNum[-1].isalpha():
-                    addNum = addNum[:-1]
-                preDir = removeNone(address.prefixDirection)
-
-                sName = address.streetName
-                sType = removeNone(address.suffixType)
-                if checkExceptions(row[0], rdExceptions) == True:
-                    sName = parse_address.parse(row[0]).streetName
-                    sType = parse_address.parse(row[0]).suffixType
-
-                if sName in fix_name:
-                    sName = fix_name[sName]
-                if sName in fix_type:
-                    sType = fix_type[sName]
-
-                if sName not in rdSet and 'HWY' not in sName:
-                    addressErrors = errorPtsDict.setdefault('{} | {}'.format(sName, row[0]), [])
-                    addressErrors.extend(['street name not found in roads', row[4]])
-
-                sName = removeDuplicateWords(sName)
-                if sName == '':
-                    addressErrors = errorPtsDict.setdefault(row[0], [])
-                    addressErrors.extend(['bad address', row[4]])
-                    continue
-
-                sufDir = removeNone(address.suffixDirection)
-                if sName[0].isdigit() == True and sName[-1].isdigit() != True and sName != '1 MILE POST':
-                    print ('{} {}'.format(sName, row[5]))
-                    sufDir = sName[-1]
-                    sName = sName[:-1]
-                    sType = ''
-                if sName[-1].isdigit() == True and sName[0].isdigit() != True and 'HWY' not in sName:
-                    preDir = sName[0]
-                    sName = sName[1:].strip()
-                    sType = ''
-                if sName.endswith((' ST', ' ROAD', ' DR', ' DRIVE', ' AVE')):
-                    sType = returnKey(sName.split()[1], sTypeDir)
-                    sName = sName.split()[0]
-
-                if preDir == sufDir:
-                    addressErrors = errorPtsDict.setdefault(row[0], [])
-                    addressErrors.extend(['pre and post directions match', row[4]])
-
-                if sufDir == '' and sType == '' and 'HWY' not in sName:
-                    addressErrors = errorPtsDict.setdefault(row[0], [])
-                    addressErrors.extend(['post dir or street type missing', row[4]])
-
-
-                fulladd = f'{addNum} {preDir} {sName} {sufDir} {sType} {unitType} {unitId}'
-                fulladd = ' '.join(fulladd.split())
-
-                if fulladd in add_predir:
-                    preDir = add_predir[fulladd]
-                    fulladd = f'{addNum} {preDir} {sName} {sufDir}'
-
-                shp = row[4]
-
-                iCursor.insertRow(('', '', fulladd, addNum, '', preDir, sName, sType, sufDir, '', '', unitType, unitId,\
-                                   '', '', '49027', 'UT', 'Unknown', 'Unknown', 'Unknown', '', 'MILLARD COUNTY', today, 'COMPLETE', '', None,\
-                                   '', '', '', shp))
-
-        error_pts = createErrorPts(errorPtsDict, cntyFldr, 'Millard_ErrorPts.shp', 'ADDRESS', millardCoAddPts)
-
-    del iCursor
-
-    inputDict = {
-    'AddSystem':['SGID.LOCATION.AddressSystemQuadrants', 'GRID_NAME', ''],
-    'City':['SGID.BOUNDARIES.Municipalities', 'SHORTDESC', ''],
-    'ZipCode':['SGID.BOUNDARIES.ZipCodes', 'ZIP5', ''],
-    'ParcelID':['SGID.CADASTRE.Parcels_Millard_LIR', 'PARCEL_ID', ''],
-    'USNG':['SGID.INDICES.NationalGrid', 'USNG', '']
-    }
-
-    addPolyAttributes(sgid, agrcAddPts_millardCo, inputDict)
-    updateAddPtID(agrcAddPts_millardCo)
-    addBaseAddress(agrcAddPts_millardCo)
-    deleteDuplicatePts(agrcAddPts_millardCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
-    dupePts = returnDuplicateAddresses(agrcAddPts_millardCo, ['UTAddPtID', 'SHAPE@'])
-    updateErrorPts(os.path.join(cntyFldr, 'Millard_ErrorPts.shp'), error_pts, dupePts)
 
 
 def millardCounty():
@@ -2652,6 +2535,9 @@ def saltLakeCounty():
     class strip_street_type:
         def __init__(self, words):
             self.name = ' '.join(words.split()[:-1])
+            directions = ['N', 'S', 'E', 'W', 'NORTH', 'SOUTH', 'EAST', 'WEST']
+            if words.split()[:-1] in directions:
+                self.direction = ''
             self.type = words.split()[-1]
     def fix_road_name(road_name):
         return strip_street_type(road_name)
@@ -2874,7 +2760,11 @@ def SanJuanCounty():
     sanjuanCoAddPts = r'C:\sde\AddressAdmin@AddressPointEditing@agrc.utah.gov.sde\AddressPointEditing.ADDRESSADMIN.AddressPoints'
     agrcAddPts_sanjuanCo = r'..\SanJuan\SanJuan.gdb\AddressPoints_SanJuan'
 
+    cntyFldr = r'..\SanJuan'
+
     truncateOldCountyPts(agrcAddPts_sanjuanCo)
+
+    errorPtsDict = {}
 
     sanjuan_fields = ['AddSystem', 'UTAddPtID', 'FullAdd', 'AddNum', 'AddNumSuffix', 'PrefixDir', 'StreetName', 'StreetType', \
                       'SuffixDir', 'LandmarkName', 'Building', 'UnitType', 'UnitID', 'City', 'ZipCode', 'CountyID', 'State', \
@@ -2900,7 +2790,7 @@ def SanJuanCounty():
                     street_type = ''
 
                 suf_dir = removeNone(row[8])
-                unit_type = removeNone(row[11])
+                unit_type = removeNone(row[11]).replace(' ', '')
                 unit_id = removeNone(row[12]).strip()
                 pt_location = removeNone(row[17])
                 pt_type = removeNone(row[18])
@@ -2923,6 +2813,8 @@ def SanJuanCounty():
                 icursor.insertRow(('', '', full_address, add_num, add_num_suf, pre_dir, street_name, street_type, suf_dir,
                                    '', '', unit_type, unit_id, '', '', '49037', 'UT', pt_location, pt_type, structure, parcel_id,
                                    pts_source, load_date, 'COMPLETE', '', mod_date, '', '', '', shp))
+                
+        errorPts = createErrorPts(errorPtsDict, cntyFldr, 'SanJuan_ErrorPts.shp', 'ADDRESS', agrcAddPts_sanjuanCo)
 
     inputDict = {
         'AddSystem':['SGID.LOCATION.AddressSystemQuadrants', 'GRID_NAME', ''],
@@ -2935,6 +2827,8 @@ def SanJuanCounty():
     addPolyAttributes(sgid, agrcAddPts_sanjuanCo, inputDict)
     updateAddPtID(agrcAddPts_sanjuanCo)
     addBaseAddress(agrcAddPts_sanjuanCo)
+    dupePts = returnDuplicateAddresses(agrcAddPts_sanjuanCo, ['UTAddPtID', 'SHAPE@'])
+    updateErrorPts(os.path.join(cntyFldr, 'SanJuan_ErrorPts.shp'), errorPts, dupePts)
     deleteDuplicatePts(agrcAddPts_sanjuanCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
 
 
@@ -3773,9 +3667,6 @@ def utahCounty():
             'ParcelID':['SGID.CADASTRE.Parcels_Utah', 'PARCEL_ID', '']
             }
 
-
-
-
     utah_parcelsLIR = {'PtType': ['SGID.CADASTRE.Parcels_Utah_LIR', 'PROP_CLASS']}
 
     utah_remapLIR = {'Residential': ['APARTMENTS', 'CONDO', 'DUPLEX', 'FOURPLEX', 'IMPROVED CONDOS', 'IMPROVED PUD', 'HGH DEN RES',
@@ -3914,6 +3805,7 @@ def uintahCounty_oldSchema():
     deleteDuplicatePts(agrcAddPts_uintahCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
     dupePts = returnDuplicateAddresses(agrcAddPts_uintahCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Uintah_ErrorPts.shp'), errorPts, dupePts)
+
 
 def uintahCounty():
     uintahCoAddPts = r'..\Uintah\UintahCounty.gdb\Uintah_MAL_2022'
@@ -4644,11 +4536,11 @@ def checkRequiredFields(inCounty, requiredFlds):
 
 
 #beaverCounty()   #Complete w/error points
-boxElderCounty()  #Complete w/error points
+#boxElderCounty()  #Complete w/error points
 #cacheCounty()  #Complete w/error points
 #carbonCounty() #Complete
 #daggettCounty() #Complete w/error points
-#davisCounty()  #Complete
+davisCounty()  #Complete
 #duchesneCounty()
 #emeryCounty()  #Complete
 #garfieldCounty()  #Complete
@@ -4673,7 +4565,7 @@ boxElderCounty()  #Complete w/error points
 #wasatchCounty()  #Complete w/error points
 #washingtonCounty()  #Complete
 #wayneCounty()
-#weberCounty()   #Complete
+weberCounty()   #Complete
 
 
 

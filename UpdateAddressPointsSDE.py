@@ -1,4 +1,5 @@
 import arcpy
+import sys
 import datetime, time
 
 def update_sde(county_name):
@@ -12,6 +13,7 @@ def update_sde(county_name):
                  'Sevier':'49041', 'Summit':'49043', 'Tooele':'49045', 'Uintah':'49047', 'Utah':'49049',
                  'Wasatch':'49051', 'Washington':'49053', 'Wayne':'49055', 'Weber':'49057'}
     
+
     path_name = ''.join(county_name.title().split())
     update_pts = f'..\{path_name}\{path_name}.gdb\AddressPoints_{path_name}'
     
@@ -34,12 +36,11 @@ def update_sde(county_name):
             print(f'!!!!!{county_name.upper()} COUNTY update has fewer points ({count_update_pts}) than what is in SDE ({count_sgid_pts_fl})')
             sys.exit('Update has fewer points than SDE')
 
-        try:
-            arcpy.DeleteFeatures_management(sgid_pts_fl)
-            arcpy.Delete_management(sgid_pts_fl)
-            print(f'-----Deleted {count_sgid_pts_fl} address points from SDE')
-        except:
-            print(f'!!!!!DELETE failed, you broke something')
+
+        arcpy.DeleteFeatures_management(sgid_pts_fl)
+        arcpy.Delete_management(sgid_pts_fl)
+        print(f'-----Deleted {count_sgid_pts_fl} address points from SDE')
+
 
         try:
             arcpy.Append_management(update_pts, sgid_pts, 'NO_TEST')
@@ -51,9 +52,18 @@ def update_sde(county_name):
     else:
         print(f'!!!!!{county_name.title()} County address points not found - {update_pts}')
     
+    #-----verify update-------
+    updated_sgid_pts_fl = arcpy.MakeFeatureLayer_management(sgid_pts, 'updated_sgid_pts_fl', sql)
+    count_updated_sgid_pts_fl = arcpy.GetCount_management(updated_sgid_pts_fl)[0]
 
+    if count_updated_sgid_pts_fl != count_update_pts:
+        point_difference = int(count_updated_sgid_pts_fl) - int(count_update_pts)
+        print(f'!!!!!SGID.LOCATION.AddressPoint has a {point_difference} point difference than the update source')
 
     print(f'End SDE Update {str(datetime.datetime.now())}')
+
+
+
 
 
 update_sde('Sevier') #Update input points and SQL query
