@@ -1,6 +1,7 @@
 import arcpy
 import sys
 import datetime, time
+from pathlib import Path
 
 def update_sde(county_name):
 
@@ -20,7 +21,7 @@ def update_sde(county_name):
 
     if arcpy.Exists(update_pts):
 
-        sgid_pts = r'..\sde_connections\SGID_Location.sde\SGID.LOCATION.AddressPoints'
+        sgid_pts = Path(__file__).resolve().parents[1].joinpath('sde_connections','SGID_Location.sde')
         
         sql = f'"CountyID" = \'{fips_dict[county_name.title()]}\''
         sgid_pts_fl = arcpy.MakeFeatureLayer_management(sgid_pts, 'sgid_pts_fl', sql)
@@ -33,7 +34,7 @@ def update_sde(county_name):
 
         if count_sgid_pts_fl > count_update_pts:
             print(f'!!!!!{county_name.upper()} COUNTY update has fewer points ({count_update_pts}) than what is in SDE ({count_sgid_pts_fl})')
-            sys.exit('Update has fewer points than SDE')
+            raise Exception('Update has fewer points than SDE')
 
 
         arcpy.DeleteFeatures_management(sgid_pts_fl)
