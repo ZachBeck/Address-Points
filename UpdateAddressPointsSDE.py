@@ -21,7 +21,7 @@ def update_sde(county_name):
 
     if arcpy.Exists(update_pts):
 
-        sgid_pts = Path(__file__).resolve().parents[1].joinpath('sde_connections','SGID_Location.sde')
+        sgid_pts = str(Path(__file__).resolve().parents[3].joinpath('sde', 'SGID_internal', 'SGID_Location.sde', 'SGID.LOCATION.AddressPoints'))
         
         sql = f'"CountyID" = \'{fips_dict[county_name.title()]}\''
         sgid_pts_fl = arcpy.MakeFeatureLayer_management(sgid_pts, 'sgid_pts_fl', sql)

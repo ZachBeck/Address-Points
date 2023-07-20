@@ -26,7 +26,7 @@ from sweeper.address_parser import Address
 
 global sgid, agrcAddFLDS, errorList
 
-sgid = r'C:\sde\SGID_internal\SGID_agrc.sde'
+sgid = str(Path(__file__).resolve().parents[3].joinpath('sde', 'SGID_internal', 'SGID_agrc.sde'))
 
 today = str(datetime.datetime.today().strftime("%m/%d/%Y"))
 
@@ -218,7 +218,7 @@ def returnEnd(str, endList):
       return s
 
 def createRoadSet(countyNumber):
-    sgidRds = r'C:\sde\SGID_internal\SGID_agrc.sde\SGID.TRANSPORTATION.Roads'
+    sgidRds = str(Path(__file__).resolve().parents[3].joinpath('sde', 'SGID_internal', 'SGID_agrc.sde', 'SGID.TRANSPORTATION.Roads'))
     rdFlds = ['COUNTY_L', 'NAME', 'POSTTYPE']
     rdList = []
 
@@ -2757,7 +2757,8 @@ def saltLakeCounty():
 
 
 def SanJuanCounty():
-    sanjuanCoAddPts = r'C:\sde\AddressAdmin@AddressPointEditing@agrc.utah.gov.sde\AddressPointEditing.ADDRESSADMIN.AddressPoints'
+    sde_file = Path(__file__).resolve().parents[3].joinpath('sde', 'AddressAdmin@AddressPointEditing@agrc.utah.gov.sde')
+    sanjuanCoAddPts = str(Path.joinpath(sde_file, 'AddressPointEditing.ADDRESSADMIN.AddressPoints'))
     agrcAddPts_sanjuanCo = r'..\SanJuan\SanJuan.gdb\AddressPoints_SanJuan'
 
     cntyFldr = r'..\SanJuan'
@@ -3473,7 +3474,7 @@ def utahCounty():
     agrcAddPts_utahCo = r'..\Utah\Utah.gdb\AddressPoints_Utah'
     cntyFldr = r'..\Utah'
 
-    sgidRds = r'C:\sde\SGID_internal\SGID_agrc.sde\SGID.TRANSPORTATION.Roads'
+    sgidRds = str(Path(__file__).resolve().parents[3].joinpath('sde', 'SGID_internal', 'SGID_agrc.sde', 'SGID.TRANSPORTATION.Roads'))
 
     utahCoAddFLDS = ['ADDRNUM', 'ROADPREDIR', 'ROADNAME', 'ROADTYPE', 'ROADPOSTDIR', 'ADDRTYPE', \
                      'UNITTYPE', 'UNITID', 'LASTUPDATE', 'SHAPE@', 'LASTEDITOR', 'FULLADDR', 'ZIPCODE', 'OBJECTID',
@@ -3697,7 +3698,7 @@ def uintahCounty_oldSchema():
     agrcAddPts_uintahCo = r'..\Uintah\Uintah.gdb\AddressPoints_Uintah'
     cntyFldr = r'..\Uintah'
 
-    sgidRds = r'C:\sde\SGID_internal\SGID_agrc.sde\SGID.TRANSPORTATION.Roads'
+    sgidRds = str(Path(__file__).resolve().parents[3].joinpath('sde', 'SGID_internal', 'SGID_agrc.sde', 'SGID.TRANSPORTATION.Roads'))
 
     uintahCoAddFLDS = ['HOUSENUMBE', 'STREETNAME', 'APARTMENT', 'ZIP', 'SHAPE@', 'Add_Type']
 
@@ -3812,7 +3813,7 @@ def uintahCounty():
     agrcAddPts_uintahCo = r'..\Uintah\Uintah.gdb\AddressPoints_Uintah'
     cntyFldr = r'..\Uintah'
 
-    sgidRds = r'C:\sde\SGID_internal\SGID_agrc.sde\SGID.TRANSPORTATION.Roads'
+    sgidRds = str(Path(__file__).resolve().parents[3].joinpath('sde', 'SGID_internal', 'SGID_agrc.sde', 'SGID.TRANSPORTATION.Roads'))
 
     uintahCoAddFLDS = ['FullAdd', 'AddNum', 'PrefixDir', 'StreetName', 'StreetType', 'SuffixDir', 'LandmarkNa',
                        'Building', 'UnitType', 'UnitID', 'City', 'ZipCode', 'PtLocation', 'PtType', 'Structure',
@@ -4540,7 +4541,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #cacheCounty()  #Complete w/error points
 #carbonCounty() #Complete
 #daggettCounty() #Complete w/error points
-davisCounty()  #Complete
+#davisCounty()  #Complete
 #duchesneCounty()
 #emeryCounty()  #Complete
 #garfieldCounty()  #Complete
@@ -4555,7 +4556,7 @@ davisCounty()  #Complete
 #piuteCounty()
 #richCounty()    #Complete
 #saltLakeCounty() #Complete w/error points
-#SanJuanCounty()
+SanJuanCounty()
 #sanpeteCounty()
 #sevierCounty()
 #summitCounty()
@@ -4565,7 +4566,7 @@ davisCounty()  #Complete
 #wasatchCounty()  #Complete w/error points
 #washingtonCounty()  #Complete
 #wayneCounty()
-weberCounty()   #Complete
+#weberCounty()   #Complete
 
 
 
