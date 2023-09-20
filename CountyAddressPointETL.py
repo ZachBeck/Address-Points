@@ -189,7 +189,7 @@ def truncateOldCountyPts(inPts):
     pointCount = int(arcpy.GetCount_management(inPts).getOutput(0))
     if pointCount > 0:
         arcpy.TruncateTable_management(inPts)
-        print ('Deleted {} points in {}'.format(pointCount, inPts))
+        print (f'Deleted {pointCount} points in {inPts}')
     else:
         print ('No points to delete')
 
@@ -727,23 +727,23 @@ def carbonCounty():
                 addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[4]}', [])
                 addressErrors.extend(['bad pre dir', row[12]])
             if row[5].endswith((' N', ' S', ' E', ' W')):
-                addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[2], row[5]), [])
+                addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[5]}', [])
                 addressErrors.extend(['suf dir in street name', row[12]])
             if row[5].isdigit() and row[4] == row[7] and row[4] not in errorList:
-                addressErrors = errorPtsDict.setdefault('{} | {} | {}'.format(row[2], row[4], row[7]), [])
+                addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[4]} | {row[7]}', [])
                 addressErrors.extend(['pre dir = suf dir', row[12]])
             if row[7] not in dirs and row[7] not in longDirs and row[7] not in errorList:
-                addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[2], row[7]), [])
+                addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[7]}', [])
                 addressErrors.extend(['bad suf dir', row[12]])
             if row[5] not in row[2] and row[5] not in errorList and  row[2] not in errorList:
-                addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[2], row[5]), [])
+                addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[5]}', [])
                 addressErrors.extend(['street name not in FullAdd', row[12]])
             if row[5].endswith((tuple(leadingSpaceTypes))):
-                addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[2], row[5]), [])
+                addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[5]}', [])
                 addressErrors.extend(['street type in street name', row[12]])
             if row[3].startswith('#') or row[3].endswith(('W', 'TH', 'ST', 'E', 'N', '350? OR 39', '4099 N HWY', '?')) \
                 or row[3] in ('CEMETARY R', 'GUN CLUB R', 'JANET', 'WILSON ST'):
-                addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[2], row[3]), [])
+                addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[3]}', [])
                 addressErrors.extend(['bad address number', row[12]])
             #---------------------------
 
@@ -815,13 +815,13 @@ def carbonCounty():
                 if 'HIGHWAY 6' in row[2]:
                     sName = 'HWY 6'
                     if sType != '':
-                        addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[2], row[6]), [])
+                        addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[6]}', [])
                         addressErrors.extend(['street type not needed', row[12]])
                     sType = ''
                 if 'HWY' in sName:
                     sName = sName.lstrip('U S ')
                     if sType != '':
-                        addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[2], row[6]), [])
+                        addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[6]}', [])
                         addressErrors.extend(['street type not needed', row[12]])
                     sType = ''
                 hwyNumbers = ['6', '10', '96', '122', '123', '124', '157', '191', '264']
@@ -830,7 +830,7 @@ def carbonCounty():
                     sType = ''
 
                 if row[6] != '' and row[6] != ' ' and row[6] != None and row[6] not in sTypeDir:
-                    addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[6], row[2]), [])
+                    addressErrors = errorPtsDict.setdefault(f'{row[6]} | {row[2]}', [])
                     addressErrors.extend(['bad or missing street type', row[12]])
 
                 if row[9] not in errorList and row[9] != 'OFFICE':
@@ -860,11 +860,11 @@ def carbonCounty():
                 #     unitType = ''
 
                 if unitType == '' and unitID != '':
-                   unitID_hash = '# {}'.format(unitID)
-                   fullAdd = '{} {} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName, sType, sufDir, unitType, unitID_hash)
+                   unitID_hash = f'# {unitID}'
+                   fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sType} {sufDir} {unitType} {unitID_hash}'
                    fullAdd = ' '.join(fullAdd.split())
                 else:
-                    fullAdd = '{} {} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName, sType, sufDir, unitType, unitID)
+                    fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sType} {sufDir} {unitType} {unitID}'
                     fullAdd = ' '.join(fullAdd.split())
 
             elif row[2] != '' and row[2][0].isdigit() and len(row[2]) > 7:
@@ -911,7 +911,7 @@ def carbonCounty():
             shp = row[12]
 
             if row[5].upper() not in rdSet and row[5] != '' and 'HWY' not in sName:
-                addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[2], row[5]), [])
+                addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[5]}', [])
                 addressErrors.extend(['street name not found in roads', row[12]])
             if sName.endswith((' ALY', ' AVE', ' BAY', ' BND', ' BLVD', ' CYN', ' CTR', ' CIR', ' COR', ' CT', ' CV', \
                                 ' CRK', ' CRES', ' XING', ' DR', ' EST', ' ESTS', ' EXPY', ' FLT', ' FRK', ' FWY', \
@@ -919,7 +919,7 @@ def carbonCounty():
                                 ' MNR', ' MDW', ' MDWS', ' PARK', ' PKWY', ' PASS', ' PL', ' PLZ', ' PT', ' RAMP', \
                                 ' RNCH', ' RDG', ' RD', ' RTE', ' ROW', ' RUN', ' SQ', ' ST', ' TER', ' TRCE', ' TRL', \
                                 ' VW', ' VLG', ' WAY')):
-                addressErrors = errorPtsDict.setdefault('{} | {}'.format(sName, row[2]), [])
+                addressErrors = errorPtsDict.setdefault(f'{sName} | {row[2]}', [])
                 addressErrors.extend(['street type in name?', row[12]])
 
             if sName.isdigit() and preDir in errorList and sufDir not in errorList:
@@ -1021,11 +1021,11 @@ def daggettCounty():
                     addressErrors.extend(['HouseAddr and StreetName have mixed street names', row[10]])
                 if row[3].isalpha() and row[4] == '':
                     print ('missing stype')
-                if ' {}'.format(removeNone(row[3])).endswith(' ' + removeNone(row[4])):
+                if f' {removeNone(row[3])}'.endswith(' ' + removeNone(row[4])):
                     addressErrors = errorPtsDict.setdefault(row[3], [])
                     addressErrors.extend(['StreetType in StreetName', row[10]])
 
-                    sName = row[3].strip(' {}'.format(row[4]))
+                    sName = row[3].strip(f' {row[4]}')
 
                 if sName in fix_name:
                     sName = fix_name[sName]
@@ -1037,10 +1037,10 @@ def daggettCounty():
                 unitID = removeNone(row[6]).strip()
 
                 if unitID == '':
-                    fullAdd = '{} {} {} {} {}'.format(addNum, preDir, sName, sufDir, sType)
+                    fullAdd = f'{addNum} {preDir} {sName} {sufDir} {sType}'
                     fullAdd = ' '.join(fullAdd.split())
                 else:
-                    fullAdd = '{} {} {} {} {} # {}'.format(addNum, preDir, sName, sufDir, sType, unitID)
+                    fullAdd = f'{addNum} {preDir} {sName} {sufDir} {sType} # {unitID}'
                     fullAdd = ' '.join(fullAdd.split())
 
                 parcelID = row[7]
@@ -1176,7 +1176,7 @@ def davisCounty():
                         addressErrors = errorPtsDict.setdefault(row[8], [])
                         addressErrors.extend(['Prefix = Suffix direction', row[9]])
                     if 'HWY' not in streetName and streetName not in row[8].upper():
-                        addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[8], streetName), [])
+                        addressErrors = errorPtsDict.setdefault(f'{row[8]} | {streetName}', [])
                         addressErrors.extend(['Mixed street names', row[9]])
                     # if ' {}'.format(row[5]).endswith(' ' + row[6]):
                     #     addressErrors = errorPtsDict.setdefault(row[8], [])
@@ -1192,7 +1192,7 @@ def davisCounty():
                     #     addressErrors = errorPtsDict.setdefault(row[8], [])
                     #     addressErrors.extend([streetName + ' not in FullAddress', row[9]])
                     if streetName not in rdSet:
-                        addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[8], streetName), [])
+                        addressErrors = errorPtsDict.setdefault(f'{row[8]} | {streetName}', [])
                         addressErrors.extend(['Street name missing in roads data', row[9]])
 
 
@@ -1294,7 +1294,7 @@ def duchesneCounty():
                     sufDir = returnKey(row[3].upper(), dirs2)
 
                     if row[2].strip() not in rdSet and 'SR ' not in row[2]:
-                        addressErrors = errorPtsDict.setdefault('{} {} {}'.format(addNum, row[1], row[2].strip()), [])
+                        addressErrors = errorPtsDict.setdefault(f'{addNum} {row[1]} {row[2].strip()}', [])
                         addressErrors.extend(['Street name missing in roads data', row[7]])
 
                     if '(' in sName:
@@ -1311,14 +1311,14 @@ def duchesneCounty():
                     sName = sNameFix[sName]
 
                     if sName in hwyLst:
-                        sName = 'HWY {}'.format(sName)
+                        sName = f'HWY {sName}'
                         sType = ''
                     if sName in crLst:
-                        sName = 'COUNTY RD {}'.format(sName)
+                        sName = f'COUNTY RD {sName}'
                         sType = ''
                     if sName.endswith((' N', ' S', ' E', ' W')):
                         sufDir = sName[-1]
-                        sName = sName.strip(' {}'.format(sufDir))
+                        sName = sName.strip(f' {sufDir}')
                         sType = ''
                     if sName.endswith((' West')):
                         sufDir = 'W'
@@ -1327,7 +1327,7 @@ def duchesneCounty():
                         sName = sName.replace('SR ', 'HWY ')
                         sType = ''
                     if 'US ' in sName:
-                        sName = 'HWY {}'.format(sName.split()[-1])
+                        sName = f'HWY {sName.split()[-1]}'
                         sType = ''
                     if sName == 'MAIN':
                         sType = 'ST'
@@ -1337,11 +1337,11 @@ def duchesneCounty():
                         sufDir = ''
 
                     if preDir != '' and sufDir != '' and preDir == sufDir:
-                        addressErrors = errorPtsDict.setdefault('{} {} {}'.format(preDir, sName, sufDir), [])
+                        addressErrors = errorPtsDict.setdefault(f'{preDir} {sName} {sufDir}', [])
 
                         addressErrors.extend(['Prefix = Suffix direction', row[7]])
 
-                    fullAdd = '{} {} {} {} {}'.format(addNum, preDir, sName, sufDir, sType)
+                    fullAdd = f'{addNum} {preDir} {sName} {sufDir} {sType}'
                     fullAdd = ' '.join(fullAdd.split())
 
                     parcelID = row[5]
@@ -1401,7 +1401,7 @@ def emeryCounty():
                     sName = sName.replace('STATE ROAD', 'HWY')
 
                 if sName not in rdSet and 'HWY' not in sName:
-                    addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[14], sName), [])
+                    addressErrors = errorPtsDict.setdefault(f'{row[14]} | {sName}', [])
                     addressErrors.extend(['Street name not in roads data', row[13]])
 
                 sufDir = returnKey(row[4].upper(), dirs)
@@ -1429,7 +1429,7 @@ def emeryCounty():
                 modDate = row[11]
                 shp = row[13]
 
-                fullAdd = '{} {} {} {} {} {}'.format(addNum, preDir, sName, sufDir, sType, unitID_hash)
+                fullAdd = f'{addNum} {preDir} {sName} {sufDir} {sType} {unitID_hash}'
                 fullAdd = ' '.join(fullAdd.split())
 
                 # if fullAdd != row[14].upper():
@@ -1437,7 +1437,7 @@ def emeryCounty():
 
     # --------------Create Error Points--------------
                 if row[2].upper() not in row[14].upper():
-                    addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[2], row[14]), [])
+                    addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[14]}', [])
                     addressErrors.extend(['mixed street names', row[13]])
                 if preDir == sufDir and sType == '':
                     addressErrors = errorPtsDict.setdefault(row[14], [])
@@ -1546,11 +1546,11 @@ def garfieldCounty():
                 shp = row[28]
 
                 if unitId != '':
-                    fullAdd = '{} {} {} {} {} # {}'.format(addNum, preDir, sName, sType, sufDir, unitId)
+                    fullAdd = f'{addNum} {preDir} {sName} {sType} {sufDir} # {unitId}'
                 elif sType == 'HWY':
-                    fullAdd = '{} {} {} {}'.format(addNum, preDir, sName, sufDir)
+                    fullAdd = f'{addNum} {preDir} {sName} {sufDir}'
                 else:
-                    fullAdd = '{} {} {} {} {}'.format(addNum, preDir, sName, sType, sufDir)
+                    fullAdd = f'{addNum} {preDir} {sName} {sType} {sufDir}'
 
                 fullAdd = ' '.join(fullAdd.split())
 
@@ -1614,10 +1614,10 @@ def grandCounty():
                 sName = sName.replace(u'\xd1', 'N')
                 if sName not in rdSet:
                     if row[0] != None:
-                        addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[0], row[3]), [])
+                        addressErrors = errorPtsDict.setdefault(f'{row[0]} | {row[3]}', [])
                         addressErrors.extend(['street name not in roads data', row[15]])
                     else:
-                        addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[16], row[3]), [])
+                        addressErrors = errorPtsDict.setdefault(f'{row[16]} | {row[3]}', [])
                         addressErrors.extend(['street name not in roads data', row[15]])
 
                 if sName in fix_name:
@@ -1645,9 +1645,9 @@ def grandCounty():
 
                 unitId = removeNone(row[7]).strip('#').strip()
 
-                fullAdd = '{} {} {} {} {}'.format(addNum, preDir, sName, sType, sufDir)
+                fullAdd = f'{addNum} {preDir} {sName} {sType} {sufDir}'
                 if unitId != '':
-                    fullAdd = '{} {} {} {} {} # {}'.format(addNum, preDir, sName, sType, sufDir, unitId)
+                    fullAdd = f'{addNum} {preDir} {sName} {sType} {sufDir} # {unitId}'
                 fullAdd = ' '.join(fullAdd.split())
 
                 if sType == '' and sName[0].isdigit() == False:
@@ -1988,7 +1988,7 @@ def kaneCounty():
 
             if streetName in fix_rds:
                 streetName = fix_rds[streetName]
-                fullAdd = '{} {} {} {} {} {}'.format(addNum, preDir, streetName, sufDir, streetType, unitId)
+                fullAdd = f'{addNum} {preDir} {streetName} {sufDir} {streetType} {unitId}'
                 
 
             if streetName.startswith('HIGHWAY'):
@@ -2204,7 +2204,7 @@ def morganCounty():
 
             shp = row[5]
 
-            fullAdd = '{} {} {} {} {} {} {}'.format(addNum, preDir, sName, sufDir, sType, unitType, unitID)
+            fullAdd = f'{addNum} {preDir} {sName} {sufDir} {sType} {unitType} {unitID}'
             fullAdd = ' '.join(fullAdd.split())
 
             if fullAddr != fullAdd:
@@ -2415,12 +2415,12 @@ def richCounty():
                 if preDir == sufDir and sType == '':
                     addressErrors = errorPtsDict.setdefault(f'{sName} | {preDir} {sufDir}', [])
                     addressErrors.extend(['prefix = suffix direction', row[8]])
-                    print ('{} p = s no type'.format(row[9]))
+                    print (f'{row[9]} p = s no type')
                     continue
                 if sName.isdigit() and preDir == '':
                     addressErrors = errorPtsDict.setdefault(f'{sName} | {preDir} {sufDir}', [])
                     addressErrors.extend(['prefix direction is missing', row[8]])
-                    print ('{} no p'.format(row[9]))
+                    print (f'{row[9]} no p')
                     continue
                 if sName in skipAdd:
                     continue
@@ -2580,8 +2580,8 @@ def saltLakeCounty():
 
                 if '/' in row[1]:
                     addNumSuf = row[1].split('/')
-                    addNumSuf = '{}/{}'.format(addNumSuf[0][-1], addNumSuf[1][0])
-                    addNum = addNum.replace('-{}'.format(addNumSuf), '')
+                    addNumSuf = f'{addNumSuf[0][-1]}/{addNumSuf[1][0]}'
+                    addNum = addNum.replace(f'-{addNumSuf}', '')
                 else:
                     addNumSuf = ''
                 preDir = returnKey(row[15], dirs)
@@ -2636,10 +2636,10 @@ def saltLakeCounty():
                     addressErrors = errorPtsDict.setdefault(row[1], [])
                     addressErrors.extend(['predir = sufdir', row[10]])
                 if row[13] not in row[1]:
-                    addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[13], row[3]), [])
+                    addressErrors = errorPtsDict.setdefault(f'{row[13]} | {row[3]}', [])
                     addressErrors.extend(['Mixed street names', row[10]])
                 if row[17] not in sTypeList and row[17] not in errorList and row[17] != 'WY' and row[17] != 'CNTR':
-                    addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[17], row[3]), [])
+                    addressErrors = errorPtsDict.setdefault(f'{row[17]} | {row[3]}', [])
                     addressErrors.extend(['bad street type', row[10]])
         #-----------------------------------------------------------------------
 
@@ -2658,17 +2658,17 @@ def saltLakeCounty():
                     unitType = unitDict[row[21]]
 
                 if unitType != '' and unitId != '':
-                    fulladd = '{} {} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, streetName, sufDir, streetType, unitType, unitId)
+                    fulladd = f'{addNum} {addNumSuf} {preDir} {streetName} {sufDir} {streetType} {unitType} {unitId}'
                 elif unitId != '':
-                    fulladd = '{} {} {} {} {} {} # {}'.format(addNum, addNumSuf, preDir, streetName, sufDir, streetType, unitId)
+                    fulladd = f'{addNum} {addNumSuf} {preDir} {streetName} {sufDir} {streetType} # {unitId}'
                 elif row[13] in fixDict and streetName == 'PARK':
-                    fulladd = '{} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, streetName, streetType, sufDir, unitId)
+                    fulladd = f'{addNum} {addNumSuf} {preDir} {streetName} {streetType} {sufDir} {unitId}'
                 elif row[13] in fixDict and streetName == 'SUNRISE':
-                    fulladd = '{} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, streetName, streetType, sufDir, unitId)
+                    fulladd = f'{addNum} {addNumSuf} {preDir} {streetName} {streetType} {sufDir} {unitId}'
                 elif streetName.startswith('HWY '):
-                    fulladd = '{} {} {} {}'.format(addNum, addNumSuf, preDir, streetName)
+                    fulladd = f'{addNum} {addNumSuf} {preDir} {streetName}'
                 else:
-                    fulladd = '{} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, streetName, sufDir, streetType)
+                    fulladd = f'{addNum} {addNumSuf} {preDir} {streetName} {sufDir} {streetType}'
 
                 fulladd = ' '.join(fulladd.split())
 
@@ -2679,7 +2679,7 @@ def saltLakeCounty():
 
                 #-------------Error Points Part II----------------
                 if streetName not in fixDict and 'HWY' not in streetName and streetName not in rdSet:
-                    addressErrors = errorPtsDict.setdefault('{} | {}'.format(streetName, fulladd), [])
+                    addressErrors = errorPtsDict.setdefault(f'{streetName} | {fulladd}', [])
                     addressErrors.extend(['add pts street name not found in roads', row[10]])
                 #--------------------------------------------------
 
@@ -2973,9 +2973,9 @@ def sevierCounty():
             unitType = returnKey(unitType, unitTypeDir)
 
             if unitType == '' and unitID != '':
-                fullAdd = '{} {} {} {} {} # {}'.format(addNum, preDir, sName, sufDir, sType, unitID)
+                fullAdd = f'{addNum} {preDir} {sName} {sufDir} {sType} # {unitID}'
             else:
-                fullAdd = '{} {} {} {} {} {} {}'.format(addNum, preDir, sName, sufDir, sType, unitType, unitID)
+                fullAdd = f'{addNum} {preDir} {sName} {sufDir} {sType} {unitType} {unitID}'
 
             fullAdd = ' '.join(fullAdd.split())
 
@@ -3073,7 +3073,7 @@ def summitCounty():
 
             unitNum = formatUnitID(row[2])
 
-            fullAdd = '{} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName, sType, sufDir, unitNum)
+            fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sType} {sufDir} {unitNum}'
             fullAdd = ' '.join(fullAdd.split())
 
             if row[9] == 'Condo or Unit':
@@ -3093,13 +3093,13 @@ def summitCounty():
                 addressErrors = errorPtsDict.setdefault(row[7], [])
                 addressErrors.extend(['predir = sufdir', row[12]])
             if sName not in removeNone(row[7]).upper() and 'HWY' not in sName and row[7] != None:
-                addressErrors = errorPtsDict.setdefault('{} | {}'.format(sName, row[7]), [])
+                addressErrors = errorPtsDict.setdefault(f'{sName} | {row[7]}', [])
                 addressErrors.extend(['Mixed street names', row[12]])
             if sName not in rdSet and 'SR ' not in sName:
                 addressErrors = errorPtsDict.setdefault(row[7], [])
                 addressErrors.extend(['Street name not found in roads', row[12]])
             if row[5] != None and returnKey(row[5], sTypeDir) == '': #not in sTypeList and row[5] not in errorList:
-                addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[5], row[7]), [])
+                addressErrors = errorPtsDict.setdefault(f'{row[5]} | {row[7]}', [])
                 addressErrors.extend(['bad street type', row[12]])
             # ------------------------------------
 
@@ -3252,7 +3252,7 @@ def tooeleCounty():
 
     def stripType(street, types):
         if len(street.split()) > 1:
-            if ' {}'.format(street.split()[-1]) in types:
+            if f' {street.split()[-1]}' in types:
                 type = street.split()[-1]
                 return street.rstrip(type).strip()
         return street
@@ -3385,10 +3385,10 @@ def tooeleCounty():
 
         #-------Log address errors
                 if removeNone(row[4]).lstrip('0').upper() not in removeNone(row[1]):
-                    addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[4], row[1]), [])
+                    addressErrors = errorPtsDict.setdefault(f'{row[4]} | {row[1]}', [])
                     addressErrors.extend(['Mixed street names', row[11]])
                 if sName not in rdSet and 'HWY' not in sName:
-                    addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[4],row[1]), [])
+                    addressErrors = errorPtsDict.setdefault(f'{row[4]} | {row[1]}', [])
                     addressErrors.extend(['Street name not found in roads', row[11]])
                 if row[3] == row[6] and row[3] not in errorList:
                     addressErrors = errorPtsDict.setdefault(row[1], [])
@@ -3401,7 +3401,7 @@ def tooeleCounty():
                 if ' 1/2' in addNumRAW:
                     addNum = addNumRAW.split()[0]
                     addNumSuf = addNumRAW.split()[1]
-                    fullAdd = '{} {} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName, sufDir, sType, unitType, unitID)
+                    fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sufDir} {sType} {unitType} {unitID}'
                     fullAdd = ' '.join(fullAdd.split())
                     iCursor.insertRow(('', '', fullAdd, addNum, addNumSuf, preDir, sName, sType, sufDir, '', '', \
                                        unitType, unitID, city, '', '49045', 'UT', '', '', structure, parcelID, \
@@ -3409,7 +3409,7 @@ def tooeleCounty():
 
                 elif separator:
                     addNum = addNumRAW.split(separator.group(0))[0].strip()
-                    fullAdd = '{} {} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName, sufDir, sType, unitType, unitID)
+                    fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sufDir} {sType} {unitType} {unitID}'
                     fullAdd = ' '.join(fullAdd.split())
                     iCursor.insertRow(('', '', fullAdd, addNum, addNumSuf, preDir, sName, sType, sufDir, '', '', \
                                        unitType, unitID, city, '', '49045', 'UT', '', '', structure, parcelID, \
@@ -3419,10 +3419,10 @@ def tooeleCounty():
                     if '#' in addNumRAW:
                         addNum = addNumRAW.strip('#')
                         if unitType == '' and unitID != '':
-                            fullAdd = '{} {} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName, sufDir, sType, '#', unitID)
+                            fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sufDir} {sType} # {unitID}'
                             fullAdd = ' '.join(fullAdd.split())
                         else:
-                            fullAdd = '{} {} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName, sufDir, sType, unitType, unitID)
+                            fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sufDir} {sType} {unitType} {unitID}'
                             fullAdd = ' '.join(fullAdd.split())
 
                         iCursor.insertRow(('', '', fullAdd, addNum, addNumSuf, preDir, sName, sType, sufDir, '', '', \
@@ -3450,17 +3450,17 @@ def tooeleCounty():
                     else:
                         addNum = addNumRAW.strip()
                         if sName in routeDict:
-                            fullAdd = '{} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName, sufDir, unitType, unitID)
+                            fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sufDir} {unitType} {unitID}'
                             fullAdd = ' '.join(fullAdd.split())
                             if unitType == '' and unitID != '':
-                                fullAdd = '{} {} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName, sufDir, sType, '#', unitID)
+                                fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sufDir} {sType} # {unitID}'
                                 fullAdd = ' '.join(fullAdd.split())
 
                         elif unitType == '' and unitID != '':
-                            fullAdd = '{} {} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName, sufDir, sType, '#', unitID)
+                            fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sufDir} {sType} # {unitID}'
                             fullAdd = ' '.join(fullAdd.split())
                         else:
-                            fullAdd = '{} {} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName, sufDir, sType, unitType, unitID)
+                            fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sufDir} {sType} {unitType} {unitID}'
                             fullAdd = ' '.join(fullAdd.split())
 
 
@@ -3601,7 +3601,7 @@ def utahCounty():
                     sType = 'ST'
 
                 if street.startswith(('SR ', 'US ')):
-                    street = 'HWY {}'.format(street[3:])
+                    street = f'HWY {street[3:]}'
                     sType = ''
 
                 if row[1] in dirs:
@@ -3611,7 +3611,7 @@ def utahCounty():
 
                 if row[4] not in errorList:
                     sufDir = row[4]
-                    if ' {} '.format(sufDir) not in row[11]:
+                    if f' {sufDir} ' not in row[11]:
                         sufDir = ''
 
                 if preDir in errorList and sufDir not in errorList:
@@ -3649,10 +3649,10 @@ def utahCounty():
                     modDate = row[14]
 
                 if unitType == '' and unitId != '':
-                    fullAdd = '{} {} {} {} {} # {}'.format(addNum, preDir, street, sufDir, sType, unitId)
+                    fullAdd = f'{addNum} {preDir} {street} {sufDir} {sType} # {unitId}'
                     fullAdd = ' '.join(fullAdd.split())
                 else:
-                    fullAdd = '{} {} {} {} {} {} {}'.format(addNum, preDir, street, sufDir, sType, unitType, unitId)
+                    fullAdd = f'{addNum} {preDir} {street} {sufDir} {sType} {unitType} {unitId}'
                     fullAdd = ' '.join(fullAdd.split())
 
                 zip = ''
@@ -3664,7 +3664,7 @@ def utahCounty():
                     addressErrors = errorPtsDict.setdefault(f'{row[15]} | {fullAdd}', [])
                     addressErrors.extend(['predir = sufdir', row[9]])
                 # if street not in removeNone(row[11]) and 'HWY' not in street and row[11] != None:
-                #     addressErrors = errorPtsDict.setdefault('{} | {}'.format(street, row[11]), [])
+                #     addressErrors = errorPtsDict.setdefault('{street} | {row[11]}', [])
                 #     addressErrors.extend(['Mixed street names', row[9]])
                 # if street not in rdSet and 'HWY' not in street:
                 # #if street not in rdSet_county and 'HWY' not in street:
@@ -3783,7 +3783,7 @@ def uintahCounty_oldSchema():
             sName_strp = sName_strp.strip()
 
             if sName_strp not in rdSet and sName_strp[:4] != 'HWY ':
-                addressErrors = errorPtsDict.setdefault('{} | {}'.format(sName_strp, row[1]), [])
+                addressErrors = errorPtsDict.setdefault(f'{sName_strp} | {row[1]}', [])
                 addressErrors.extend(['Street name not found in roads', row[4]])
             if preDir == sufDir:
                 addressErrors = errorPtsDict.setdefault(row[1], [])
@@ -3803,9 +3803,9 @@ def uintahCounty_oldSchema():
                 unitType = ''
 
             if unitType == '' and unitID != '':
-                fullAdd = '{} {} {} {} {} {} # {}'.format(addNum, addNumSuf, preDir, sName_strp, sufDir, sType, unitID)
+                fullAdd = f'{addNum} {addNumSuf} {preDir} {sName_strp} {sufDir} {sType} # {unitID}'
             else:
-                fullAdd = '{} {} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName_strp, sufDir, sType, unitType, unitID)
+                fullAdd = f'{addNum} {addNumSuf} {preDir} {sName_strp} {sufDir} {sType} {unitType} {unitID}'
 
             if row[5] in map_ptType:
                 pt_Type = map_ptType[row[5]]
@@ -4001,7 +4001,7 @@ def wasatchCounty():
 
                 sName = sName.replace('SR ', 'HWY ').replace('US ', 'HWY ')
                 if 'HWY' not in sName and sName not in rdSet:
-                    addressErrors = errorPtsDict.setdefault('{} | {}'.format(sName, row[1]), [])
+                    addressErrors = errorPtsDict.setdefault(f'{sName} | {row[1]}', [])
                     addressErrors.extend(['add pts street name not found in roads', row[11]])
 
                 sufDir = removeNone(row[5])
@@ -4009,8 +4009,8 @@ def wasatchCounty():
                 if sType != '' and sufDir in dirs:
                     sufDir = ''
 
-                if sName.endswith(' {}'.format(sType)):
-                    sName = sName.replace(' {}'.format(sType), '')
+                if sName.endswith(f' {sType}'):
+                    sName = sName.replace(f' {sType}', '')
                 if sName in fixDict:
                     sName = fixDict[sName]
                 if sName == 'HAMLET':
@@ -4036,11 +4036,11 @@ def wasatchCounty():
                 unitID = removeBadValues(row[7], errorList)
 
                 if unitType == '' and unitID != '':
-                    fullAdd = '{} {} {} {} {} # {}'.format(addNum, preDir, sName, sType, sufDir, unitID)
+                    fullAdd = f'{addNum} {preDir} {sName} {sType} {sufDir} # {unitID}'
                 elif unitType != '' and unitID != '':
-                    fullAdd = '{} {} {} {} {} {} {}'.format(addNum, preDir, sName, sType, sufDir, unitType, unitID)
+                    fullAdd = f'{addNum} {preDir} {sName} {sType} {sufDir} {unitType} {unitID}'
                 else:
-                    fullAdd = '{} {} {} {} {}'.format(addNum, preDir, sName, sType, sufDir)
+                    fullAdd = f'{addNum} {preDir} {sName} {sType} {sufDir}'
 
                 fullAdd = ' '.join(fullAdd.split())
 
@@ -4155,12 +4155,12 @@ def washingtonCounty():
                 parcel = removeBadValues(row[0], errorList)
 
                 if unitType == '' and unitID != '':
-                   unitID_hash = '# {}'.format(unitID)
-                   fullAdd = '{} {} {} {} {} {}'.format(addNum, preDir, sName, sType, sufDir, unitID_hash)
+                   unitID_hash = f'# {unitID}'
+                   fullAdd = f'{addNum} {preDir} {sName} {sType} {sufDir} {unitID_hash}'
                 elif unitType != '' and unitID != '':
-                   fullAdd = '{} {} {} {} {} {} {}'.format(addNum, preDir, sName, sType, sufDir, unitType, unitID)
+                   fullAdd = f'{addNum} {preDir} {sName} {sType} {sufDir} {unitType} {unitID}'
                 else:
-                   fullAdd = '{} {} {} {} {}'.format(addNum, preDir, sName, sType, sufDir)
+                   fullAdd = f'{addNum} {preDir} {sName} {sType} {sufDir}'
 
                 fullAdd = ' '.join(fullAdd.split())
 
@@ -4177,10 +4177,10 @@ def washingtonCounty():
                     addressErrors = errorPtsDict.setdefault(row[12], [])
                     addressErrors.extend(['missing street type?', row[9]])
                 if removeNone(row[3]).upper() not in removeNone(row[12]).upper():
-                    addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[3], row[12]), [])
+                    addressErrors = errorPtsDict.setdefault(f'{row[3]} | {row[12]}', [])
                     addressErrors.extend(['mixed street names', row[9]])
                 if sName not in rdSet:
-                    addressErrors = errorPtsDict.setdefault('{} | {}'.format(sName, row[12]), [])
+                    addressErrors = errorPtsDict.setdefault(f'{sName} | {row[12]}', [])
                     addressErrors.extend(['street name not in roads', row[9]])
 
                 iCursor.insertRow(('', '', fullAdd, addNum, '', preDir, sName, sType, sufDir, landmark, '', unitType, unitID, '', '', '49053', 'UT', 'Unknown', \
@@ -4359,7 +4359,7 @@ def weberCounty():
                 if sName == 'MALLORY LOOP':
                     sName = 'MALLORY'
                 if 'HWY' not in sName and sName not in rdSet:
-                    addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[2], row[5]), [])
+                    addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[5]}', [])
                     addressErrors.extend(['street name not found in roads', row[12]])
 
                 if sName == 'CENTURY MHP':
@@ -4375,7 +4375,7 @@ def weberCounty():
                     sType = 'WAY'
                 if row[4] == 'RD':
                     sType = 'RD'
-                    addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[4], row[5]), [])
+                    addressErrors = errorPtsDict.setdefault(f'{row[4]} | {row[5]}', [])
                     addressErrors.extend(['bad value in ADDR_SD', row[12]])
 
                 if sName == 'HORIZON RUN':
@@ -4422,8 +4422,8 @@ def weberCounty():
 
 
                 if preDir == sufDir and sType == '' and preDir != '':
-                    print ('preDir({}) = sufDir({})'.format(preDir, sufDir))
-                    addressErrors = errorPtsDict.setdefault('{} {} | {}'.format(row[1], row[4], row[5]), [])
+                    print (f'preDir({preDir}) = sufDir({sufDir})')
+                    addressErrors = errorPtsDict.setdefault(f'{row[1]} {row[4]} | {row[5]}', [])
                     addressErrors.extend(['prefix = suffix', row[12]])
                     continue
 
@@ -4437,10 +4437,10 @@ def weberCounty():
                 unitSearch = re.search(reUnits, unitTypeRaw)
                 if unitSearch != None:
                     unitType = unitSearch.group(0)
-                    typeRemainder = unitTypeRaw.replace('{}'.format(unitType), '').strip()
+                    typeRemainder = unitTypeRaw.replace(f'{unitType}', '').strip()
 
                     if unitTypeRaw.strip(unitType) != '':
-                        unitId = '{}{}'.format(typeRemainder, unitId).strip()
+                        unitId = f'{typeRemainder}{unitId}'.strip()
 
                     if unitType == 'BLDG':
                         building = unitTypeRaw
@@ -4460,7 +4460,7 @@ def weberCounty():
                     if unitTypeRaw == '1' and unitId == '':
                         unitTypeRaw = ''
                     if unitTypeRaw != unitId:
-                        unitId = '{}{}'.format(unitTypeRaw, unitId).strip()
+                        unitId = f'{unitTypeRaw}{unitId}'.strip()
 
                 if unitId.startswith('BAY'):
                     unitId = f'{unitId[:3]} {unitId[3:].strip()}'
@@ -4490,22 +4490,22 @@ def weberCounty():
 
 
                 if unitId.startswith('BAY'):
-                    fullAdd = '{} {} {} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName, sType, sufDir, building, unitType, unitId)
+                    fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sType} {sufDir} {building} {unitType} {unitId}'
 
                 elif unitType == 'BLDG' and unitId != '':
-                    fullAdd = '{} {} {} {} {} {} # {}'.format(addNum, addNumSuf, preDir, sName, sType, sufDir, unitId)
+                    fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sType} {sufDir} # {unitId}'
 
                 elif unitType in ['FRNT', 'REAR'] and unitId == '':
-                    fullAdd = '{} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName, sType, sufDir, unitType)
+                    fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sType} {sufDir} {unitType}'
 
                 elif unitType != '' and unitId != '':
-                    fullAdd = '{} {} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName, sType, sufDir, unitType, unitId)
+                    fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sType} {sufDir} {unitType} {unitId}'
 
                 elif unitId != '':
-                    fullAdd = '{} {} {} {} {} {} # {}'.format(addNum, addNumSuf, preDir, sName, sType, sufDir, unitId)
+                    fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sType} {sufDir} # {unitId}'
 
                 else:
-                    fullAdd = '{} {} {} {} {} {} {} {}'.format(addNum, addNumSuf, preDir, sName, sType, sufDir, unitType, unitId)
+                    fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sType} {sufDir} {unitType} {unitId}'
 
                 fullAdd = ' '.join(fullAdd.split())
 
@@ -4521,7 +4521,7 @@ def weberCounty():
                     addressErrors = errorPtsDict.setdefault(row[5], [])
                     addressErrors.extend(['missing street type?', row[12]])
                 if removeNone(row[2]).upper() not in removeNone(row[5]).upper():
-                    addressErrors = errorPtsDict.setdefault('{} | {}'.format(row[2], row[5]), [])
+                    addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[5]}', [])
                     addressErrors.extend(['mixed street names', row[12]])
 
                 iCursor.insertRow(('', '', fullAdd, addNum, addNumSuf, preDir, sName, sType, sufDir, landmark, building, unitType, \
