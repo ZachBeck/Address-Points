@@ -32,7 +32,7 @@ def addPolyAttributes(sgid, in_features, near_layers_dict):
         near_features = sgid + '\\' + near_layers_dict[lyr][0]
         print (near_features)
 
-        near_table = '{}_nearTbl'.format(lyr)
+        near_table = f'{lyr}_nearTbl'
 
         arcpy.GenerateNearTable_analysis(in_features, near_features, near_table, '1 Meters', 'NO_LOCATION', 'NO_ANGLE', 'CLOSEST')
 

@@ -1085,6 +1085,7 @@ def davisCounty():
                       'FullAddres', 'SHAPE@', 'PrimaryAdd']
 
     checkRequiredFields(davisCoAddPts, davisCoAddFLDS)
+    archive_last_month(agrcAddPts_davisCo)
     truncateOldCountyPts(agrcAddPts_davisCo)
 
     noTypeList = ['ANTELOPE ISLAND CAUSEWAY', 'APPLE ACRES', 'ASPEN GROVE', 'BOUNTIFUL MEMORIAL PARK', 'BROADWAY', \
@@ -1151,16 +1152,6 @@ def davisCounty():
                         streetType = ''
                         sufDir = ''
 
-                    if streetName.isdigit() == True:
-                        if streetType != '':
-                            addressErrors = errorPtsDict.setdefault(row[8], [])
-                            addressErrors.extend(['Drop street type?', row[9]])
-                        streetType = ''
-                    else:
-                        if sufDir != '':
-                            addressErrors = errorPtsDict.setdefault(row[8], [])
-                            addressErrors.extend(['Drop suffix direction?', row[9]])
-                        sufDir = ''
 
                     if streetName == 'FREEPORT CENTER':
                         addNum = ''
@@ -1194,6 +1185,16 @@ def davisCounty():
                     if streetName not in rdSet:
                         addressErrors = errorPtsDict.setdefault(f'{row[8]} | {streetName}', [])
                         addressErrors.extend(['Street name missing in roads data', row[9]])
+                    # if streetName.isdigit() == True:
+                    #     if streetType != '':
+                    #         addressErrors = errorPtsDict.setdefault(row[8], [])
+                    #         addressErrors.extend(['Drop street type?', row[9]])
+                    #     streetType = ''
+                    # else:
+                    #     if sufDir != '':
+                    #         addressErrors = errorPtsDict.setdefault(row[8], [])
+                    #         addressErrors.extend(['Drop suffix direction?', row[9]])
+                    #     sufDir = ''
 
 
                     addSys = ''
@@ -4311,16 +4312,17 @@ def weberCounty():
     agrcAddPts_weberCo = r'..\Weber\Weber.gdb\AddressPoints_Weber'
     cntyFldr = r'..\Weber'
 
-    weberCoAddFLDS = ['ADDR_HN', 'ADDR_PD', 'ADDR_SN', 'ADDR_ST', 'ADDR_SD', 'PT_ADD', 'PLCMT_METH', 'WEBER_DATE', 'ADDRES_TYP', \
+    weberCoAddFLDS = ['ADDR_HN', 'ADDR_PD', 'ADDR_SN', 'ADDR_ST', 'ADDR_SD', 'PT_ADD', 'PLCMT_METH', 'WEBER_DATE', 'ADDRES_TYP', 
                       'ZIP', 'PARCEL_ID', 'EDIT_DATE', 'SHAPE@', 'OBJECTID_1', 'NAME', 'UNIT', 'UNIT_NUM', 'OBJECTID_1']
 
     ptTypeDict = {'Residential':['0', '1', '3'], 'Commercial':['2'], 'Other':['4', '5', '6', '7']}
 
     checkRequiredFields(weberCoAddPts, weberCoAddFLDS)
+    archive_last_month(agrcAddPts_weberCo)
     truncateOldCountyPts(agrcAddPts_weberCo)
 
     errorPtsDict = {}
-    rdSet = createRoadSet('49057')
+    #rdSet = createRoadSet('49057')
 
     numberedUnits = ['APT', 'FLR', 'RM', 'STE', 'UNIT']
 
@@ -4358,9 +4360,9 @@ def weberCounty():
                 sName = row[2].upper()
                 if sName == 'MALLORY LOOP':
                     sName = 'MALLORY'
-                if 'HWY' not in sName and sName not in rdSet:
-                    addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[5]}', [])
-                    addressErrors.extend(['street name not found in roads', row[12]])
+                # if 'HWY' not in sName and sName not in rdSet:
+                #     addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[5]}', [])
+                #     addressErrors.extend(['street name not found in roads', row[12]])
 
                 if sName == 'CENTURY MHP':
                     landmark = sName
@@ -4442,16 +4444,10 @@ def weberCounty():
                     if unitTypeRaw.strip(unitType) != '':
                         unitId = f'{typeRemainder}{unitId}'.strip()
 
-                    if unitType == 'BLDG':
-                        building = unitTypeRaw
+                    if 'BLDG' in unitType:
+                        building = ''
                         unitType = ''
-                        unitId = row[16].replace('BAY ', '')
-                        if ' ' not in building:
-                            building = building.replace('BLDG', 'BLDG ').strip()
-
-                    if row[16][:4] == 'STE ':
-                        unitType = 'STE'
-                        unitId = row[16].replace('STE', '').strip()
+                        unitId = row[16]
 
                     if unitType == 'SUITE':
                         unitType = 'STE'
@@ -4470,18 +4466,18 @@ def weberCounty():
                 if unitId == '' and unitType not in ['BSMT', 'FRNT', 'REAR']:
                     unitType = ''
 
-                if row[15] == 'BLDG' and ' ' in unitId:
-                    if 'BLDG' in row[16]:
-                        building = row[16]
-                        unitId = ''
-                    else:
-                        building = f'BLDG {row[16].split()[0]}'
-                        unitId = row[16].replace(row[16].split()[0], '').strip()
-                        if 'STE' in row[16]:
-                            unitType = 'STE'
-                            unitId = row[16].split()[-1]
-                        # else:
-                        #     unitType = ''
+                # if row[15] == 'BLDG' and ' ' in unitId:
+                #     if 'BLDG' in row[16]:
+                #         building = row[16]
+                #         unitId = ''
+                #     else:
+                #         building = f'BLDG {row[16].split()[0]}'
+                #         unitId = row[16].replace(row[16].split()[0], '').strip()
+                #         if 'STE' in row[16]:
+                #             unitType = 'STE'
+                #             unitId = row[16].split()[-1]
+                #         # else:
+                #         #     unitType = ''
 
                 unitId = unitId.replace('PKWY ', '').strip()
 
@@ -4489,7 +4485,7 @@ def weberCounty():
                     unitType = ''
 
 
-                if unitId.startswith('BAY'):
+                if unitId.startswith(('BAY', 'BLDG')):
                     fullAdd = f'{addNum} {addNumSuf} {preDir} {sName} {sType} {sufDir} {building} {unitType} {unitId}'
 
                 elif unitType == 'BLDG' and unitId != '':
@@ -4585,7 +4581,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #emeryCounty()  #Complete
 #garfieldCounty()  #Complete
 #grandCounty()
-ironCounty()   #Complete
+#ironCounty()   #Complete
 #juabCounty()
 #kaneCounty()   #Complete
 #millardCounty()   #Complete w/error points
@@ -4605,7 +4601,7 @@ ironCounty()   #Complete
 #wasatchCounty()  #Complete w/error points
 #washingtonCounty()  #Complete
 #wayneCounty()
-#weberCounty()   #Complete
+weberCounty()   #Complete
 
 
 

@@ -34,7 +34,7 @@ class DuplicateTest(object):
                 shp = row[-2]
                 if shp != None:
                     coord_trim = dig_trim.sub(r'\1', shp)
-                    hash = xxh64('{} {}'.format(row[:-2], coord_trim))
+                    hash = xxh64(f'{row[:-2]} {coord_trim}')
                     digest = hash.hexdigest()
                     if digest not in digest_dict:
                         digest_dict.setdefault(digest)
@@ -53,9 +53,9 @@ class DuplicateTest(object):
         arcpy.env.workspace = self.workspace
         if len(self.report) > 0:
             try:
-                sql = '"OBJECTID" IN ({})'.format(', '.join(str(d) for d in self.report))
+                sql = f"\"OBJECTID\" IN ({', '.join(str(d) for d in self.report)})"
                 duplicate_FL = arcpy.management.MakeFeatureLayer(self.table_name, 'duplicate_FL', sql)
-                print('Deleted {} duplicate records'.format(len(self.report)))
+                print(f'Deleted {len(self.report)} duplicate records')
                 arcpy.DeleteFeatures_management(duplicate_FL)
             except:
                 print('unable to delete features')

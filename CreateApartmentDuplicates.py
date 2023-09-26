@@ -23,9 +23,9 @@ def addBaseAddress(inAddressPoints):
 
     with arcpy.da.SearchCursor(inAddressPoints, flds) as sCursor:
         for row in sCursor:
-            stripStr = ' {} {}'.format(row[9], row[10])
+            stripStr = f' {row[9]} {row[10]}'
             if '#' in row[1]:
-                stripStr = ' # {}'.format(row[10])
+                stripStr = f' # {row[10]}'
             baseAdd = re.sub(stripStr, '', row[1])
             baseAddList.append(baseAdd)
             allAddsDict.setdefault(row[1])
@@ -34,9 +34,9 @@ def addBaseAddress(inAddressPoints):
 
         sCursor.reset()
         for row in sCursor:
-            stripStr = ' {} {}'.format(row[9], row[10])
+            stripStr = f' {row[9]} {row[10]}'
             if '#' in row[1]:
-                stripStr = ' # {}'.format(row[10])
+                stripStr = f' # {row[10]}'
             baseAdd = re.sub(stripStr, '', row[1])
 
             if baseAdd in baseAddSet and baseAdd not in allAddsDict:

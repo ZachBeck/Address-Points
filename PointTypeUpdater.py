@@ -12,20 +12,9 @@ def ptTypeUpdates_SaltLake(sgid, pts, polyLyrDict, lirDict):
 
     for lyr in polyLyrDict:
 
-        # polys = os.path.join(sgid, polyLyrDict[lyr][0])
-        # print(polys)
-
-        # propCodes = (
-        #     '102', '103', '104', '105', '106', '110', '111', '112', '113', '114', '115', '116', '117', '118',
-        #     '119', '120', '142', '150', '160', '199', '504', '511', '512', '524', '535', '540', '563', '576',
-        #     '613', '614', '615', '620', '699', '901', '903', '913', '997')
-        # sql = """"{}" IN {}""".format('PROP_TYPE', propCodes)
-
-        #sql = f'"PROP_CLASS" NOT IN \'{exclude_list}\''
-        #polyFC = arcpy.MakeFeatureLayer_management(polys, 'polyFC', sql)
         polyFC = os.path.join(sgid, polyLyrDict[lyr][0])
 
-        nearTBL = '{}_nearTbl'.format(lyr)
+        nearTBL = f'{lyr}_nearTbl'
 
         arcpy.GenerateNearTable_analysis(pts, polyFC, nearTBL, '1 Meters', 'NO_LOCATION', 'NO_ANGLE', 'CLOSEST')
 
@@ -91,7 +80,7 @@ def addPolyAttributesLIR(sgid, pts, polyLyrDict, lirDict):
         polyFC = os.path.join(sgid, polyLyrDict[lyr][0])
         print (polyFC)
 
-        nearTBL = '{}_nearTbl'.format(lyr)
+        nearTBL = f'{lyr}_nearTbl'
 
         arcpy.GenerateNearTable_analysis(pts, polyFC, nearTBL, '1 Meters', 'NO_LOCATION', 'NO_ANGLE', 'CLOSEST')
 
@@ -142,7 +131,7 @@ def UpdatePropertyTypeLIR(sgid, pts, polyLyrDict, lirDict):
         polyFC = os.path.join(sgid, polyLyrDict[lyr][0])
         print (polyFC)
 
-        nearTBL = '{}_nearTbl'.format(lyr)
+        nearTBL = f'{lyr}_nearTbl'
 
         arcpy.GenerateNearTable_analysis(pts, polyFC, nearTBL, '1 Meters', 'NO_LOCATION', 'NO_ANGLE', 'CLOSEST')
 

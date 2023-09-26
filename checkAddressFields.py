@@ -51,7 +51,7 @@ def createStreetDict(cofips):
     rdDict = {}
     sgid10 = r'Database Connections\dc_agrc@SGID10@sgid.agrc.utah.gov.sde'
     roadsFC = sgid10 + '\\SGID10.TRANSPORTATION.Roads'
-    sql = """"COFIPS" = '{}'""".format(cofips)
+    sql = f""""COFIPS" = '{cofips}'"""
     roadsFL = arcpy.MakeFeatureLayer_management(roadsFC, 'roadsFL', sql)
 
     #rdFlds = ['STREETNAME', 'ZIPRIGHT']
@@ -72,7 +72,7 @@ def countyRoadList(cofips):
     countyRdList = []
     sgid10 = r'Database Connections\dc_agrc@SGID10@sgid.agrc.utah.gov.sde'
     roadsFC = sgid10 + '\\SGID10.TRANSPORTATION.Roads'
-    sql = """"COFIPS" = '{}'""".format(cofips)
+    sql = f""""COFIPS" = '{cofips}'"""
     roadsFL = arcpy.MakeFeatureLayer_management(roadsFC, 'roadsFL', sql)
     rdFlds = ['STREETNAME']
 
@@ -88,7 +88,7 @@ def flagDuplicates(addressPts, objectID, addsysFld, fullAddFld, flagFld):
         empty = [None, '', ' ']
         for row in sCursor:
             if row[1] and row[2] not in empty:
-                addKey = '{} {}'.format(row[1], row[2])
+                addKey = f'{row[1]} {row[2]}'
                 objectid = row[0]
 
                 if addKey not in addDict:
@@ -97,11 +97,11 @@ def flagDuplicates(addressPts, objectID, addsysFld, fullAddFld, flagFld):
 
     with arcpy.da.UpdateCursor(addressPts, [objectID, addsysFld, fullAddFld, flagFld]) as uCursor:
         for row in uCursor:
-            addKey = '{} {}'.format(row[1], row[2])
+            addKey = f'{row[1]} {row[2]}'
 
             if addKey in addDict:
                 if len(addDict[addKey]) > 1:
-                    row[3] = '{} {}'.format(row[3], '[Duplicate address]')
+                    row[3] = f'{row[3]} [Duplicate address]'
                     uCursor.updateRow(row)
 
 
