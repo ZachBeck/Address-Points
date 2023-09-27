@@ -483,7 +483,7 @@ def boxElderCounty():
     updateErrorPts(os.path.join(cntyFldr, 'BoxElder_ErrorPts.shp'), errorFlds, dupePts)
 
 
-def cacheCounty():
+def cacheCounty():  
     cacheCoAddPts = r'..\Cache\CacheCounty.gdb\CacheAddressPoints'
     agrcAddPts_cacheCo = r'..\Cache\Cache.gdb\AddressPoints_Cache'
     cntyFldr = r'..\Cache'
@@ -663,7 +663,8 @@ def cacheCounty():
     del sCursor
     del iCursor
 
-    remapLIR = {'Agricultural': ['LAND AGRICULTURE', 'LAND GREENBELT'], 'Commercial': ['LAND COMMERCIAL'],
+    remapLIR = {'Agricultural': ['Agricultural', 'Greenbelt', 'LAND AGRICULTURE', 'LAND GREENBELT'],
+                'Commercial': ['LAND COMMERCIAL', 'Commercial',  'Commercial - Office Space', 'Commercial - Retail'],
                 'Residential': ['LAND RESIDENTIAL', 'LAND SECONDARY'], 'Vacant': ['LAND VACANT']}
 
     inputDict = {
@@ -1228,8 +1229,8 @@ def davisCounty():
     # dictLIR = {'Commercial':'Commercial', 'Residential':'Residential', 'Vacant':'Vacant Land', 'Unknown':['', ' ']}
     # davisLIR = {'PtType': ['SGID.CADASTRE.Parcels_Davis_LIR', 'PROP_CLASS']}
     
-    remapLIR = {'Agricultural': ['LAND AGRICULTURE', 'LAND GREENBELT'], 'Commercial': ['LAND COMMERCIAL'],
-                'Residential': ['LAND RESIDENTIAL', 'LAND SECONDARY'], 'Other': ['LAND VACANT', 'Vacant Land'],
+    remapLIR = {'Agricultural': ['LAND AGRICULTURE', 'LAND GREENBELT'], 'Commercial': ['LAND COMMERCIAL', 'Commercial'],
+                'Residential': ['LAND RESIDENTIAL', 'LAND SECONDARY', 'Residential'], 'Other': ['LAND VACANT', 'Vacant Land', 'Vacant'],
                 'Unknown':[None, '']}
 
     inputDict = {
@@ -1698,7 +1699,7 @@ def ironCounty():
     #ironCoAddFLDS = ['AddNum', 'PrefixDir', 'StreetName', 'StreetType', 'SuffixDir', 'UnitType', 'UnitID', 'LoadDate', 'SHAPE@', 'FullAdd']
 
     checkRequiredFields(ironCoAddPts, ironCoAddFLDS)
-    archive_last_month(agrcAddPts_ironCo)
+    #archive_last_month(agrcAddPts_ironCo)
     truncateOldCountyPts(agrcAddPts_ironCo)
 
     errorPtsDict = {}
@@ -1829,8 +1830,20 @@ def ironCounty():
     'USNG':['SGID.INDICES.NationalGrid', 'USNG', '']
     }
 
+    iron_parcelsLIR = {'PtType': ['SGID.CADASTRE.Parcels_Iron_LIR', 'PROP_CLASS']}
+
+    iron_remapLIR = {'Agricultural':['Agricultural', 'Greenbelt'],
+                     'Residential':['Residential', 'Commercial - Apartment & Condo'],
+                     'Commercial':['Commercial',  'Commercial - Office Space', 'Commercial - Retail'], 
+                     'Mixed Use':['Mixed Use'],
+                     'Unknown': [None, 'Unknown', ''],
+                     'Other':['Tax Exempt', 'Tax Exempt - Charitable Organization or Religious',
+                              'Tax Exempt - Government', 'Undevelopable', 'Vacant', 'Privilege Tax', 'Personal Property']}
+    
+
     addPolyAttributes(sgid, agrcAddPts_ironCo, inputDict)
     updateAddPtID(agrcAddPts_ironCo)
+    addPolyAttributesLIR(sgid, agrcAddPts_ironCo, iron_parcelsLIR, iron_remapLIR)
     addBaseAddress(agrcAddPts_ironCo)
     deleteDuplicatePts(agrcAddPts_ironCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
     dupePts = returnDuplicateAddresses(agrcAddPts_ironCo, ['UTAddPtID', 'SHAPE@'])
@@ -2760,7 +2773,14 @@ def saltLakeCounty():
 
     sl_parcelsLIR = {'PtType':['SGID.CADASTRE.Parcels_SaltLake_LIR', 'PROP_CLASS']}
 
-    sl_remapLIR = {'Agricultural':'A', 'Commercial':['c', 'C'], 'Industrial':'I', 'Residential':'MH', 'Residential':'R', 'Other':'RE'}
+    sl_remapLIR = {'Agricultural':['Agricultural', 'Greenbelt'],
+                   'Commercial':['Commercial',  'Commercial - Office Space', 'Commercial - Retail'],
+                   'Industrial':['Industrial', 'Commercial - Industrial'],
+                   'Mixed Use':['Mixed Use'],
+                   'Other':['Tax Exempt', 'Tax Exempt - Charitable Organization or Religious', 
+                            'Tax Exempt - Government', 'Undevelopable', 'Vacant', 'Privilege Tax', 'Personal Property'],
+                   'Residential':['Residential', 'Commercial - Apartment & Condo'],
+                   'Unknown':[None, '', 'Unknown']}
 
     addPolyAttributes(sgid, agrcAddPts_SLCO, inputDict)
     updateAddPtID(agrcAddPts_SLCO)
@@ -3489,8 +3509,20 @@ def tooeleCounty():
     'USNG':['SGID.INDICES.NationalGrid', 'USNG', '']
     }
 
+    tooele_parcelsLIR = {'PtType': ['SGID.CADASTRE.Parcels_Tooele_LIR', 'PROP_CLASS']}
+
+    tooele_remapLIR = {'Agricultural':['Agricultural', 'Greenbelt'],
+                       'Commercial':['Commercial',  'Commercial - Office Space', 'Commercial - Retail'],
+                       'Industrial':['Industrial', 'Commercial - Industrial'],
+                       'Mixed Use':['Mixed Use'],
+                       'Other':['Tax Exempt', 'Tax Exempt - Charitable Organization or Religious',
+                                'Tax Exempt - Government', 'Undevelopable', 'Vacant', 'Privilege Tax', 'Personal Property'],
+                       'Residential':['Residential', 'Commercial - Apartment & Condo'],
+                       'Unknown':[None, '', 'Unknown']}
+
     addPolyAttributes(sgid, agrcAddPts_tooeleCo, inputDict)
     updateAddPtID(agrcAddPts_tooeleCo)
+    addPolyAttributesLIR(sgid, agrcAddPts_tooeleCo, tooele_parcelsLIR, tooele_remapLIR)
     addBaseAddress(agrcAddPts_tooeleCo)
     deleteDuplicatePts(agrcAddPts_tooeleCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
     dupePts = returnDuplicateAddresses(agrcAddPts_tooeleCo, ['UTAddPtID', 'SHAPE@'])
@@ -3701,15 +3733,14 @@ def utahCounty():
 
     utah_parcelsLIR = {'PtType': ['SGID.CADASTRE.Parcels_Utah_LIR', 'PROP_CLASS']}
 
-    utah_remapLIR = {'Residential': ['APARTMENTS', 'CONDO', 'DUPLEX', 'FOURPLEX', 'IMPROVED CONDOS', 'IMPROVED PUD', 'HGH DEN RES',
-                                'MANUFACTURED HOME - SKIRTING', 'MOBILE HOME - SKIRTING', 'MULTIPLE RES', 'PUD', 
-                                'RES CONVERSION TO APT', 'RESIDENTIAL', 'SINGLE FAMILY RES', 'STUDENT HOUSING', 'SUBSIDIZE HOUSING',
-                                'TRAILER PARK', 'TRIPLEX', 'VACANT APARTMENT'],
-                    'Commercial': ['COMMERCIAL', 'COMMERCIAL WITH AG SECONDARY',  'COMMERCIAL WITH RES EXEMPTION', 'VACANT COMM/IND',
-                                   'VACANT COMMERCIAL'], 
-                    'Mixed Use':['MIXED USE', 'MULTIPLE UNIT MIX'],
-                    'Unknown': [None, 'UNKNOWN'],
-                    'Other':['EXEMPT', 'PARTIAL EXEMPT-Clarissa', 'PARTIALLY EXEMPT COUNTY', 'Privilege Tax On Part exempt', 'VACANT']}
+    utah_remapLIR = {'Agricultural':['Agricultural', 'Greenbelt'],
+                     'Commercial':['Commercial',  'Commercial - Office Space', 'Commercial - Retail'],
+                     'Industrial':['Industrial', 'Commercial - Industrial'],
+                     'Mixed Use':['Mixed Use'],
+                     'Other':['Tax Exempt', 'Tax Exempt - Charitable Organization or Religious',
+                              'Tax Exempt - Government', 'Undevelopable', 'Vacant', 'Privilege Tax', 'Personal Property'],
+                     'Residential':['Residential', 'Commercial - Apartment & Condo'],
+                     'Unknown':[None, '', 'Unknown']}
 
     update_grid = {'BLUFFDALE (UTAH CO)':'SALT LAKE CITY', 'CEDAR HILLS':'PROVO', 'HIGHLAND':'PROVO',
                    'DRAPER CITY (UTAH CO)':'SALT LAKE CITY', 'SANTAQUIN CITY (UTAH CO)':'SANTAQUIN'}
@@ -4202,12 +4233,14 @@ def washingtonCounty():
 
     washington_parcelsLIR = {'PtType': ['SGID.CADASTRE.Parcels_Washington_LIR', 'PROP_CLASS']}
 
-    washington_remapLIR = {'Agricultural':['Agricultural'],
-                           'Commercial': ['Commercial'], 
-                           'Residential': ['Condo', 'Duplex', 'Mobile Home', 'Multiple Unit', 'Residential', 'Townhouse', 'Triplex'],
-                           'Unknown': [None, ''], 'Other':['Exempt', 'Out Building', 'State Assessed'],
-                           'Vacant':['Vacant Land']
-                            }
+    washington_remapLIR = {'Agricultural':['Agricultural', 'Greenbelt'],
+                           'Commercial':['Commercial',  'Commercial - Office Space', 'Commercial - Retail'],
+                           'Industrial':['Industrial', 'Commercial - Industrial'],
+                           'Mixed Use':['Mixed Use'],
+                           'Other':['Tax Exempt', 'Tax Exempt - Charitable Organization or Religious',
+                                    'Tax Exempt - Government', 'Undevelopable', 'Vacant', 'Privilege Tax', 'Personal Property'],
+                           'Residential':['Residential', 'Commercial - Apartment & Condo'],
+                           'Unknown':[None, '', 'Unknown']}
 
 
     addPolyAttributes(sgid, agrcAddPts_washCo, inputDict)
@@ -4581,7 +4614,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #emeryCounty()  #Complete
 #garfieldCounty()  #Complete
 #grandCounty()
-#ironCounty()   #Complete
+ironCounty()   #Complete
 #juabCounty()
 #kaneCounty()   #Complete
 #millardCounty()   #Complete w/error points
@@ -4601,7 +4634,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #wasatchCounty()  #Complete w/error points
 #washingtonCounty()  #Complete
 #wayneCounty()
-weberCounty()   #Complete
+#weberCounty()   #Complete
 
 
 
