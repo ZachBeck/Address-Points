@@ -66,7 +66,6 @@ unitTypeList = ['APT', 'APARTMENT', 'BSMT', 'BASEMENT', 'BLDG', 'BUILDING', 'DEP
                'PH', 'PENTHOUSE', 'PIER', 'REAR', 'RM', 'ROOM', 'SIDE', 'SLIP', 'SPC', 'SP', 'SPACE', 'STOP', 'STE',
                'SUITE', 'TRLR', 'TRAILER', 'TRL', 'UNIT', 'UPPR']
 
-
 noUnitIds = ['BSMT', 'FRNT', 'LBBY', 'LOWR', 'OFC', 'PH', 'REAR', 'SIDE', 'UPPR']
 
 errorList = [None, False, 'None', '<Null>', 'NULL', '', ' ', '#', '####', '--', '.', '~', '-?', '--?', '?', '09-0000-01',
@@ -488,22 +487,22 @@ def cacheCounty():
     agrcAddPts_cacheCo = r'..\Cache\Cache.gdb\AddressPoints_Cache'
     cntyFldr = r'..\Cache'
 
-    cacheCoAddFLDS = ['addsystem', 'fulladd', 'addnum', 'addnumsuffix', 'prefixdir', 'streetname', 'streettype', 'suffixdir', \
-                      'landmarkname', 'building', 'unittype', 'unitid', 'ptlocation', 'pttype', 'structure', 'parcelid', \
+    cacheCoAddFLDS = ['addsystem', 'fulladd', 'addnum', 'addnumsuffix', 'prefixdir', 'streetname', 'streettype', 'suffixdir',
+                      'landmarkname', 'building', 'unittype', 'unitid', 'ptlocation', 'pttype', 'structure', 'parcelid',
                       'addsource', 'last_edited_date', 'SHAPE@', 'objectid']
 
-    flrDict = {'BSMT':['FLR BSMT','FLR BMST', 'FLR BSMT EAST', 'FLR BSMT RIGHT', 'FLR BSMT S', 'FLR DWNSTRS'], \
+    flrDict = {'BSMT':['FLR BSMT','FLR BMST', 'FLR BSMT EAST', 'FLR BSMT RIGHT', 'FLR BSMT S', 'FLR DWNSTRS'],
                'REAR':['FLR REAR'], 'UPPR':['FLR UPPER', 'FLR UPSTRS', 'FLR UPSTRS; APT 1', 'UPSTRS'],
                'FRNT':['FR', 'FRONT'], 'OFC':['OFFICE'], 'RM':['ROOM']}
 
-    cacheTypesDict = {'ALY':'ALLEY', 'AVE':'AVENUE', 'BAY':'BAY', 'BND':'BEND', 'BLVD':'BOULEVARD', 'CYN':'CANYON', \
-            'CTR':'CENTER', 'CIR':'CIRCLE', 'COR':'CORNER', 'CT':'COURT', 'CV':'COVE', 'CRK':'CREEK', \
-            'CRES':'CRESCENT', 'XING':'CROSSING', 'DR':'DRIVE', 'EST':'ESTATE', 'ESTS':'ESTATES', \
-            'EXPY':'EXPRESSWAY', 'FLT':'FLAT', 'FRK':'FORK', 'FWY':'FREEWAY', 'GLN':'GLEN', 'GRV':'GROVE', \
-            'HTS':'HEIGHTS','HWY':'HIGHWAY', 'HL':'HILL', 'HOLW':'HOLLOW', 'JCT':'JUNCTION', 'LN':'LANE', \
-            'LNDG':'LANDING', 'LOOP':['LP', 'LOOP'], 'MNR':'MANOR','MDW':'MEADOW', 'MDWS':'MEADOWS', 'PARK':'PARK', \
-            'PKWY':'PARKWAY', 'PASS':'PASS', 'PL':'PLACE', 'PLZ':'PLAZA', 'PT':'POINT', 'RAMP':'RAMP', 'RNCH':'RANCH', \
-            'RDG':'RIDGE', 'RD':'ROAD', 'RTE':'ROUTE', 'ROW':'ROW', 'RUN':'RUN', 'SQ':'SQUARE', 'ST':'STREET', \
+    cacheTypesDict = {'ALY':'ALLEY', 'AVE':'AVENUE', 'BAY':'BAY', 'BND':'BEND', 'BLVD':'BOULEVARD', 'CYN':'CANYON',
+            'CTR':'CENTER', 'CIR':'CIRCLE', 'COR':'CORNER', 'CT':'COURT', 'CV':'COVE', 'CRK':'CREEK',
+            'CRES':'CRESCENT', 'XING':'CROSSING', 'DR':'DRIVE', 'EST':'ESTATE', 'ESTS':'ESTATES',
+            'EXPY':'EXPRESSWAY', 'FLT':'FLAT', 'FRK':'FORK', 'FWY':'FREEWAY', 'GLN':'GLEN', 'GRV':'GROVE',
+            'HTS':'HEIGHTS','HWY':'HIGHWAY', 'HL':'HILL', 'HOLW':'HOLLOW', 'JCT':'JUNCTION', 'LN':'LANE',
+            'LNDG':'LANDING', 'LOOP':['LP', 'LOOP'], 'MNR':'MANOR','MDW':'MEADOW', 'MDWS':'MEADOWS', 'PARK':'PARK',
+            'PKWY':'PARKWAY', 'PASS':'PASS', 'PL':'PLACE', 'PLZ':'PLAZA', 'PT':'POINT', 'RAMP':'RAMP', 'RNCH':'RANCH',
+            'RDG':'RIDGE', 'RD':'ROAD', 'RTE':'ROUTE', 'ROW':'ROW', 'RUN':'RUN', 'SQ':'SQUARE', 'ST':'STREET',
             'TER':'TERRACE', 'TRCE':'TRACE', 'TRL':'TRAIL', 'VW':'VIEW', 'VLG':'VILLAGE', 'WAY':'WAY'}
 
     hwy_dict = {'SR 101':'HWY 101', 'SR 142':'HWY 142', 'SR 165':'HWY 165', 'SR 23':'HWY 23', '23 SR':'HWY 23',
@@ -656,7 +655,7 @@ def cacheCounty():
 
 
                 iCursor.insertRow(('', '', fullAdd, addnum, addnumsuf, predir, sName, sType, sufdir, landName, building, unitType, unitId, '',\
-                                   '', '49005', 'UT', '', '', '', parcelId, 'Cache County', loadDate, 'COMPLETE', editor, modDate, '', '', '', shp))
+                                   '', '49005', 'UT', '', '', '', parcelId, 'CACHE COUNTY', loadDate, 'COMPLETE', editor, modDate, '', '', '', shp))
 
         errorFlds = createErrorPts(errorPtsDict, cntyFldr, 'Cache_ErrorPts.shp', cacheCoAddFLDS[1], cacheCoAddPts)
 
@@ -2240,7 +2239,19 @@ def morganCounty():
     'USNG':['SGID.INDICES.NationalGrid', 'USNG', '']
     }
 
+    morgan_parcelsLIR = {'PtType': ['SGID.CADASTRE.Parcels_Washington_LIR', 'PROP_CLASS']}
+
+    morgan_remapLIR = {'Agricultural':['Agricultural', 'Greenbelt'],
+                      'Commercial':['Commercial',  'Commercial - Office Space', 'Commercial - Retail'],
+                      'Industrial':['Industrial', 'Commercial - Industrial'],
+                      'Mixed Use':['Mixed Use'],
+                      'Other':['Tax Exempt', 'Tax Exempt - Charitable Organization or Religious',
+                               'Tax Exempt - Government', 'Undevelopable', 'Vacant', 'Privilege Tax', 'Personal Property'],
+                      'Residential':['Residential', 'Commercial - Apartment & Condo'],
+                      'Unknown':[None, '', 'Unknown']}
+
     addPolyAttributes(sgid, agrcAddPts_morganCo, inputDict)
+    addPolyAttributesLIR(sgid, agrcAddPts_morganCo, morgan_parcelsLIR, morgan_remapLIR)
     updateAddPtID(agrcAddPts_morganCo)
     addBaseAddress(agrcAddPts_morganCo)
     deleteDuplicatePts(agrcAddPts_morganCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
@@ -2365,7 +2376,19 @@ def piuteCounty():
     'USNG':['SGID.INDICES.NationalGrid', 'USNG', '']
     }
 
+    piute_parcelsLIR = {'PtType': ['SGID.CADASTRE.Parcels_Washington_LIR', 'PROP_CLASS']}
+
+    piute_remapLIR = {'Agricultural':['Agricultural', 'Greenbelt'],
+                      'Commercial':['Commercial',  'Commercial - Office Space', 'Commercial - Retail'],
+                      'Industrial':['Industrial', 'Commercial - Industrial'],
+                      'Mixed Use':['Mixed Use'],
+                      'Other':['Tax Exempt', 'Tax Exempt - Charitable Organization or Religious',
+                               'Tax Exempt - Government', 'Undevelopable', 'Vacant', 'Privilege Tax', 'Personal Property'],
+                      'Residential':['Residential', 'Commercial - Apartment & Condo'],
+                      'Unknown':[None, '', 'Unknown']}
+
     addPolyAttributes(sgid, agrcAddPts_piuteCo, inputDict)
+    addPolyAttributesLIR(sgid, agrcAddPts_piuteCo, piute_parcelsLIR, piute_remapLIR)
     updateAddPtID(agrcAddPts_piuteCo)
     addBaseAddress(agrcAddPts_piuteCo)
     deleteDuplicatePts(agrcAddPts_piuteCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
@@ -2389,7 +2412,7 @@ def richCounty():
 
     hwyDict = {'HIGHWAY 16':'HWY 16', 'HIGHWAY 30':'HWY 30', 'HIGHWAY 89':'HWY 89', 'STATE ROUTE 30':'HWY 30'}
     fix_streets = {'150 SOUJTH':'150 SOUTH', 'ARROWLEAFF':'ARROWLEAF', 'CEMETARY':'CEMETERY', 'CRAWFORD VEIW':'CRAWFORD VIEW',
-                   'MONTEISTO':'MONTE CRISTO', 'MOUNTIAN VIEW':'MOUNTAIN VIEW'}
+                   'MONTEISTO':'MONTE CRISTO', 'MOUNTIAN VIEW':'MOUNTAIN VIEW', 'CHOKE CHERRY':'CHOKECHERRY'}
     skipAdd = ['AR111']
 
     with arcpy.da.SearchCursor(richCoAddPts, richCoAddFLDS) as sCursor, \
@@ -4560,16 +4583,14 @@ def weberCounty():
     
     errorPts = createErrorPts(errorPtsDict, cntyFldr, 'Weber_ErrorPts.shp', 'Address', weberCoAddPts)
 
-    weber_remapLIR = {'Agricultural':['811- FARM ANIMALS', '812- PROD FARM'],
-                      'Residential': ['108- SFR on COMM Zone', '111- SNGL FAM RES', '112- DUPLEX', '113- 3-4 UNITS', '114- 5-9 UNITS',
-                                      '115- 10+ UNITS', '116- CONDO', '118- MOBILE HOME', '119- PUD', '300- MULTIPLE HOUSING',
-                                      '502-COMM LAND with SFR', '508- Both RES & COMM IMPRVD', '511- RES-ON-COMM', '901- VAC - RES - DEV',
-                                      '911- RES LOT', '919- PUD-COMMON', '922- PUD LOT', '951- EXEMPT - RES'],
-                      'Commercial': ['500- COMMERCIAL', '952- EXEMPT - COM'],
-                      'Industrial':['200-INDUSTRIAL'],
-                      'Other':['117- RECREATIONAL', '121-OUT BLDGS', '902- C/I VACANT', '917- REC-VAC-LOT', '957-RELATED PARCEL',
-                              '999- UNDEVELOPED VL'],
-                      'Unknown': [None, '', ' ']}
+    weber_remapLIR = {'Agricultural':['Agricultural', 'Greenbelt'],
+                           'Commercial':['Commercial',  'Commercial - Office Space', 'Commercial - Retail'],
+                           'Industrial':['Industrial', 'Commercial - Industrial'],
+                           'Mixed Use':['Mixed Use'],
+                           'Other':['Tax Exempt', 'Tax Exempt - Charitable Organization or Religious',
+                                    'Tax Exempt - Government', 'Undevelopable', 'Vacant', 'Privilege Tax', 'Personal Property'],
+                           'Residential':['Residential', 'Commercial - Apartment & Condo'],
+                           'Unknown':[None, '', 'Unknown']}
 
     polyAttributesDict = {
                         'AddSystem':['SGID.LOCATION.AddressSystemQuadrants', 'GRID_NAME', ''],
@@ -4579,11 +4600,11 @@ def weberCounty():
                         'PtType': ['SGID.CADASTRE.Parcels_Weber_LIR', 'PROP_CLASS', weber_remapLIR]
                         }
     
-    #weber_parcelsLIR = {'PtType': ['SGID.CADASTRE.Parcels_Weber_LIR', 'PROP_CLASS']}
+    weber_parcelsLIR = {'PtType': ['SGID.CADASTRE.Parcels_Weber_LIR', 'PROP_CLASS']}
 
     addPolyAttributes(sgid, agrcAddPts_weberCo, polyAttributesDict)
     updateAddPtID(agrcAddPts_weberCo)
-    #addPolyAttributesLIR(sgid, agrcAddPts_weberCo, weber_parcelsLIR, weber_remapLIR)
+    addPolyAttributesLIR(sgid, agrcAddPts_weberCo, weber_parcelsLIR, weber_remapLIR)
     addBaseAddress(agrcAddPts_weberCo)
     deleteDuplicatePts(agrcAddPts_weberCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
     dupePts = returnDuplicateAddresses(agrcAddPts_weberCo, ['UTAddPtID', 'SHAPE@'])
