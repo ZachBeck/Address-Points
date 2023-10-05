@@ -23,7 +23,7 @@ def update_sde(county_name):
 
         sgid_pts = str(Path(__file__).resolve().parents[3].joinpath('sde', 'SGID_internal', 'SGID_Location.sde', 'SGID.LOCATION.AddressPoints'))
         
-        sql = f'"CountyID" = \'{fips_dict[county_name.title()]}\''
+        sql = f'"CountyID" = \'{fips_dict[county_name.title()]}\' AND NOT "AddSource" = \'DABC\''
         sgid_pts_fl = arcpy.MakeFeatureLayer_management(sgid_pts, 'sgid_pts_fl', sql)
 
         print(f'-----Made Feature Layer of {county_name.upper()} COUNTY address points')
