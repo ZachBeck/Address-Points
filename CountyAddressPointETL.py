@@ -2528,7 +2528,7 @@ def saltLakeCounty():
     agrcAddPts_SLCO = r'..\SaltLake\SaltLake.gdb\AddressPoints_SaltLake'
     cntyFldr = r'..\SaltLake'
 
-    archive_last_month(agrcAddPts_SLCO)
+    #archive_last_month(agrcAddPts_SLCO)
 
     # slcoAddFLDS = ['PARCEL', 'ADDRESS', 'UNIT_DESIG', 'IDENTIFY', 'BLDG_DESIG', 'ADDR_LABEL', 'DEVELOPMENT', 'BUSINESS_NAME', \
     #                'ADDR_TYPE', 'UPDATED', 'MODIFIED_DATE', 'ADDR_PD', 'SHAPE@', 'ZIP_CODE', 'ADDR_HN', 'ADDR_SN', 'EXPORT', \
@@ -2562,7 +2562,8 @@ def saltLakeCounty():
                'SOUTHWILLOW':'SOUTH WILLOW', 'ST MORITZ':'SAINT MORITZ', 'STELLER JAY':'STELLAR JAY',
                'SWEET BASIL N':'SWEET BASIL NORTH', 'SWEET BASIL S':'SWEET BASIL SOUTH', 'VALDOWN':'VAL DOWN',
                'WELL SPRING':'WELLSPRING', 'WESTLILAC':'WEST LILAC', 'WHITECHERRY':'WHITE CHERRY',
-               'WILLOW BANK':'WILLOWBANK', 'WOLF GROVE':'WOLFE GROVE', 'COPPERCREEK':'COPPER CREEK', 'COVEPOINT':'COVE POINT'}
+               'WILLOW BANK':'WILLOWBANK', 'WOLF GROVE':'WOLFE GROVE', 'COPPERCREEK':'COPPER CREEK', 'COVEPOINT':'COVE POINT',
+               'UEIGHTYFIVE NB':'HWY 85 NB', 'UEIGHTYFIVE SB':'HWY 85 SB', 'MTN VIEW CORID':'MOUNTAIN VIEW HWY'}
 
     typeNames = ['APPLE HILL', 'BALDWIN PARK', 'BELL RIDGE', 'BEN DAVIS PARK', 'DAWN HILL', 'GRAVENSTEIN PARK', 'HICKORY HILL', \
                  'HOLLYHOCK HILL', 'PEPPERWOOD POINTE', 'ROME BEAUTY PARK', 'SOLITUDE RIDGE', 'STRAWBERRY LOOP', \
@@ -2639,6 +2640,8 @@ def saltLakeCounty():
                     streetName = aveDict[streetName]
 
                 if streetName.startswith('HWY '):
+                    streetType = ''
+                if streetName == 'MOUNTAIN VIEW HWY':
                     streetType = ''
 
                 if streetType == '' and row[17] in dirs:
@@ -4611,6 +4614,63 @@ def weberCounty():
     updateErrorPts(os.path.join(cntyFldr, 'Weber_ErrorPts.shp'), errorPts, dupePts)
 
 
+def dabc_pts():
+    dabc_pts = r'..\DABC\AddressPointAdditions.gdb\Pt_Additions'
+    agrcAddPts_DABC = r'..\DABC\dabc.gdb\AddressPoints_DABC'
+    cntyFldr = r'..\DABC'
+
+    dabc_flds = ['AddSystem', 'UTAddPtID', 'FullAdd', 'AddNum', 'AddNumSuffix', 'PrefixDir', 'StreetName', 'StreetType',
+                 'SuffixDir', 'LandmarkName', 'Building', 'UnitType', 'UnitID', 'City', 'ZipCode', 'CountyID', 'State',
+                 'PtLocation', 'PtType', 'Structure', 'ParcelID', 'AddSource', 'USNG', 'SHAPE@']
+
+    checkRequiredFields(dabc_pts, dabc_flds)
+    #archive_last_month(agrcAddPts_DABC)
+    truncateOldCountyPts(agrcAddPts_DABC)
+
+    with arcpy.da.SearchCursor(dabc_pts, dabc_flds) as sCursor,\
+        arcpy.da.InsertCursor(agrcAddPts_DABC, agrcAddFLDS) as iCursor:
+
+        for row in sCursor:
+            add_num = removeNone(row[3])
+            add_num_suf = ''
+            pre_dir = removeNone(row[5])
+            st_name = removeNone(row[6])
+            st_type = removeNone(row[7])
+            suf_dir = removeNone(row[8])
+            unit_type = removeNone(row[11])
+            unit_id = removeNone(row[12])
+            zip = removeNone(row[14])
+            load_date = today
+            shp = row[23]
+
+            if unit_type != '' and unit_id != '':
+                full_add = f'{add_num} {add_num_suf} {pre_dir} {st_name} {st_type} {suf_dir} {unit_type} {unit_id}'
+
+            elif unit_id != '':
+                full_add = f'{add_num} {add_num_suf} {pre_dir} {st_name} {st_type} {suf_dir} # {unit_id}'
+
+            else:
+                full_add = f'{add_num} {add_num_suf} {pre_dir} {st_name} {st_type} {suf_dir} {unit_type} {unit_id}'
+
+            full_add = ' '.join(full_add.split())
+
+            iCursor.insertRow(('', '', full_add, add_num, '', pre_dir, st_name, st_type, suf_dir, '', '', unit_type,
+                               unit_id, '', zip, '', 'UT', '', '', '', '', 'DABC', load_date, 'COMPLETE', '',
+                               load_date, '', '', '', shp))
+
+        polyAttributesDict = {
+                        'AddSystem':['SGID.LOCATION.AddressSystemQuadrants', 'GRID_NAME', ''],
+                        'City':['SGID.BOUNDARIES.Municipalities', 'SHORTDESC', ''],
+                        'USNG':['SGID.INDICES.NationalGrid', 'USNG', ''],
+                        'ZipCode':['SGID.BOUNDARIES.ZipCodes', 'ZIP5', ''],
+                        'CountyID': ['SGID.BOUNDARIES.Counties', 'FIPS_STR', '']
+                        }
+
+    addPolyAttributes(sgid, agrcAddPts_DABC, polyAttributesDict)
+    updateAddPtID(agrcAddPts_DABC)
+    addBaseAddress(agrcAddPts_DABC)
+    
+
 def checkRequiredFields(inCounty, requiredFlds):
 
     countyFlds = arcpy.ListFields(inCounty)
@@ -4635,7 +4695,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #emeryCounty()  #Complete
 #garfieldCounty()  #Complete
 #grandCounty()
-ironCounty()   #Complete
+#ironCounty()   #Complete
 #juabCounty()
 #kaneCounty()   #Complete
 #millardCounty()   #Complete w/error points
@@ -4656,6 +4716,7 @@ ironCounty()   #Complete
 #washingtonCounty()  #Complete
 #wayneCounty()
 #weberCounty()   #Complete
+dabc_pts()
 
 
 
