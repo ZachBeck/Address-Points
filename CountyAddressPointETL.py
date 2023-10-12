@@ -3565,11 +3565,11 @@ def utahCounty():
 
     utahCoAddFLDS = ['ADDRNUM', 'ROADPREDIR', 'ROADNAME', 'ROADTYPE', 'ROADPOSTDIR', 'ADDRTYPE',
                      'UNITTYPE', 'UNITID', 'LASTUPDATE', 'SHAPE@', 'LASTEDITOR', 'FULLADDR', 'ZIPCODE',
-                     'OBJECTID', 'LAST_EDITED_DATE', 'CITY']
+                     'OBJECTID', 'LAST_EDITED_DATE', 'CITY', 'ALTUNITTYPE', 'ALTUNITID']
 
 
     checkRequiredFields(utahCoAddPts, utahCoAddFLDS)
-    archive_last_month(agrcAddPts_utahCo)
+    #archive_last_month(agrcAddPts_utahCo)
     truncateOldCountyPts(agrcAddPts_utahCo)
 
     errorPtsDict = {}
@@ -3695,6 +3695,11 @@ def utahCounty():
                 if unitId == '' and unitType != '':
                     unitType = ''
 
+                if row[16] in ['BLDG', 'Building'] and row[17] not in [None, 'Creekside']:
+                    building = row[17]
+                else:
+                    building = ''
+
                 loadDate = today
                 status = 'COMPLETE'
 
@@ -3707,12 +3712,15 @@ def utahCounty():
                 if modDate != None and row[14] != None and modDate < row[14]:
                     modDate = row[14]
 
-                if unitType == '' and unitId != '':
+                if building != '':
+                    fullAdd = f'{addNum} {preDir} {street} {sufDir} {sType} BLDG {building} {unitType} {unitId}'
+
+                elif unitType == '' and unitId != '':
                     fullAdd = f'{addNum} {preDir} {street} {sufDir} {sType} # {unitId}'
-                    fullAdd = ' '.join(fullAdd.split())
                 else:
                     fullAdd = f'{addNum} {preDir} {street} {sufDir} {sType} {unitType} {unitId}'
-                    fullAdd = ' '.join(fullAdd.split())
+
+                fullAdd = ' '.join(fullAdd.split())
 
                 zip = ''
                 shp = row[9]
@@ -3734,7 +3742,7 @@ def utahCounty():
                 #     addressErrors.extend(['bad street type', row[9]])
                 # ------------------------------------
 
-                iCursor.insertRow(('PROVO', '', fullAdd, addNum, '', preDir, street, sType, sufDir, '', '', unitType, unitId, '', zip, '49049', \
+                iCursor.insertRow(('PROVO', '', fullAdd, addNum, '', preDir, street, sType, sufDir, '', building, unitType, unitId, '', zip, '49049', \
                                    'UT', ptLocation, '', '', '', 'UTAH COUNTY', loadDate, status, editor, modDate, '', '', '', shp))
 
         errorPts = createErrorPts(errorPtsDict, cntyFldr, 'Utah_ErrorPts.shp', 'ADDRESS', utahCoAddPts)
@@ -4711,12 +4719,12 @@ def checkRequiredFields(inCounty, requiredFlds):
 #summitCounty()
 #tooeleCounty()    #Complete
 #uintahCounty()
-#utahCounty() #Complete
+utahCounty() #Complete
 #wasatchCounty()  #Complete w/error points
 #washingtonCounty()  #Complete
 #wayneCounty()
 #weberCounty()   #Complete
-dabc_pts()
+#dabc_pts()
 
 
 
