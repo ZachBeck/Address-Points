@@ -18,7 +18,7 @@ def addBaseAddress(inAddressPoints):
 
     flds = ['AddSystem', 'UTAddPtID', 'FullAdd', 'AddNum', 'AddNumSuffix', 'PrefixDir', 'StreetName', 'StreetType',
             'SuffixDir', 'UnitType', 'UnitID', 'City', 'ZipCode', 'CountyID', 'State', 'PtType', 'AddSource', 
-            'LoadDate', 'Status', 'ParcelID', 'USNG', 'SHAPE@XY']
+            'LoadDate', 'Status', 'ParcelID', 'USNG', 'SHAPE@XY', 'Building']
     hwy_exceptions = ['OLD HWY 89']
 
     with arcpy.da.SearchCursor(inAddressPoints, flds) as sCursor:
@@ -26,6 +26,8 @@ def addBaseAddress(inAddressPoints):
             stripStr = f' {row[9]} {row[10]}'
             if '#' in row[1]:
                 stripStr = f' # {row[10]}'
+            if 'BLDG' in row[1] and row[22] != '':
+                stripStr = f' BLDG {row[22]} {row[9]} {row[10]}'
             baseAdd = re.sub(stripStr, '', row[1])
             baseAddList.append(baseAdd)
             allAddsDict.setdefault(row[1])
@@ -37,6 +39,8 @@ def addBaseAddress(inAddressPoints):
             stripStr = f' {row[9]} {row[10]}'
             if '#' in row[1]:
                 stripStr = f' # {row[10]}'
+            if 'BLDG' in row[1] and row[22] != '':
+                stripStr = f' BLDG {row[22]} {row[9]} {row[10]}'
             baseAdd = re.sub(stripStr, '', row[1])
 
             if baseAdd in baseAddSet and baseAdd not in allAddsDict:
@@ -89,7 +93,7 @@ def addBaseAddress(inAddressPoints):
                 yCoord = ySum / count
                 xyCoord = [xCoord, yCoord]
 
-                iCursror.insertRow((addSys, utAddPtID, fullAdd, addNum, addNumSuf, preDir, sName, sType, sufDir, '', '',\
-                                    city, zip, county, state, ptType, addSrc, loadDate, 'COMPLETE', parcel_id, usng, xyCoord))
+                iCursror.insertRow((addSys, utAddPtID, fullAdd, addNum, addNumSuf, preDir, sName, sType, sufDir, '', '',
+                                    city, zip, county, state, ptType, addSrc, loadDate, 'COMPLETE', parcel_id, usng, xyCoord, ''))
 
 
