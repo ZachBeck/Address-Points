@@ -256,8 +256,6 @@ def beaverCounty():
     agrcAddPts_beaverCo = r'..\Beaver\Beaver.gdb\AddressPoints_Beaver'
     cntyFldr = r'..\Beaver'
 
-    archive_last_month(agrcAddPts_beaverCo)
-
     beaverCoAddFLDS = ['Address', 'Prefix', 'St_Name', 'Dir_Type', 'Unit_Num', 'Grid', 'SHAPE@', 'OBJECTID', 'Parcel_ID']
 
     fix_dict = {'NORTHCREEK':'NORTH CREEK', 'ELK MEADOW':'ELK MEADOWS', 'NORTH CREE':'NORTH CREEK'}
@@ -266,6 +264,7 @@ def beaverCounty():
     rdSet = createRoadSet('49001')
 
     checkRequiredFields(beaverCoAddPts, beaverCoAddFLDS)
+    archive_last_month(agrcAddPts_beaverCo)
     truncateOldCountyPts(agrcAddPts_beaverCo)
 
     errorPtsDict = {}
@@ -373,6 +372,7 @@ def boxElderCounty():
     #sTypeTuple = tuple(sTypeList)
 
     checkRequiredFields(boxelderCoAddPts, boxelderCoAddFLDS)
+    archive_last_month(agrcAddPts_boxelderCo)
     truncateOldCountyPts(agrcAddPts_boxelderCo)
 
     errorPtsDict = {}
@@ -683,7 +683,7 @@ def cacheCounty():
 
 
 def carbonCounty():
-    carbonCoAddPts = r'..\Carbon\CarbonCounty.gdb\CC_Addresses'
+    carbonCoAddPts = r'..\Carbon\CarbonCounty.gdb\AddressPoints'
     agrcAddPts_carbonCo = r'..\Carbon\Carbon.gdb\AddressPoints_Carbon'
     cntyFldr = r'..\Carbon'
 
@@ -710,6 +710,7 @@ def carbonCounty():
                  'RICHELMAN LANE', 'NORTH COAL CREEK ROAD', 'CONSUMERS ROAD', 'DRY VALLEY ROAD', 'FORD RIDGE ROAD']
 
     checkRequiredFields(carbonCoAddPts, carbonCoAddFLDS)
+    archive_last_month(agrcAddPts_carbonCo)
     truncateOldCountyPts(agrcAddPts_carbonCo)
     rdSet = createRoadSet('49007')
 
@@ -1088,20 +1089,20 @@ def davisCounty():
     archive_last_month(agrcAddPts_davisCo)
     truncateOldCountyPts(agrcAddPts_davisCo)
 
-    noTypeList = ['ANTELOPE ISLAND CAUSEWAY', 'APPLE ACRES', 'ASPEN GROVE', 'BOUNTIFUL MEMORIAL PARK', 'BROADWAY', \
-                  'BUFFALO RANCH DEVELOPMENT', 'BURN PLANT', 'CARRIAGE CROSSING', 'CENTERVILLE MEMORIAL PARK', \
-                  'CHERRY HILL ENTRANCE', 'CHEVRON REFINERY', 'CHRISTY', 'COMPTONS POINTE', 'DEER CREEK', 'EAST ENTRANCE', \
-                  'EAST PROMONTORY', 'EGG ISLAND OVERLOOK', 'FAIRVIEW PASEO', 'FARMINGTON CEMETERY', 'FARMINGTON CROSSING', \
-                  'FREEPORT CENTER', 'GARDEN CROSSING PASEO', 'HAWORTH', 'HWY 106', 'HWY 126', 'HWY 193', 'HWY 68', 'HWY 89', \
-                  'HWY 93', 'HOLLY HAVEN I', 'HOLLY HAVEN II', 'IBIS CROSSING', 'KAYSVILLE AND LAYTON CEMETERY', \
-                  'LLOYDS PARK', 'MOUNTAIN VIEW PASEO', 'NORTH ENTRANCE', 'NORTHEAST ENTRANCE', 'NORTHWEST ENTRANCE', \
-                  'POETS REST', 'PRESERVE PASEO', 'SOMERSBY', 'SOUTH CAUSEWAY', 'SOUTH ENTRANCE', 'SOUTHEAST ENTRANCE', \
-                  'STATION', 'STONEY BROOK', 'SYRACUSE CEMETERY', 'VALIANT', 'VALLEY VIEW', 'WARD', 'WARWICK', 'WEST PROMONTORY', \
-                  'WETLAND POINT', 'WHISPERING PINE', 'WILLOW BEND PASEO', 'WILLOW FARM PASEO', 'WILLOW GARDEN PASEO', \
+    noTypeList = ['ANTELOPE ISLAND CAUSEWAY', 'APPLE ACRES', 'ASPEN GROVE', 'BOUNTIFUL MEMORIAL PARK', 'BROADWAY',
+                  'BUFFALO RANCH DEVELOPMENT', 'BURN PLANT', 'CARRIAGE CROSSING', 'CENTERVILLE MEMORIAL PARK',
+                  'CHERRY HILL ENTRANCE', 'CHEVRON REFINERY', 'CHRISTY', 'COMPTONS POINTE', 'DEER CREEK', 'EAST ENTRANCE',
+                  'EAST PROMONTORY', 'EGG ISLAND OVERLOOK', 'FAIRVIEW PASEO', 'FARMINGTON CEMETERY', 'FARMINGTON CROSSING',
+                  'FREEPORT CENTER', 'GARDEN CROSSING PASEO', 'HAWORTH', 'HWY 106', 'HWY 126', 'HWY 193', 'HWY 68', 'HWY 89',
+                  'HWY 93', 'HOLLY HAVEN I', 'HOLLY HAVEN II', 'IBIS CROSSING', 'KAYSVILLE AND LAYTON CEMETERY',
+                  'LLOYDS PARK', 'MOUNTAIN VIEW PASEO', 'NORTH ENTRANCE', 'NORTHEAST ENTRANCE', 'NORTHWEST ENTRANCE',
+                  'POETS REST', 'PRESERVE PASEO', 'SOMERSBY', 'SOUTH CAUSEWAY', 'SOUTH ENTRANCE', 'SOUTHEAST ENTRANCE',
+                  'STATION', 'STONEY BROOK', 'SYRACUSE CEMETERY', 'VALIANT', 'VALLEY VIEW', 'WARD', 'WARWICK', 'WEST PROMONTORY',
+                  'WETLAND POINT', 'WHISPERING PINE', 'WILLOW BEND PASEO', 'WILLOW FARM PASEO', 'WILLOW GARDEN PASEO',
                   'WILLOW GREEN PASEO', 'WILLOW GROVE PASEO', 'WYNDOM']
 
-    remove_stypes = ['STONEY BROOK CIR', 'ANGEL ST', 'BROWNING LN', 'CHARLENE WAY', 'COUNTRY WAY', 'EAGLES LNDG', 'GRANTS LN',\
-                     'SAGE DR', ]
+    remove_stypes = ['STONEY BROOK CIR', 'ANGEL ST', 'BROWNING LN', 'CHARLENE WAY', 'COUNTRY WAY', 'EAGLES LNDG', 'GRANTS LN',
+                     'SAGE DR']
 
     hwy_dict = {'SR 37':'HWY 37', 'SR 193':'HWY 193'}
 
@@ -1230,7 +1231,7 @@ def davisCounty():
     
     remapLIR = {'Agricultural': ['LAND AGRICULTURE', 'LAND GREENBELT'], 'Commercial': ['LAND COMMERCIAL', 'Commercial'],
                 'Residential': ['LAND RESIDENTIAL', 'LAND SECONDARY', 'Residential'], 'Other': ['LAND VACANT', 'Vacant Land', 'Vacant'],
-                'Unknown':[None, '']}
+                'Unknown':['Unknown', None, '']}
 
     inputDict = {
         'AddSystem':['SGID.LOCATION.AddressSystemQuadrants', 'GRID_NAME', ''],
@@ -2528,8 +2529,6 @@ def saltLakeCounty():
     agrcAddPts_SLCO = r'..\SaltLake\SaltLake.gdb\AddressPoints_SaltLake'
     cntyFldr = r'..\SaltLake'
 
-    #archive_last_month(agrcAddPts_SLCO)
-
     # slcoAddFLDS = ['PARCEL', 'ADDRESS', 'UNIT_DESIG', 'IDENTIFY', 'BLDG_DESIG', 'ADDR_LABEL', 'DEVELOPMENT', 'BUSINESS_NAME', \
     #                'ADDR_TYPE', 'UPDATED', 'MODIFIED_DATE', 'ADDR_PD', 'SHAPE@', 'ZIP_CODE', 'ADDR_HN', 'ADDR_SN', 'EXPORT', \
     #                'ADDR_PD', 'ADDR_SN', 'ADDR_ST', 'ADDR_SD', 'PRIMARY_ADDRESS', 'CORNER_ADDRESS', 'ADDR_CLASS']
@@ -2596,12 +2595,12 @@ def saltLakeCounty():
     def fix_road_name(road_name):
         return strip_street_type(road_name)
 
+    checkRequiredFields(slcoAddPts, slcoAddFLDS)
+    #archive_last_month(agrcAddPts_SLCO)
+    truncateOldCountyPts(agrcAddPts_SLCO)
 
     errorPtsDict = {}
     rdSet = createRoadSet('49035')
-
-    checkRequiredFields(slcoAddPts, slcoAddFLDS)
-    truncateOldCountyPts(agrcAddPts_SLCO)
 
     with arcpy.da.SearchCursor(slcoAddPts, slcoAddFLDS) as sCursor_slco, \
         arcpy.da.InsertCursor(agrcAddPts_SLCO, agrcAddFLDS) as iCursor:
@@ -2968,7 +2967,7 @@ def sanpeteCounty():
 
 
 def sevierCounty():
-    sevierCoAddPts = r'..\Sevier\SevierCounty.gdb\SC911AddressPt_041723'
+    sevierCoAddPts = r'..\Sevier\SevierCounty.gdb\SC911AddressPts_101923'
     agrcAddPts_sevierCo = r'..\Sevier\Sevier.gdb\AddressPoints_Sevier'
 
     sevierCoAddFLDS = ['NUMBER', 'Pre', 'Name', 'Dir', 'Type', 'Unit', 'PARCEL__', 'SHAPE@', 'ADDRESS']
@@ -2978,11 +2977,14 @@ def sevierCounty():
     errorPtsDict = {}
 
     checkRequiredFields(sevierCoAddPts, sevierCoAddFLDS)
+    #archive_last_month(agrcAddPts_sevierCo)
     truncateOldCountyPts(agrcAddPts_sevierCo)
 
     hwyDict = {'SR 118':'HWY 118', 'SR 119':'HWY 119', 'SR 24':'HWY 24', 'SR 25':'HWY 25', 'SR 256':'HWY 256',
                'SR 258':'HWY 258', 'SR 260':'HWY 260', 'SR 50':'HWY 50', 'SR 62':'HWY 62', 'SR 72':'HWY 72',
                'SR 76':'HWY 76', 'US HWY 89':'HWY 89'}
+    
+    rds_with_types = ['ASPEN TERRACE RD', 'VACA LN', 'DRY CREEK RD']
 
     with arcpy.da.SearchCursor(sevierCoAddPts, sevierCoAddFLDS) as sCursor, \
         arcpy.da.InsertCursor(agrcAddPts_sevierCo, agrcAddFLDS) as iCursor:
@@ -3011,8 +3013,9 @@ def sevierCounty():
                 sName = sName[:-2]
             if sName in hwyDict:
                 sName = hwyDict[sName]
-            if sName == 'VACA LN':
-                sName = 'VACA'
+
+            if sName in rds_with_types:
+                sName = sName.rsplit(' ', 1)[0]
 
             unitsRaw = row[5].strip()
             unitTuple = splitVals(unitsRaw, unitTypeList)
@@ -4385,11 +4388,11 @@ def weberCounty():
     ptTypeDict = {'Residential':['0', '1', '3'], 'Commercial':['2'], 'Other':['4', '5', '6', '7']}
 
     checkRequiredFields(weberCoAddPts, weberCoAddFLDS)
-    archive_last_month(agrcAddPts_weberCo)
+    #archive_last_month(agrcAddPts_weberCo)
     truncateOldCountyPts(agrcAddPts_weberCo)
 
     errorPtsDict = {}
-    #rdSet = createRoadSet('49057')
+    rdSet = createRoadSet('49057')
 
     numberedUnits = ['APT', 'FLR', 'RM', 'STE', 'UNIT']
 
@@ -4414,11 +4417,14 @@ def weberCounty():
         arcpy.da.InsertCursor(agrcAddPts_weberCo, agrcAddFLDS) as iCursor:
         for row in sCursor_weber:
 
-            if removeNone(row[0]).isdigit() == True and row[0] not in errorList and row[2] not in errorList:
+            if removeNone(row[0]).strip().isdigit() == True and row[0] not in errorList and row[2] not in errorList or row[14] == 'West Haven Cove':
                 if row[5] not in errorList:
                     address = parse_address.parse(row[5])
 
-                addNum = row[0]
+                addNum = row[0].strip()
+                if addNum == '':
+                    addNum = address.houseNumber
+                
                 addNumSuf = ''
                 if len(addNum.split()) > 1:
                     addNumSuf = addNum.split()[1]
@@ -4427,9 +4433,9 @@ def weberCounty():
                 sName = row[2].upper()
                 if sName == 'MALLORY LOOP':
                     sName = 'MALLORY'
-                # if 'HWY' not in sName and sName not in rdSet:
-                #     addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[5]}', [])
-                #     addressErrors.extend(['street name not found in roads', row[12]])
+                if 'HWY' not in sName and sName not in rdSet:
+                    addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[5]}', [])
+                    addressErrors.extend(['street name not found in roads', row[12]])
 
                 if sName == 'CENTURY MHP':
                     landmark = sName
@@ -4595,13 +4601,13 @@ def weberCounty():
     errorPts = createErrorPts(errorPtsDict, cntyFldr, 'Weber_ErrorPts.shp', 'Address', weberCoAddPts)
 
     weber_remapLIR = {'Agricultural':['Agricultural', 'Greenbelt'],
-                           'Commercial':['Commercial',  'Commercial - Office Space', 'Commercial - Retail'],
-                           'Industrial':['Industrial', 'Commercial - Industrial'],
-                           'Mixed Use':['Mixed Use'],
-                           'Other':['Tax Exempt', 'Tax Exempt - Charitable Organization or Religious',
-                                    'Tax Exempt - Government', 'Undevelopable', 'Vacant', 'Privilege Tax', 'Personal Property'],
-                           'Residential':['Residential', 'Commercial - Apartment & Condo'],
-                           'Unknown':[None, '', 'Unknown']}
+                      'Commercial':['Commercial',  'Commercial - Office Space', 'Commercial - Retail'],
+                      'Industrial':['Industrial', 'Commercial - Industrial'],
+                      'Mixed Use':['Mixed Use'],
+                      'Other':['Tax Exempt', 'Tax Exempt - Charitable Organization or Religious',
+                               'Tax Exempt - Government', 'Undevelopable', 'Vacant', 'Privilege Tax', 'Personal Property'],
+                      'Residential':['Residential', 'Commercial - Apartment & Condo'],
+                      'Unknown':[None, '', 'Unknown']}
 
     polyAttributesDict = {
                         'AddSystem':['SGID.LOCATION.AddressSystemQuadrants', 'GRID_NAME', ''],
@@ -4719,11 +4725,11 @@ def checkRequiredFields(inCounty, requiredFlds):
 #summitCounty()
 #tooeleCounty()    #Complete
 #uintahCounty()
-utahCounty() #Complete
+#utahCounty() #Complete
 #wasatchCounty()  #Complete w/error points
 #washingtonCounty()  #Complete
 #wayneCounty()
-#weberCounty()   #Complete
+weberCounty()   #Complete
 #dabc_pts()
 
 
