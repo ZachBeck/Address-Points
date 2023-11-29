@@ -64,6 +64,6 @@ def update_sde(county_name):
 
 
 
-update_sde('Iron') #Update input points and SQL query
+update_sde('Utah') #Update input points and SQL query
 
 

@@ -69,7 +69,7 @@ unitTypeList = ['APT', 'APARTMENT', 'BSMT', 'BASEMENT', 'BLDG', 'BUILDING', 'DEP
 noUnitIds = ['BSMT', 'FRNT', 'LBBY', 'LOWR', 'OFC', 'PH', 'REAR', 'SIDE', 'UPPR']
 
 errorList = [None, False, 'None', '<Null>', 'NULL', '', ' ', '#', '####', '--', '.', '~', '-?', '--?', '?', '09-0000-01',
-             '0', '00', '000', '??0', '0 STREET', '*', '(Future )', 'Unknown', 'UNKNOWN', '09-0000-01', ',ILLER', '+', 0]
+             '0', '00', '000', '??0', '0 STREET', '*', '(Future )', '(FUTURE )', 'Unknown', 'UNKNOWN', '09-0000-01', ',ILLER', '+', 0]
 
 leadingSpaceTypes = []
 for t in sTypeDir:
@@ -1082,7 +1082,7 @@ def davisCounty():
     agrcAddPts_davisCo = r'..\Davis\Davis.gdb\AddressPoints_Davis'
     cntyFldr = r'..\Davis'
 
-    davisCoAddFLDS = ['AddressNum', 'AddressN_1', 'UnitType', 'UnitNumber', 'RoadPrefix', 'RoadName', 'RoadNameTy', 'RoadPostDi', \
+    davisCoAddFLDS = ['AddressNum', 'AddressN_1', 'UnitType', 'UnitNumber', 'RoadPrefix', 'RoadName', 'RoadNameTy', 'RoadPostDi',
                       'FullAddres', 'SHAPE@', 'PrimaryAdd']
 
     checkRequiredFields(davisCoAddPts, davisCoAddFLDS)
@@ -1324,7 +1324,7 @@ def duchesneCounty():
                         sType = ''
                     if sName.endswith((' West')):
                         sufDir = 'W'
-                        sName = sName.strip(' West')
+                        sName = sName.replace(' West', '')
                     if 'SR ' in sName:
                         sName = sName.replace('SR ', 'HWY ')
                         sType = ''
@@ -1923,32 +1923,22 @@ def juabCounty():
 
 
 def kaneCounty():
-    # addressAppPts = r'C:\sde\DC_AddressAdmin@AddressPointEditing@itdb104sp.sde\AddressPointEditing.ADDRESSADMIN.AddressPoints'
-    # countyBoundaries = r'C:\sde\SGID_internal\SGID_agrc.sde\SGID.BOUNDARIES.Counties'
-    #
-    # sql = """"{}" = '{}'""".format('NAME', 'KANE')
-    # kaneBoundaryFL = arcpy.MakeFeatureLayer_management(countyBoundaries, 'kaneBoundaryFL', sql)
-    # addressAppPtsFL = arcpy.MakeFeatureLayer_management(addressAppPts, 'addressAppPtsFL')
-    #
-    # kaneCoAddPts = arcpy.SelectLayerByLocation_management(addressAppPtsFL, 'WITHIN', kaneBoundaryFL, '', 'NEW_SELECTION')
-
-    kaneCoAddPts = r'..\Kane\KaneCounty.gdb\KaneAddressPts_2021'
+    kaneCoAddPts = r'..\Kane\KaneCounty.gdb\ADDRESS_POINTS'
     agrcAddPts_kaneCo = r'..\Kane\Kane.gdb\AddressPoints_Kane'
+    cntyFldr = r'..\Kane'
 
+    kaneCoAddFLDS = ['AddSystem', 'UTAddPtID', 'FullAdd', 'AddNum', 'AddNumSuff', 'PrefixDir', 'StreetName', 'StreetType',
+                     'SuffixDir', 'LandmarkNa', 'Building', 'UnitType', 'UnitID', 'City', 'ZipCode', 'CountyID', 'State',
+                     'PtLocation', 'PtType', 'Structure', 'ParcelID', 'AddSource', 'SHAPE@']
+
+    checkRequiredFields(kaneCoAddPts, kaneCoAddFLDS)
+    #archive_last_month(agrcAddPts_kaneCo)
     truncateOldCountyPts(agrcAddPts_kaneCo)
 
-    kaneCoAddFLDS = ['AddSystem', 'UTAddPtID', 'FullAdd', 'AddNum', 'AddNumSuffix', 'PrefixDir', 'StreetName', 'StreetType', \
-                     'SuffixDir', 'LandmarkName', 'Building', 'UnitType', 'UnitID', 'City', 'ZipCode', 'CountyID', 'State', \
-                     'PtLocation', 'PtType', 'Structure', 'ParcelID', 'AddSource', 'LoadDate', 'Status', 'Editor', \
-                     'ModifyDate', 'StreetAlias', 'Notes', 'SHAPE@']
+    errorPtsDict = {}
 
-    fix_rds = {'ARAPAJO':'ARAPAHO', 'ARAPHAO':'ARAPAHO', 'BEECHCRAFT':'BEECH CRAFT', 'CEDAR MTN':'CEDAR MOUNTAIN', \
-               'CENTURIOIN':'CENTURION', 'CESNNA':'CESSNA', 'FOXTREE':'FOX TREE', 'HWY89A':'HWY 89A', \
-               'INSPIRATON':'INSPIRATION', 'INSPRIATION':'INSPIRATION', 'JULUIS':'JULIUS', 'LOS BARRANCOS':'LOS BARANCOS', \
-               'LOS BRANCOS':'LOS BARANCOS', 'PANORMA':'PANORAMA', 'PINE TREE':'PINETREE', 'SHIVWITTS':'SHIVWITS', \
-               'SKYKLINE VIEW':'SKYLINE VIEW', 'STRAWBERRY PONT':'STRAWBERRY POINT', 'STRAWBERRY PT':'STRAWBERRY POINT', \
-               'STRWBERRY POINT':'STRAWBERRY POINT', 'VERMILION':'VERMILLION', 'WHIPSERING PINES':'WHISPERING PINES', \
-               'WOODCUCK':'WOODCHUCK', 'FIRST':'1ST', 'SECOND':'2ND', 'THIRD':'3RD', 'FORTH':'4TH', 'FIFTH':'5TH', 'SIXTH':'6TH'}
+    fix_rds = {'8 MILE GAP':'EIGHT MILE GAP','AARON BURR SUITE D':'AARON BURR', 'JOHNSON CAYON':'JOHNSON CANYON',
+               'JOHNSONCANYON':'JOHNSON CANYON', 'UNINTAH':'UINTAH'}
 
 
     with arcpy.da.SearchCursor(kaneCoAddPts, kaneCoAddFLDS) as sCursor_kane, \
@@ -1956,11 +1946,7 @@ def kaneCounty():
 
         for row in sCursor_kane:
 
-            addNum = row[3]
-            streetName = row[6]
-
-            if row[2] not in errorList:
-                fullAdd = row[2].replace('#', '# ')
+            if row[3] not in errorList and row[6] not in ['725 E KANEPLEX DR']:
                 addNum = row[3]
                 preDir = removeBadValues(row[5], errorList)
                 streetName = removeBadValues(row[6], errorList)
@@ -1975,12 +1961,13 @@ def kaneCounty():
                 structure = removeBadValues(row[19], errorList)
                 parcel = removeBadValues(row[20], errorList)
 
-            if addNum and streetName not in errorList:
-                addNum = row[3]
-                preDir = removeBadValues(row[5], errorList)
-                streetName = removeBadValues(row[6], errorList)
-                streetType = removeBadValues(row[7], errorList)
-                sufDir = removeBadValues(row[8], errorList)
+            elif row[2] not in errorList and row[2] not in ['KANAB', 'KANAB UTAH', 'S HOUSE ROCK VALLEY ROAD', 'WHITE HOUSE TRAILHEAD RD']:
+                address = parse_address.parse(row[2])
+                addNum = address.houseNumber
+                preDir = removeNone(address.prefixDirection)
+                streetName = address.streetName
+                streetType = removeNone(address.suffixType)
+                sufDir = removeNone(address.suffixDirection)
                 landmark = removeBadValues(row[9], errorList)
                 building = removeBadValues(row[10], errorList)
                 unitType = removeBadValues(row[11], errorList)
@@ -1990,23 +1977,45 @@ def kaneCounty():
                 structure = removeBadValues(row[19], errorList)
                 parcel = removeBadValues(row[20], errorList)
 
-                if unitType == '' and unitId != '':
-                    fullAdd = f'{addNum} {preDir} {streetName} {sufDir} {streetType} # {unitId}'
-                    #fullAdd = ' '.join(fullAdd.split())
-                else:
-                    fullAdd = f'{addNum} {preDir} {streetName} {sufDir} {streetType} {unitType} {unitId}'
-                    #fullAdd = ' '.join(fullAdd.split())
-
             else:
                 continue
 
             if streetName in fix_rds:
                 streetName = fix_rds[streetName]
-                fullAdd = f'{addNum} {preDir} {streetName} {sufDir} {streetType} {unitId}'
-                
 
+                addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[6]}', [])
+                addressErrors.extend(['bad street name', row[22]])
+
+            if streetName[0].isdigit() == True and streetName.endswith((' N', ' S', ' E', ' W')):
+                sufDir = streetName[-1]
+                streetName = streetName.replace(streetName[-2:], '')
+
+                addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[6]}', [])
+                addressErrors.extend(['suffix dir in street name', row[22]])
+
+            if streetName.endswith((' LN', ' DR', ' ST', ' TL')):
+                streetType = streetName[-2:]
+                if streetType == 'TL':
+                    streetType = 'TRL'
+                streetName = streetName[:-3]
+
+                addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[6]}', [])
+                addressErrors.extend(['street type in street name', row[22]])
+                
             if streetName.startswith('HIGHWAY'):
                 streetName = streetName.replace('HIGHWAY', 'HWY').rstrip('HWY')
+
+            if streetType in ['N', 'S', 'E', 'W']:
+                sufDir = streetType
+                streetType = ''
+
+                addressErrors = errorPtsDict.setdefault(f'{row[2]} | {row[7]}', [])
+                addressErrors.extend(['suffix dir in street street type', row[22]])
+
+            if unitType == '' and unitId != '':
+                fullAdd = f'{addNum} {preDir} {streetName} {sufDir} {streetType} # {unitId}'
+            else:
+                fullAdd = f'{addNum} {preDir} {streetName} {sufDir} {streetType} {unitType} {unitId}'
 
             fullAdd = ' '.join(fullAdd.split())
 
@@ -2020,14 +2029,14 @@ def kaneCounty():
             addSource = 'KANE COUNTY'
             status = 'COMPLETE'
             loadDate = today
-            editor = removeBadValues(row[24], errorList)
-            shp = row[28]
+            editor = ''
+            shp = row[22]
 
             iCursor.insertRow((addSys, utAddId, fullAdd, addNum, addNumSuf, preDir, streetName, streetType, sufDir, landmark, building, \
                                 unitType, unitId, city, zip, fips, state, ptLocation, ptType, structure, parcel, addSource, loadDate, \
                                 status, editor, None, '', '', '', shp))
 
-    del iCursor
+    errorPts = createErrorPts(errorPtsDict, cntyFldr, 'Kane_ErrorPts.shp', 'EXAMPLE', kaneCoAddPts)
 
     inputDict = {
     'AddSystem':['SGID.LOCATION.AddressSystemQuadrants', 'GRID_NAME', ''],
@@ -2037,9 +2046,11 @@ def kaneCounty():
     }
 
     addPolyAttributes(sgid, agrcAddPts_kaneCo, inputDict)
-    addBaseAddress(agrcAddPts_kaneCo)
     updateAddPtID(agrcAddPts_kaneCo)
+    addBaseAddress(agrcAddPts_kaneCo)
     deleteDuplicatePts(agrcAddPts_kaneCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
+    dupePts = returnDuplicateAddresses(agrcAddPts_kaneCo, ['UTAddPtID', 'SHAPE@'])
+    updateErrorPts(os.path.join(cntyFldr, 'Kane_ErrorPts.shp'), errorPts, dupePts)
 
 
 def millardCounty():
@@ -2967,7 +2978,7 @@ def sanpeteCounty():
 
 
 def sevierCounty():
-    sevierCoAddPts = r'..\Sevier\SevierCounty.gdb\SC911AddressPts_101923'
+    sevierCoAddPts = r'..\Sevier\SevierCounty.gdb\All_SC911AddressPts_101923'
     agrcAddPts_sevierCo = r'..\Sevier\Sevier.gdb\AddressPoints_Sevier'
 
     sevierCoAddFLDS = ['NUMBER', 'Pre', 'Name', 'Dir', 'Type', 'Unit', 'PARCEL__', 'SHAPE@', 'ADDRESS']
@@ -3316,14 +3327,15 @@ def tooeleCounty():
                 'SNIVELY':'CT', 'TAHOE':'ST', 'VIA LA COSTA':'ST', }
 
 
-    tooeleCoAddPts = r'..\Tooele\TooeleCo_20230822.gdb\TCAddressPoints_08082023'
+    tooeleCoAddPts = r'..\Tooele\TooeleCounty.gdb\TCAddressPoints'
     agrcAddPts_tooeleCo = r'..\Tooele\Tooele.gdb\AddressPoints_Tooele'
     cntyFldr = r'..\Tooele'
 
     tooeleCoAddFLDS = ['HouseAddr', 'FullAddr', 'HouseNum', 'PreDir', 'StreetName', 'StreetType', 'SufDir', 
-                       'UnitNumber', 'City', 'Parcel_ID', 'Structure', 'SHAPE@', 'OBJECTID', 'SP_UnitTyp']
+                       'UnitNumber', 'City', 'Parcel_ID', 'Structure', 'SHAPE@', 'OBJECTID', 'SP_UnitType']
 
     checkRequiredFields(tooeleCoAddPts, tooeleCoAddFLDS)
+    #archive_last_month(agrcAddPts_tooeleCo)
     truncateOldCountyPts(agrcAddPts_tooeleCo)
 
     routeDict = {'HWY 36':['STATE HWY 36', 'SR36 HWY', 'STATE RTE 36', 'SR 36', 'SR36', 'SR36 ', 'HGIHWAY 36', 'UTAH STATE HWY-36',
@@ -3425,7 +3437,7 @@ def tooeleCounty():
 
                 city = ''
                 parcelID = removeBadValues(row[9], errorList)
-                structure = removeBadValues(row[10].upper(), errorList)
+                structure = removeBadValues(removeNone(row[10]).upper(), errorList)
                 if structure in yes_no:
                     structure = yes_no[structure]
                 if structure == '':
@@ -3572,7 +3584,7 @@ def utahCounty():
 
 
     checkRequiredFields(utahCoAddPts, utahCoAddFLDS)
-    #archive_last_month(agrcAddPts_utahCo)
+    archive_last_month(agrcAddPts_utahCo)
     truncateOldCountyPts(agrcAddPts_utahCo)
 
     errorPtsDict = {}
@@ -4388,7 +4400,7 @@ def weberCounty():
     ptTypeDict = {'Residential':['0', '1', '3'], 'Commercial':['2'], 'Other':['4', '5', '6', '7']}
 
     checkRequiredFields(weberCoAddPts, weberCoAddFLDS)
-    #archive_last_month(agrcAddPts_weberCo)
+    archive_last_month(agrcAddPts_weberCo)
     truncateOldCountyPts(agrcAddPts_weberCo)
 
     errorPtsDict = {}
@@ -4629,7 +4641,7 @@ def weberCounty():
 
 
 def dabc_pts():
-    dabc_pts = r'..\DABC\AddressPointAdditions.gdb\Pt_Additions'
+    dabc_pts = r'..\DABC\AddressPointAdditions.gdb\Pt_Additions_20231128'
     agrcAddPts_DABC = r'..\DABC\dabc.gdb\AddressPoints_DABC'
     cntyFldr = r'..\DABC'
 
@@ -4638,7 +4650,7 @@ def dabc_pts():
                  'PtLocation', 'PtType', 'Structure', 'ParcelID', 'AddSource', 'USNG', 'SHAPE@']
 
     checkRequiredFields(dabc_pts, dabc_flds)
-    #archive_last_month(agrcAddPts_DABC)
+    archive_last_month(agrcAddPts_DABC)
     truncateOldCountyPts(agrcAddPts_DABC)
 
     with arcpy.da.SearchCursor(dabc_pts, dabc_flds) as sCursor,\
@@ -4711,7 +4723,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #grandCounty()
 #ironCounty()   #Complete
 #juabCounty()
-#kaneCounty()   #Complete
+kaneCounty()   #Complete
 #millardCounty()   #Complete w/error points
 #morganCounty()    #Complete
 #murrayCity_AddressPts()
@@ -4729,7 +4741,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #wasatchCounty()  #Complete w/error points
 #washingtonCounty()  #Complete
 #wayneCounty()
-weberCounty()   #Complete
+#weberCounty()   #Complete
 #dabc_pts()
 
 
