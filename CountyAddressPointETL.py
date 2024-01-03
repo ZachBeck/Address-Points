@@ -1221,7 +1221,7 @@ def davisCounty():
                                     unitType, unitId, city, zip, fips, state, ptLocation, ptType, structure, parcelID, addSource, loadDate, \
                                     status, '', modified, '', '', '', shp))
 
-        hill_afb_pts = r'..\Davis\DavisCounty.gdb\AddressPoints_HillAFB'
+        hill_afb_pts = r'..\Davis\Davis.gdb\AddressPoints_HillAFB'
         arcpy.Append_management([hill_afb_pts], agrcAddPts_davisCo)
         errorFlds = createErrorPts(errorPtsDict, cntyFldr, 'Davis_ErrorPts.shp', davisCoAddFLDS[8], davisCoAddPts)
 
@@ -1699,21 +1699,21 @@ def ironCounty():
     #ironCoAddFLDS = ['AddNum', 'PrefixDir', 'StreetName', 'StreetType', 'SuffixDir', 'UnitType', 'UnitID', 'LoadDate', 'SHAPE@', 'FullAdd']
 
     checkRequiredFields(ironCoAddPts, ironCoAddFLDS)
-    #archive_last_month(agrcAddPts_ironCo)
+    archive_last_month(agrcAddPts_ironCo)
     truncateOldCountyPts(agrcAddPts_ironCo)
 
     errorPtsDict = {}
     rdSet = createRoadSet('49021')
     fixStreets = {'AAROTIPPETS':'AARON TIPPETS', 'APPLBLOSSOM':'APPLE BLOSSOM', 'AHSDOWFOREST':'ASHDOWN FOREST', 'ASHDOWFOREST':'ASHDOWN FOREST',
                   'ANTELOPSPRINGS':'ANTELOPE SPRINGS', 'APPLALOSA':'APPALOOSA', 'APPLALOOSA':'APPALOOSA', 'APPLEBLOSSOM':'APPLE BLOSSOM',
-                  'ASPERIDGE':'ASPEN RIDGE', 'AVIATON':'AVIATION', 'BEACOHL':'BEACON', 'BLUJAY':'BLUE JAY', 'BUCKSKIVALLEY':'BUCKSKIN VALLEY',
+                  'ASPERIDGE':'ASPEN RIDGE', 'AVIATON':'AVIATION', 'BEACOHL':'BEACON','CANYORANCH':'CANYON RANCH', 'BLUJAY':'BLUE JAY', 'BUCKSKIVALLEY':'BUCKSKIN VALLEY',
                   'BUMBLEBESPRING':'BUMBLEBEE SPRING', 'CANYOBREEZE':'CANYON BREEZE', 'CEDAR KNOLLSOUTH':'CEDAR KNOLLS SOUTH',
                   'COMMERCCENTER':'COMMERCE CENTER', 'COVCANYON':'COVE CANYON', 'COVVIEW':'COVE VIEW', 'COVEREDAGON':'COVERED WAGON',
                   'COVHEIGHTS':'COVE HEIGHTS', 'CROSHOLLOW': 'CROSS HOLLOW', 'DOUBLTREE':'DOUBLE TREE', 'EAGLEROOST':'EAGLES ROOST',
                   'EAGLRIDGE':'EAGLE RIDGE', 'GEORGBERRY':'GEORGE BERRY', 'GLECANYON':'GLEN CANYON', 'GOLDELEAF':'GOLDEN LEAF',
                   'GREENLAKE':'GREENS LAKE', 'GUIDELIGHT':'GUIDE LIGHT', 'HALFCLE':'HALF CIRCLE', 'HERITAGHILLS':'HERITAGE HILLS', 
                   'HIDDEHILLS':'HIDDEN HILLS', 'HIDDELAKE':'HIDDEN LAKE', 'HIGH MOUNTAIVIEW':'HIGH MOUNTAIN VIEW', 'HOUSROCK':'HOUSE ROCK',
-                  'IROTOWLOOKOUT':'IRON TOWN LOOKOUT', 'JACKSOPOINT':'JACKSON POINT', 'LITTLPINTO CREEK':'LITTLE PINTO CREEK',
+                  'IROTOWLOOKOUT':'IRON TOWN LOOKOUT', 'JACKSOPOINT':'JACKSON POINT', 'JAMES':'ST JAMES', 'LITTLPINTO CREEK':'LITTLE PINTO CREEK',
                   'LITTLCREEK CANYON':'LITTLE CREEK CANYON', 'LITTLSALT LAKE':'LITTLE SALT LAKE', 'LODGLAKE':'LODGE LAKE',
                   'LUMDERJACK':'LUMBERJACK', 'KIMBERLEY':'KIMBERLY', 'MAPLCANYON':'MAPLE CANYON', 'MARBLCANYON':'MARBLE CANYON',
                   'MARSHALL':'MARSHAL', 'MEADOLAKE':'MEADOW LAKE', 'MEADOLANE':'MEADOW LANE', 'MEADOLARK':'MEADOW LARK',
@@ -1764,6 +1764,7 @@ def ironCounty():
                 addressErrors.extend(['Street name missing in roads data', row[8]])
 
             if sName in fixStreets:
+                print(f'fixed {sName}')
                 sName = fixStreets[sName]
 
             preDir = returnKey(row[1], dirs)
@@ -2167,6 +2168,7 @@ def morganCounty():
     morganCoAddFLDS = ['addrnum', 'fullname', 'unittype', 'unitid', 'last_edited_date', 'SHAPE@', 'fulladdr', 'Serial']
 
     checkRequiredFields(morganCoAddPts, morganCoAddFLDS)
+    archive_last_month(agrcAddPts_morganCo)
     truncateOldCountyPts(agrcAddPts_morganCo)
 
     errorPtsDict = {}
@@ -2546,6 +2548,14 @@ def saltLakeCounty():
     slcoAddFLDS = ['PARCEL', 'ADDRESS', 'UNIT_DESIG', 'IDENTIFY', 'BLDG_DESIG', 'ADDR_LABEL', 'DEVELOPMENT', 'BUSINESS_NAME',
                    'ADDR_TYPE', 'ADDR_PD', 'SHAPE@', 'ZIP_CODE', 'ADDR_HN', 'ADDR_SN', 'EXPORT', 'ADDR_PD', 'ADDR_SN',
                    'ADDR_ST', 'ADDR_SD', 'PRIMARY_ADDRESS', 'CORNER_ADDRESS', 'ADDR_CLASS', 'last_edited_date']
+    
+
+    checkRequiredFields(slcoAddPts, slcoAddFLDS)
+    archive_last_month(agrcAddPts_SLCO)
+    truncateOldCountyPts(agrcAddPts_SLCO)
+
+    errorPtsDict = {}
+    rdSet = createRoadSet('49035')
 
     fixDict = {'SOUTHTEMPLE':'SOUTH TEMPLE', 'NORTHTEMPLE':'NORTH TEMPLE','WESTTEMPLE':'WEST TEMPLE',
                'EASTCAPITOL':'EAST CAPITOL', 'SOUTHJORDAN':'SOUTH JORDAN', 'SOUTHJRDN':'SOUTH JORDAN',
@@ -2605,13 +2615,6 @@ def saltLakeCounty():
             self.type = words.split()[-1]
     def fix_road_name(road_name):
         return strip_street_type(road_name)
-
-    checkRequiredFields(slcoAddPts, slcoAddFLDS)
-    #archive_last_month(agrcAddPts_SLCO)
-    truncateOldCountyPts(agrcAddPts_SLCO)
-
-    errorPtsDict = {}
-    rdSet = createRoadSet('49035')
 
     with arcpy.da.SearchCursor(slcoAddPts, slcoAddFLDS) as sCursor_slco, \
         arcpy.da.InsertCursor(agrcAddPts_SLCO, agrcAddFLDS) as iCursor:
@@ -3584,7 +3587,7 @@ def utahCounty():
 
 
     checkRequiredFields(utahCoAddPts, utahCoAddFLDS)
-    archive_last_month(agrcAddPts_utahCo)
+    #archive_last_month(agrcAddPts_utahCo)
     truncateOldCountyPts(agrcAddPts_utahCo)
 
     errorPtsDict = {}
@@ -3764,14 +3767,7 @@ def utahCounty():
 
     del iCursor
     del sCursor_utah
-    #'AddSystem': ['SGID.LOCATION.AddressSystemQuadrants', 'GRID_NAME'],
-    # inputDict = {
-    #             'AddSystem':['SGID.BOUNDARIES.Municipalities', 'SHORTDESC', ''],
-    #             'City':['SGID.BOUNDARIES.Municipalities', 'SHORTDESC', ''],
-    #             'ZipCode':['SGID.BOUNDARIES.ZipCodes', 'ZIP5', ''],
-    #             'USNG':['SGID.INDICES.NationalGrid', 'USNG', ''],
-    #             'ParcelID':['SGID.CADASTRE.Parcels_Utah', 'PARCEL_ID', '']
-    #             }
+
     inputDict = {
             'AddSystem':['SGID.LOCATION.AddressSystemQuadrants', 'GRID_NAME', ''],
             'City':['SGID.BOUNDARIES.Municipalities', 'SHORTDESC', ''],
@@ -3802,6 +3798,9 @@ def utahCounty():
     deleteDuplicatePts(agrcAddPts_utahCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
     dupePts = returnDuplicateAddresses(agrcAddPts_utahCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Utah_ErrorPts.shp'), errorPts, dupePts)
+
+    out_point_count = int(arcpy.GetCount_management(agrcAddPts_utahCo).getOutput(0))
+    print (f'Added {pointCount} points in {agrcAddPts_utahCo}')
 
 
 def uintahCounty_oldSchema():
@@ -4300,6 +4299,9 @@ def washingtonCounty():
     dupePts = returnDuplicateAddresses(agrcAddPts_washCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Washington_ErrorPts.shp'), errorFlds, dupePts)
 
+    out_point_count = int(arcpy.GetCount_management(agrcAddPts_washCo).getOutput(0))
+    print (f'Added {out_point_count} points in {agrcAddPts_washCo}')
+
 
 def wayneCounty():
     wayneCoAddPts = r'..\Wayne\WayneCounty.gdb\WayneCoPts'
@@ -4695,7 +4697,52 @@ def dabc_pts():
     addPolyAttributes(sgid, agrcAddPts_DABC, polyAttributesDict)
     updateAddPtID(agrcAddPts_DABC)
     addBaseAddress(agrcAddPts_DABC)
+
+
+def hill_AFB():
+    hill_pts = r'..\Davis\911MTRL_Hill.gdb\HAFB_only'
+    agrcAddPts_HillAFB = r'..\Davis\Davis.gdb\AddressPoints_HillAFB'
+
+    hill_flds = ['Add_Number', 'AddNum_Suf', 'St_PreDir', 'StreetName', 'St_PosTyp', 'Unit', 'SHAPE@']
+
+    truncateOldCountyPts(agrcAddPts_HillAFB)
+
+    loadDate = today
+
+    with arcpy.da.SearchCursor(hill_pts, hill_flds) as scursor_hill, \
+        arcpy.da.InsertCursor(agrcAddPts_HillAFB, agrcAddFLDS) as icursor:
+
+        for row in scursor_hill:
+            add_num = row[0]
+            add_num_suf = removeNone(row[1]).upper()
+            if row[5] in ['A', 'B']:
+                add_num_suf = row[5]
+            pre_dir = removeNone(row[2]).upper()
+            street_name = row[3].upper()
+            street_type = returnKey(removeNone(row[4]).upper(), sTypeDir)
+            shp = row[6]
+
+            full_add = f'{add_num} {add_num_suf} {street_name} {street_type}'
+            full_add = ' '.join(full_add.split())
+
+            icursor.insertRow(('', '', full_add, add_num, add_num_suf, pre_dir, street_name, street_type, '', '', '', \
+                               '', '', '', '', '', 'UT', 'Unknown', 'Unknown', 'Unknown', '', 'HAFB', loadDate, \
+                               'COMPLETE', '', None, '', '', '', shp))
+            
+    inputDict = {
+        'AddSystem':['SGID.LOCATION.AddressSystemQuadrants', 'GRID_NAME', ''],
+        'City':['SGID.BOUNDARIES.Municipalities', 'SHORTDESC', ''],
+        'ZipCode':['SGID.BOUNDARIES.ZipCodes', 'ZIP5', ''],
+        'USNG':['SGID.INDICES.NationalGrid', 'USNG', ''],
+        'CountyID':['SGID.BOUNDARIES.Counties', 'FIPS_STR', '']
+    }
+
+    addPolyAttributes(sgid, agrcAddPts_HillAFB, inputDict)
+    updateAddPtID(agrcAddPts_HillAFB)
+    addBaseAddress(agrcAddPts_HillAFB)
+    deleteDuplicatePts(agrcAddPts_HillAFB, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
     
+
 
 def checkRequiredFields(inCounty, requiredFlds):
 
@@ -4716,14 +4763,14 @@ def checkRequiredFields(inCounty, requiredFlds):
 #cacheCounty()  #Complete w/error points
 #carbonCounty() #Complete
 #daggettCounty() #Complete w/error points
-#davisCounty()  #Complete
+davisCounty()  #Complete
 #duchesneCounty()
 #emeryCounty()  #Complete
 #garfieldCounty()  #Complete
 #grandCounty()
 #ironCounty()   #Complete
 #juabCounty()
-kaneCounty()   #Complete
+#kaneCounty()   #Complete
 #millardCounty()   #Complete w/error points
 #morganCounty()    #Complete
 #murrayCity_AddressPts()
@@ -4743,6 +4790,7 @@ kaneCounty()   #Complete
 #wayneCounty()
 #weberCounty()   #Complete
 #dabc_pts()
+#hill_AFB()
 
 
 
