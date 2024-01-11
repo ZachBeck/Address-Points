@@ -250,6 +250,15 @@ def archive_last_month(archive_pts):
     out_archive = f'{archive_pts}{load_date}'
     arcpy.management.CopyFeatures(archive_pts, out_archive)
 
+def agol_to_fgdb(county, fs_url):
+
+    county_fgdb = f'..\{county}\{county}County.gdb'
+    with arcpy.EnvManager(workspace=county_fgdb):
+        arcpy.env.overwriteOutput = True
+        fc = f'{county}_agol_pts'
+        arcpy.conversion.ExportFeatures(fs_url, fc)
+        print(f'Exported {county} AGOL points to {county_fgdb}')
+
 
 def beaverCounty():
     beaverCoAddPts = r'..\Beaver\BeaverCounty.gdb\Address_pts'
@@ -372,7 +381,7 @@ def boxElderCounty():
     #sTypeTuple = tuple(sTypeList)
 
     checkRequiredFields(boxelderCoAddPts, boxelderCoAddFLDS)
-    archive_last_month(agrcAddPts_boxelderCo)
+    #archive_last_month(agrcAddPts_boxelderCo)
     truncateOldCountyPts(agrcAddPts_boxelderCo)
 
     errorPtsDict = {}
@@ -2055,90 +2064,92 @@ def kaneCounty():
 
 
 def millardCounty():
-    millardCoAddPts = r'..\Millard\MillardSource.gdb\Millard_AddressCAD_Jan_2022'
+    millardCoAddPts = r'..\Millard\MillardCounty.gdb\Millard_Addresses'
     agrcAddPts_millardCo = r'..\Millard\Millard.gdb\AddressPoints_Millard'
     cntyFldr = r'..\Millard'
 
-    millardCoAddFLDS = ['NUMB', 'PREDIR', 'STREETNAME', 'STREETTYPE', 'UNIT_TYPE', 'UNIT_ID', 'SHAPE@']
+    millardCoAddFLDS = ['HOUSENUM1', 'PREDIR', 'STREETNAME', 'STREETTYPE', 'UNIT_TYPE', 'UNIT_ID', 'SHAPE@']
 
     name_types = (' AVE', ' DR', ' LANE', ' LN', ' RD', ' WAY')
     fix_names = {'8430 SOUTH (SANDHILLS RD)':'SANDHILLS RD', 'BIRCH DR (450 SOUTH)':'BIRCH DR',
-                 'OLDFIELD':'OLD FIELD', 'US HIGHWAY 50':'HWY 50', 'TAMERIX':'TAMARIX'}
+                 'OLDFIELD':'OLD FIELD', 'US HIGHWAY 50':'HWY 50', 'TAMERIX':'TAMARIX',
+                 'CRYSTAL PEAKS SPUR':'CRYSTAL PEAK SPUR'}
 
     errorPtsDict = {}
     rdSet = createRoadSet('49027')
 
     checkRequiredFields(millardCoAddPts, millardCoAddFLDS)
+    #archive_last_month(agrcAddPts_millardCo)
     truncateOldCountyPts(agrcAddPts_millardCo)
 
     with arcpy.da.SearchCursor(millardCoAddPts, millardCoAddFLDS) as sCursor_millardCo, \
         arcpy.da.InsertCursor(agrcAddPts_millardCo, agrcAddFLDS) as iCursor:
 
         for row in sCursor_millardCo:
-            if row[0] != '' and row[2] != '':
+            if row[0] not in errorList and row[2] not in errorList:
 
-                addNum = row[0]
-                sType = returnKey(row[3], sTypeDir)
-                predir = row[1].strip()
-                unitType = returnKey(row[4].strip(), unitTypeDir)
-                unitId = row[5].strip()
-
-                if row[2][1].isdigit() == True:
-                    sName = row[2].split()[0]
-                    sufdir = returnKey(row[2].split()[1], dirs)
-                    sType = ''
+                if ' ' in row[0]:
+                    add_num = row[0].split()[0]
                 else:
-                    sName = row[2].upper()
-                    sType = returnKey(row[3], sTypeDir)
+                    add_num = row[0]
+                
+                stype = returnKey(row[3], sTypeDir)
+                predir = row[1].upper().strip()
+                unit_type = returnKey(row[4].strip(), unitTypeDir)
+                unit_id = row[5].strip()
+
+                if row[2][1].isdigit() == True and row[2] not in fix_names:
+                    sname = row[2].split()[0]
+                    sufdir = returnKey(row[2].split()[1], dirs)
+                    stype = ''
+                else:
+                    sname = row[2].upper()
+                    stype = returnKey(row[3], sTypeDir)
                     sufdir = ''
 
-
-                if sName in fix_names:
-                    sName = fix_names[sName]
+                if sname in fix_names:
+                    sname = fix_names[sname]
                 
-                if sName.startswith('HIGHWAY'):
-                    sName = sName.replace('HIGHWAY', 'HWY')
-                if sName.endswith('HIGHWAY'):
-                    sType = 'HWY'
-                    sName = sName[:-8]
-                if sName.startswith('HWY'):
-                    sType = ''
-                
+                if sname.startswith('HIGHWAY'):
+                    sname = sname.replace('HIGHWAY', 'HWY')
+                if sname.endswith('HIGHWAY'):
+                    stype = 'HWY'
+                    sname = sname[:-8]
+                if sname.startswith('HWY'):
+                    stype = ''
+                if sname.endswith((name_types)):
+                    stype = returnKey(sname.split()[-1], sTypeDir)
+                    sname = ' '.join(sname.split()[:-1]).strip()
+                if 'NOTTINGHAM' in sname:
+                    sname = 'NOTTINGHAM'
+                    stype = 'DR'
 
-                if sName.endswith((name_types)):
-                    sType = returnKey(sName.split()[-1], sTypeDir)
-                    sName = ' '.join(sName.split()[:-1]).strip()
+                if 'O' in add_num:
+                    add_num = add_num.replace('O', '0')
+                add_num = re.sub('[^0-9]', '', add_num)
 
-                if 'O' in addNum:
-                    addNum = addNum.replace('O', '0')
-                addNum = re.sub('[^0-9]', '', addNum)
-
-                if unitType == '' and unitId != '':
-                    fulladd = f'{addNum} {predir} {sName} {sufdir} {sType} # {unitId}'
+                if unit_type == '' and unit_id != '':
+                    fulladd = f'{add_num} {predir} {sname} {sufdir} {stype} # {unit_id}'
                 else:
-                    fulladd = f'{addNum} {predir} {sName} {sufdir} {sType} {unitType} {unitId}'
+                    fulladd = f'{add_num} {predir} {sname} {sufdir} {stype} {unit_type} {unit_id}'
 
                 fulladd = ' '.join(fulladd.split())
  
-
                 shp = row[6]
 
-                iCursor.insertRow(('', '', fulladd, addNum, '', predir, sName, sType, sufdir, '', '', unitType, unitId,\
-                                   '', '', '49027', 'UT', 'Unknown', 'Unknown', 'Unknown', '', 'MILLARD COUNTY', today, 'COMPLETE', '', None,\
-                                   '', '', '', shp))
+                iCursor.insertRow(('', '', fulladd, add_num, '', predir, sname, stype, sufdir, '', '', unit_type, unit_id,\
+                                   '', '', '49027', 'UT', 'Unknown', 'Unknown', 'Unknown', '', 'MILLARD COUNTY', today,\
+                                   'COMPLETE', '', None, '', '', '', shp))
 
                 if predir == sufdir:
                     addressErrors = errorPtsDict.setdefault(fulladd, [])
                     addressErrors.extend(['pre and post directions match', row[6]])
-                if 'HWY' not in sName and sName not in rdSet:
+                if 'HWY' not in sname and sname not in rdSet:
                     addressErrors = errorPtsDict.setdefault(f'{row[2]} | {fulladd}', [])
                     addressErrors.extend(['street name not found in roads', row[6]])
                 if predir == '' and sufdir != '':
                     addressErrors = errorPtsDict.setdefault(f'NSEW | {fulladd}'.format(fulladd, row[0]), [])
                     addressErrors.extend(['prefix direction is missing', row[6]])
-                if row[0].isdigit() == False:
-                    addressErrors = errorPtsDict.setdefault(f'{row[0]} | {fulladd}', [])
-                    addressErrors.extend(['bad house number', row[6]])
 
 
         error_pts = createErrorPts(errorPtsDict, cntyFldr, 'Millard_ErrorPts.shp', 'ADDRESS', millardCoAddPts)
@@ -2160,12 +2171,17 @@ def millardCounty():
 
 
 def morganCounty():
-    morganCoAddPts = r'..\Morgan\MorganCounty.gdb\AddressPoints'
+    morgan_agol_pts = 'https://services5.arcgis.com/9zdKz4c9IFXMrlCe/ArcGIS/rest/services/AddressPointsService/FeatureServer/0/'
+    morganCoAddPts = r'..\Morgan\MorganCounty.gdb\Morgan_agol_pts'
+    #morganCoAddPts = r'..\Morgan\MorganCounty.gdb\AddressPoints'
+    
     agrcAddPts_morganCo = r'..\Morgan\Morgan.gdb\AddressPoints_Morgan'
     cntyFldr = r'..\Morgan'
 
-    #morganCoAddFLDS = ['ADDRNUM', 'FULLNAME', 'UNITTYPE', 'UNITID', 'LASTUPDATE', 'SHAPE@', 'FULLADDR', 'SERIAL']
-    morganCoAddFLDS = ['addrnum', 'fullname', 'unittype', 'unitid', 'last_edited_date', 'SHAPE@', 'fulladdr', 'Serial']
+    agol_to_fgdb('Morgan', morgan_agol_pts)
+
+    morganCoAddFLDS = ['ADDRNUM', 'FULLNAME', 'UNITTYPE', 'UNITID', 'LASTUPDATE', 'SHAPE@', 'FULLADDR', 'SERIAL']
+    #morganCoAddFLDS = ['addrnum', 'fullname', 'unittype', 'unitid', 'last_edited_date', 'SHAPE@', 'fulladdr', 'Serial']
 
     checkRequiredFields(morganCoAddPts, morganCoAddFLDS)
     archive_last_month(agrcAddPts_morganCo)
@@ -4763,7 +4779,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #cacheCounty()  #Complete w/error points
 #carbonCounty() #Complete
 #daggettCounty() #Complete w/error points
-davisCounty()  #Complete
+#davisCounty()  #Complete
 #duchesneCounty()
 #emeryCounty()  #Complete
 #garfieldCounty()  #Complete
@@ -4771,7 +4787,7 @@ davisCounty()  #Complete
 #ironCounty()   #Complete
 #juabCounty()
 #kaneCounty()   #Complete
-#millardCounty()   #Complete w/error points
+millardCounty()   #Complete w/error points
 #morganCounty()    #Complete
 #murrayCity_AddressPts()
 #murrayCity_ParcelPts()
