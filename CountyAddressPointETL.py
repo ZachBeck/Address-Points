@@ -412,16 +412,17 @@ def boxElderCounty():
                 if sName.endswith((' RD', ' DR', ' ST', ' AVE')):
                     sType = sName[-2:]
                     sName = sName[:-2].strip()
+                if sName.endswith((' DRIVE', ' LANE', ' ROAD')):
+                    sType = returnKey(sName.split()[-1], sTypeDir)
+                    sName = sName.rsplit(' ', 1)[0]
+                    sufDir = ''
+                    print(sName)
                 if sName[0].isdigit() == True and sName.endswith((' N', ' S', ' E', ' W')):
                     sufDir = sName[-1]
                     sName = sName.replace(sName[-2:], '')
 
                 if sName.startswith(('HIGHWAY ')):
                     sName = sName.replace('HIGHWAY', 'HWY')
-
-                if sName == 'BROOKSIDE DRIVE':
-                    sName = 'BROOKSIDE'
-                    sType = 'DR'
 
                 sufDir = removeBadValues(row[5], errorList)
                 if sType != '':
@@ -431,6 +432,12 @@ def boxElderCounty():
                     sName = 'ROCKET'
                     sType = 'RD'
                     sufDir = ''
+
+                if sName[0].isdigit() == False:
+                    sufDir = ''
+
+                if sName == 'SADDLEBACK':
+                    sType = 'RD'
 
                 if row[6] not in errorList:
                     unitNum = row[6].strip('#').strip().upper()
@@ -719,7 +726,7 @@ def carbonCounty():
                  'RICHELMAN LANE', 'NORTH COAL CREEK ROAD', 'CONSUMERS ROAD', 'DRY VALLEY ROAD', 'FORD RIDGE ROAD']
 
     checkRequiredFields(carbonCoAddPts, carbonCoAddFLDS)
-    archive_last_month(agrcAddPts_carbonCo)
+    #archive_last_month(agrcAddPts_carbonCo)
     truncateOldCountyPts(agrcAddPts_carbonCo)
     rdSet = createRoadSet('49007')
 
@@ -810,6 +817,9 @@ def carbonCounty():
 
                 if sName == '1777 S HWY 10':
                     sName = 'HWY 10'
+                if sName == 'HIGHWAY':
+                    sName = 'HWY 6'
+                    sType = ''
 
                 if sName in fix_types:
                     sType = returnKey(sName.split()[-1], sTypeDir)
@@ -1232,6 +1242,7 @@ def davisCounty():
 
         hill_afb_pts = r'..\Davis\Davis.gdb\AddressPoints_HillAFB'
         arcpy.Append_management([hill_afb_pts], agrcAddPts_davisCo)
+
         errorFlds = createErrorPts(errorPtsDict, cntyFldr, 'Davis_ErrorPts.shp', davisCoAddFLDS[8], davisCoAddPts)
 
 
@@ -1488,7 +1499,7 @@ def emeryCounty():
 
 
 def garfieldCounty():
-    garfieldCoAddPts = r'..\Garfield\GarfieldCounty.gdb\GarfieldCountyPts'
+    garfieldCoAddPts = r'..\Garfield\GarfieldCounty.gdb\AddressPoints_GarfieldCounty'
     agrcAddPts_garfieldCo = r'..\Garfield\Garfield.gdb\AddressPoints_Garfield'
     cntyFldr = r'..\Garfield'
 
@@ -1498,6 +1509,7 @@ def garfieldCounty():
                          'ModifyDate', 'StreetAlias', 'Notes', 'SHAPE@']
 
     checkRequiredFields(garfieldCoAddPts, garfieldCoAddFLDS)
+    archive_last_month(agrcAddPts_garfieldCo)
     truncateOldCountyPts(agrcAddPts_garfieldCo)
 
     errorPtsDict = {}
@@ -1598,15 +1610,18 @@ def grandCounty():
                       'City', 'ZipCode', 'PtLocation', 'PtType', 'Structure', 'ParcelID', 'ModifyDate', 'SHAPE@', 'OBJECTID']
 
     checkRequiredFields(grandCoAddPts, grandCoAddFLDS)
+    archive_last_month(agrcAddPts_grandCo)
     truncateOldCountyPts(agrcAddPts_grandCo)
 
     errorPtsDict = {}
 
-    fix_name = {'BUCCHANAN':'BUCHANAN', 'DRE':'DREAM', 'HASTING':'HASTINGS', 'HIGHWAY 128':'HWY 128',
+    fix_name = {'BAGDERS':'BADGERS', 'BUCCHANAN':'BUCHANAN', 'DRE':'DREAM', 'HASTING':'HASTINGS', 'HIGHWAY 128':'HWY 128',
                 'HIGHWAY 191':'HWY 191', 'HUNTCREEK':'HUNT CREEK', 'ICEHOUSE PLACE':'ICEHOUSE', 'KANE CREEL':'KANE CREEK',
-                'KANE PRINGS':'KANE SPRINGS', 'MULBERRY': 'MULLBERRY', 'S HWY':'HWY 191', 'SR 279':'HWY 279', 
-                'SR 313':'HWY 313', 'SR 94':'HWY 94', 'RIM SHADOW':'RIMSHADOW', 'S HWY 191':'HWY 191',
+                'KANE PRINGS':'KANE SPRINGS', 'MAIN RUBISON':'MAIN RUBICON', 'MULBERRY': 'MULLBERRY', 'S HWY':'HWY 191',
+                'SR 279':'HWY 279', 'SR 313':'HWY 313', 'SR 94':'HWY 94', 'RIM SHADOW':'RIMSHADOW', 'S HWY 191':'HWY 191',
                 'SUNNY DALE':'SUNNYDALE', 'VAKKEY VIEW':'VALLEY VIEW', 'ZIMMERMZN':'ZIMMERMAN'}
+    
+    add_type = {'MAIN':'ST', 'CERMAK':'ST', 'PACE':'LN', 'RIMSHADOW':'LN', 'TIERRA DEL SOL':'DR'}
     
     long_names = ['100 N', '400 N', 'CASTLE VALLEY DR']
 
@@ -1648,11 +1663,16 @@ def grandCounty():
                 if sName in long_names:
                     fix_long_name = clean_street_name(sName)
                     sName = fix_long_name.name
-                    print(sName)
                     sufDir = fix_long_name.direction
-                    print(sufDir)
                     sType = fix_long_name.type
-                    print(sType)
+
+                if 'HWY ' in sName:
+                    sType = ''
+                if sName[1].isdigit() == False:
+                    sufDir = ''
+
+                if sName in add_type and sType == '':
+                    sType = add_type[sName]
 
                 unitId = removeNone(row[7]).strip('#').strip()
 
@@ -1958,10 +1978,10 @@ def kaneCounty():
 
             if row[3] not in errorList and row[6] not in ['725 E KANEPLEX DR']:
                 addNum = row[3]
-                preDir = removeBadValues(row[5], errorList)
+                preDir = returnKey(removeBadValues(row[5], errorList), dirs)
                 streetName = removeBadValues(row[6], errorList)
-                streetType = removeBadValues(row[7], errorList)
-                sufDir = removeBadValues(row[8], errorList)
+                streetType = returnKey(removeBadValues(row[7], errorList), sTypeDir)
+                sufDir = returnKey(removeBadValues(row[8], errorList), dirs)
                 landmark = removeBadValues(row[9], errorList)
                 building = removeBadValues(row[10], errorList)
                 unitType = removeBadValues(row[11], errorList)
@@ -2184,7 +2204,8 @@ def morganCounty():
     #morganCoAddFLDS = ['addrnum', 'fullname', 'unittype', 'unitid', 'last_edited_date', 'SHAPE@', 'fulladdr', 'Serial']
 
     checkRequiredFields(morganCoAddPts, morganCoAddFLDS)
-    archive_last_month(agrcAddPts_morganCo)
+    old_point_count = int(arcpy.GetCount_management(agrcAddPts_morganCo).getOutput(0))
+    #archive_last_month(agrcAddPts_morganCo)
     truncateOldCountyPts(agrcAddPts_morganCo)
 
     errorPtsDict = {}
@@ -2192,11 +2213,11 @@ def morganCounty():
 
     exp = re.compile(r'(?:^[NSEW]\s)?(?:(.+)(\s[NSEW]$)|(.+$))')
 
-    iCursor = arcpy.da.InsertCursor(agrcAddPts_morganCo, agrcAddFLDS)
-
     leadingSpaceTypes.extend([' LANE', ' COURT', ' COVE', ' CIRCLE', ' PARKWAY'])
                                        
-    with arcpy.da.SearchCursor(morganCoAddPts, morganCoAddFLDS) as sCursor:
+    with arcpy.da.SearchCursor(morganCoAddPts, morganCoAddFLDS) as sCursor, \
+        arcpy.da.InsertCursor(agrcAddPts_morganCo, agrcAddFLDS) as iCursor:
+
         for row in sCursor:
             if row[0] not in errorList and row[1] not in errorList:
                 addNum = row[0].strip()
@@ -2239,7 +2260,7 @@ def morganCounty():
             if row[2] not in errorList:
                 unitType = returnKey(row[2].upper(), unitTypeDir)
 
-            unitID = removeBadValues(row[3], errorList)
+            unitID = removeBadValues(row[3], errorList).strip('#')
 
             modDate = row[4]
             loadDate = today
@@ -2247,7 +2268,11 @@ def morganCounty():
 
             shp = row[5]
 
-            fullAdd = f'{addNum} {preDir} {sName} {sufDir} {sType} {unitType} {unitID}'
+            if unitType == '' and unitID != '':
+                fullAdd = f'{addNum} {preDir} {sName} {sType} {sufDir} # {unitID}'
+            else:
+                fullAdd = f'{addNum} {preDir} {sName} {sufDir} {sType} {unitType} {unitID}'
+
             fullAdd = ' '.join(fullAdd.split())
 
             if fullAddr != fullAdd:
@@ -2287,6 +2312,9 @@ def morganCounty():
     deleteDuplicatePts(agrcAddPts_morganCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
     dupePts = returnDuplicateAddresses(agrcAddPts_morganCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Morgan_ErrorPts.shp'), errorFlds, dupePts)
+
+    new_point_count = int(arcpy.GetCount_management(agrcAddPts_morganCo).getOutput(0))
+    print (f'Old count {old_point_count}, new count {new_point_count}')
 
 
 def piuteCounty():
@@ -3351,9 +3379,10 @@ def tooeleCounty():
     cntyFldr = r'..\Tooele'
 
     tooeleCoAddFLDS = ['HouseAddr', 'FullAddr', 'HouseNum', 'PreDir', 'StreetName', 'StreetType', 'SufDir', 
-                       'UnitNumber', 'City', 'Parcel_ID', 'Structure', 'SHAPE@', 'OBJECTID', 'SP_UnitType']
+                       'UnitNumber', 'City', 'Parcel_ID', 'Structure', 'SHAPE@', 'OBJECTID', 'SP_UnitTyp']
 
     checkRequiredFields(tooeleCoAddPts, tooeleCoAddFLDS)
+    old_point_count = int(arcpy.GetCount_management(agrcAddPts_tooeleCo).getOutput(0))
     #archive_last_month(agrcAddPts_tooeleCo)
     truncateOldCountyPts(agrcAddPts_tooeleCo)
 
@@ -3386,7 +3415,8 @@ def tooeleCounty():
                 'WIILDCAT':'WILDCAT', 'CAROLES WAY BUILDING':'CAROLE\'S', 'CAROLES WAY BUILDING F':'CAROLE\'S',
                 'CAROLES WAY BUIDLING F':'CAROLE\'S', 'BLUEMOON':'BLUE MOON', 'COLLETTE':'COLETTE', 'DAVILN':'DAVIS',
                 'DOALN':'DOLAN', 'GRANT AVENUE':'GRANT', 'HANDICART':'HANDCART', 'HIGHWAY 36':'HWY 36', 'RIDGON':'RIGDON',
-                'SILVER AVE':'SILVER'}
+                'SILVER AVE':'SILVER', 'BIRCHWOOD':'BIRCH WOOD', 'MORMAN TRAIL':'MORMON TRAIL', 'N':'NORTH',
+                'OLD COUNTRY':'OLD COUNTY', 'SHERIDAST':'SHERIDAN'}
 
     yes_no = {'Y':'YES', 'N':'NO'}
                                                                            
@@ -3436,6 +3466,9 @@ def tooeleCounty():
                     sType = ''
                 if sName == 'TIEBREAKER' and sType == '':
                     sType = 'CIR'
+                if sName == 'PREAKNESS WAY':
+                    sName = 'PREAKNESS'
+                    sType = 'WAY'
 
                 if sName in fixNames:
                     sName = fixNames[sName]
@@ -3587,6 +3620,9 @@ def tooeleCounty():
     deleteDuplicatePts(agrcAddPts_tooeleCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
     dupePts = returnDuplicateAddresses(agrcAddPts_tooeleCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Tooele_ErrorPts.shp'), errorPts, dupePts)
+
+    new_point_count = int(arcpy.GetCount_management(agrcAddPts_tooeleCo).getOutput(0))
+    print (f'Old count {old_point_count}, new count {new_point_count}')
     
 
 def utahCounty():
@@ -3603,7 +3639,8 @@ def utahCounty():
 
 
     checkRequiredFields(utahCoAddPts, utahCoAddFLDS)
-    #archive_last_month(agrcAddPts_utahCo)
+    old_point_count = int(arcpy.GetCount_management(agrcAddPts_utahCo).getOutput(0))
+    archive_last_month(agrcAddPts_utahCo)
     truncateOldCountyPts(agrcAddPts_utahCo)
 
     errorPtsDict = {}
@@ -3638,7 +3675,7 @@ def utahCounty():
                     else:
                         sType = returnKey(row[3], sTypeDir)
 
-                addNum = row[0]
+                addNum = row[0].strip()
 
                 if ' ' in row[2]:
                     street = ' '.join(row[2].split()).upper()
@@ -3815,8 +3852,8 @@ def utahCounty():
     dupePts = returnDuplicateAddresses(agrcAddPts_utahCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Utah_ErrorPts.shp'), errorPts, dupePts)
 
-    out_point_count = int(arcpy.GetCount_management(agrcAddPts_utahCo).getOutput(0))
-    print (f'Added {pointCount} points in {agrcAddPts_utahCo}')
+    new_point_count = int(arcpy.GetCount_management(agrcAddPts_utahCo).getOutput(0))
+    print (f'Old count {old_point_count}, new count {new_point_count}')
 
 
 def uintahCounty_oldSchema():
@@ -4046,6 +4083,9 @@ def uintahCounty():
 def wasatchCounty():
 
     rdSet = createRoadSet('49051')
+    #wasatch_agol_pts = 'https://maps.wasatch.utah.gov/arcgis/rest/services/Maps/Basic_Map_Layer/MapServer/3'
+    #agol_to_fgdb('Wasatch', wasatch_agol_pts)
+    #wasatchCoAddPts = r'..\Wasatch\WasatchCounty.gdb\Wasatch_agol_pts'
 
     wasatchCoAddPts = r'..\Wasatch\WasatchCounty.gdb\WC_ADDRESS'
     agrcAddPts_wasatchCo = r'..\Wasatch\Wasatch.gdb\AddressPoints_Wasatch'
@@ -4061,6 +4101,7 @@ def wasatchCounty():
                         'UnitType', 'UnitID', 'Subdivision', 'SiteAddID', 'PointType', 'SHAPE@']
 
     checkRequiredFields(wasatchCoAddPts, wasatchCoAddFLDS)
+    archive_last_month(agrcAddPts_wasatchCo)
     truncateOldCountyPts(agrcAddPts_wasatchCo)
 
     wasatchExclude = ['MM', 'Mile Marker']
@@ -4152,7 +4193,7 @@ def wasatchCounty():
 
         errorFlds = createErrorPts(errorPtsDict, cntyFldr, 'Wasatch_ErrorPts.shp', wasatchCoAddFLDS[1], wasatchCoAddPts)
 
-    print (errorPtsDict.keys())
+    #print (errorPtsDict.keys())
     #createErrorPts(errorPtsDict, cntyFldr, 'Wasatch_ErrorPts.shp', wasatchCoAddFLDS[1], wasatchCoAddPts)
     del iCursor
     del sCursor_wasatchCo
@@ -4183,7 +4224,8 @@ def washingtonCounty():
                      'LASTUPDATE', 'SHAPE@', 'OBJECTID', 'SUFFIXDIR', 'FULLADDR', 'FULLNAME', 'POST_DIR']
 
     checkRequiredFields(washcoAddPts, washcoAddFLDS)
-    archive_last_month(agrcAddPts_washCo)
+    old_point_count = int(arcpy.GetCount_management(agrcAddPts_washCo).getOutput(0))
+    #archive_last_month(agrcAddPts_washCo)
     truncateOldCountyPts(agrcAddPts_washCo)
 
     errorPtsDict = {}
@@ -4193,7 +4235,7 @@ def washingtonCounty():
     sTypeList = ['ALY', 'ANX', 'AVE', 'BLVD', 'BYP', 'CSWY', 'CIR', 'CT', 'CTR', 'CV', 'XING', 'DR', 'EST', 'ESTS', \
                  'EXPY', 'FWY', 'HWY', 'JCT', 'LNDG', 'LN', 'LOOP', 'PARK', 'PKWY', 'PL', 'RAMP', 'RD', 'RTE', \
                  'ROW', 'SQ', 'ST', 'TER', 'TRWY', 'TRL', 'TUNL', 'TPKE', 'WAY']
-    fix_name = {'NORTHSTAR':'NORTH STAR', 'MOLINERO':'MOLINARO'}
+    fix_name = {'BIRKIN':'BIRKEN', 'MOLINERO':'MOLINARO', 'NORTHSTAR':'NORTH STAR'}
 
     iCursor = arcpy.da.InsertCursor(agrcAddPts_washCo, agrcAddFLDS)
 
@@ -4275,7 +4317,7 @@ def washingtonCounty():
                 if removeNone(row[3]).upper() not in removeNone(row[12]).upper():
                     addressErrors = errorPtsDict.setdefault(f'{row[3]} | {row[12]}', [])
                     addressErrors.extend(['mixed street names', row[9]])
-                if sName not in rdSet:
+                if 'HWY ' not in sName and sName not in rdSet:
                     addressErrors = errorPtsDict.setdefault(f'{sName} | {row[12]}', [])
                     addressErrors.extend(['street name not in roads', row[9]])
 
@@ -4315,8 +4357,8 @@ def washingtonCounty():
     dupePts = returnDuplicateAddresses(agrcAddPts_washCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Washington_ErrorPts.shp'), errorFlds, dupePts)
 
-    out_point_count = int(arcpy.GetCount_management(agrcAddPts_washCo).getOutput(0))
-    print (f'Added {out_point_count} points in {agrcAddPts_washCo}')
+    new_point_count = int(arcpy.GetCount_management(agrcAddPts_washCo).getOutput(0))
+    print (f'Old count {old_point_count}, new count {new_point_count}')
 
 
 def wayneCounty():
@@ -4418,6 +4460,7 @@ def weberCounty():
     ptTypeDict = {'Residential':['0', '1', '3'], 'Commercial':['2'], 'Other':['4', '5', '6', '7']}
 
     checkRequiredFields(weberCoAddPts, weberCoAddFLDS)
+    old_point_count = int(arcpy.GetCount_management(agrcAddPts_weberCo).getOutput(0))
     archive_last_month(agrcAddPts_weberCo)
     truncateOldCountyPts(agrcAddPts_weberCo)
 
@@ -4657,9 +4700,11 @@ def weberCounty():
     dupePts = returnDuplicateAddresses(agrcAddPts_weberCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Weber_ErrorPts.shp'), errorPts, dupePts)
 
+    new_point_count = int(arcpy.GetCount_management(agrcAddPts_weberCo).getOutput(0))
+    print (f'Old count {old_point_count}, new count {new_point_count}')
 
 def dabc_pts():
-    dabc_pts = r'..\DABC\AddressPointAdditions.gdb\Pt_Additions_20231128'
+    dabc_pts = r'..\DABC\AddressPointAdditions.gdb\Pt_Additions_20240117'
     agrcAddPts_DABC = r'..\DABC\dabc.gdb\AddressPoints_DABC'
     cntyFldr = r'..\DABC'
 
@@ -4787,7 +4832,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #ironCounty()   #Complete
 #juabCounty()
 #kaneCounty()   #Complete
-millardCounty()   #Complete w/error points
+#millardCounty()   #Complete w/error points
 #morganCounty()    #Complete
 #murrayCity_AddressPts()
 #murrayCity_ParcelPts()
@@ -4804,7 +4849,7 @@ millardCounty()   #Complete w/error points
 #wasatchCounty()  #Complete w/error points
 #washingtonCounty()  #Complete
 #wayneCounty()
-#weberCounty()   #Complete
+weberCounty()   #Complete
 #dabc_pts()
 #hill_AFB()
 

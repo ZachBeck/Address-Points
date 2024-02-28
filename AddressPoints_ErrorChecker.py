@@ -1,5 +1,6 @@
 import arcpy, agrc
 from agrc import parse_address
+from pathlib import Path
 from checkAddressFields import checkStreetName
 from checkAddressFields import createStreetDict
 from checkAddressFields import dirCheck
@@ -8,12 +9,13 @@ from checkAddressFields import checkAddNum
 from checkAddressFields import flagDuplicates
 from checkPtsAgainstPoly import checkInsidePolys
 from checkPtsAgainstPoly import checkOutsidePolys
+from UpdatePointAttributes import addPolyAttributes
 
 
-sgid10 = r'Database Connections\dc_agrc@SGID10@sgid.agrc.utah.gov.sde'
-zips = sgid10 + '\\SGID10.BOUNDARIES.ZipCodes'
-munis = sgid10 + '\\SGID10.BOUNDARIES.Municipalities'
-addrSys = sgid10 + '\\SGID10.LOCATION.AddressSystemQuadrants'
+sgid = str(Path(__file__).resolve().parents[3].joinpath('sde', 'SGID_internal', 'SGID_agrc.sde'))
+zips = sgid + '\\SGID.BOUNDARIES.ZipCodes'
+munis = sgid + '\\SGID10.BOUNDARIES.Municipalities'
+addrSys = sgid + '\\SGID10.LOCATION.AddressSystemQuadrants'
 
 fipsDict = {'Beaver': '49001', 'Box Elder': '49003', 'Cache': '49005', 'Carbon': '49007', 'Daggett': '49009', \
            'Davis': '49011', 'Duchesne': '49013', 'Emery': '49015', 'Garfield': '49017', 'Grand': '49019', \
@@ -42,6 +44,19 @@ def checkFlagField(inFC):
             continue
         else:
             arcpy.AddField_management(inFC, 'AGRC_FLAG', 'TEXT', '#', '#', '250')
+
+def add_ugrc_zips(in_county_pts):
+    county_flds = arcpy.ListFields(in_county_pts)
+    if 'UGRC_ZIPS' not in county_flds:
+        arcpy.AddField_management(in_county_pts, 'UGRC_ZIPS', 'TEXT', '#', '#', '10')
+
+    zip_dict = {'UGRC_ZIPS':['SGID.BOUNDARIES.ZipCodes', 'ZIP5', '']}
+    addPolyAttributes(sgid, in_county_pts, zip_dict)
+
+in_pts = r'C:\ZBECK\Addressing\Weber\WeberCounty.gdb\address_pts'
+
+add_ugrc_zips(in_pts)
+
 
 def checkBoxElderPts(addPts, coName):
 
@@ -206,7 +221,7 @@ def checkMillardPts(addPts, coName):
                 if row[2][0].isdigit() == False and not row[2].startswith('HIGHWAY') and row[3] == ' ':
                     sTypeFLG = '[Missing street type]'
                 if row[2][0].isdigit() and row[1] == ' ':
-                    print row[2]
+                    print(row[2])
                     pDirFLG = '[Missing prefix]'
 
             row[6] = '{}{}{}{}{}'.format(sufFLG, nameFLG, addNumFLG, pDirFLG, sTypeFLG)
@@ -228,6 +243,6 @@ def checkMillardPts(addPts, coName):
 
 #checkCachePts(r'C:\ZBECK\Addressing\Cache\cache_MAL.gdb\cache_MAL_7_6_2016', 'Cache')
 #checkBoxElderPts(r'C:\ZBECK\Addressing\BoxElder\MonthlyUpdates\BECO_ADDRESS_POINT_UPDATE_AUG_2016.shp', 'Box Elder')
-checkMillardPts(r'C:\ZBECK\Addressing\Millard\MillardSource.gdb\Addresses_Rooftops', 'Millard')
+#checkMillardPts(r'C:\ZBECK\Addressing\Millard\MillardSource.gdb\Addresses_Rooftops', 'Millard')
 
 

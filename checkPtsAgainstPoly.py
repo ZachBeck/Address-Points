@@ -64,7 +64,7 @@ def checkOutsidePolys(polyFC, polyFLD, pts, ptsFLDS, coName):
             if urow[0] not in emptyValues:
                 if urow[0] not in unincorpList:
                     if urow[1] not in emptyValues:
-                        print errorValue
+                        print(errorValue)
                         urow[1] = '{} {}'.format(urow[1], errorValue)
                     else:
                         urow[1] = errorValue
