@@ -1775,7 +1775,7 @@ def ironCounty():
                 sType = returnKey(row[3], sTypeDir)
 
             if row[2] not in errorList:
-                sName = row[2].upper()
+                sName = row[2].upper().strip()
 
                 if sName[:2] == 'SR' and sName[2].isdigit():
                     sName = sName.replace('SR', 'HWY ')
@@ -4225,7 +4225,7 @@ def washingtonCounty():
 
     checkRequiredFields(washcoAddPts, washcoAddFLDS)
     old_point_count = int(arcpy.GetCount_management(agrcAddPts_washCo).getOutput(0))
-    #archive_last_month(agrcAddPts_washCo)
+    archive_last_month(agrcAddPts_washCo)
     truncateOldCountyPts(agrcAddPts_washCo)
 
     errorPtsDict = {}
@@ -4829,7 +4829,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #emeryCounty()  #Complete
 #garfieldCounty()  #Complete
 #grandCounty()
-#ironCounty()   #Complete
+ironCounty()   #Complete
 #juabCounty()
 #kaneCounty()   #Complete
 #millardCounty()   #Complete w/error points
@@ -4849,7 +4849,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #wasatchCounty()  #Complete w/error points
 #washingtonCounty()  #Complete
 #wayneCounty()
-weberCounty()   #Complete
+#weberCounty()   #Complete
 #dabc_pts()
 #hill_AFB()
 

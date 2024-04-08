@@ -23,8 +23,8 @@ def update_sde(county_name):
 
         sgid_pts = str(Path(__file__).resolve().parents[3].joinpath('sde', 'SGID_internal', 'SGID_Location.sde', 'SGID.LOCATION.AddressPoints'))
         
-        sql = f'"CountyID" = \'{fips_dict[county_name.title()]}\' AND NOT "AddSource" = \'DABC\''
-        #sql = f'"CountyID" = \'{fips_dict[county_name.title()]}\' AND "AddSource" NOT IN (\'DABC\', \'HAFB\')'
+        #sql = f'"CountyID" = \'{fips_dict[county_name.title()]}\' AND NOT "AddSource" = \'DABC\''
+        sql = f'"CountyID" = \'{fips_dict[county_name.title()]}\' AND "AddSource" NOT IN (\'DABC\', \'HAFB\')'
      
         sgid_pts_fl = arcpy.MakeFeatureLayer_management(sgid_pts, 'sgid_pts_fl', sql)
 
@@ -66,6 +66,6 @@ def update_sde(county_name):
 
 
 
-update_sde('Davis') #Update input points and SQL query
+update_sde('Washington') #Update input points and SQL query
 
 
