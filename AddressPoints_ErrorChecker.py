@@ -53,7 +53,7 @@ def add_ugrc_zips(in_county_pts):
     zip_dict = {'UGRC_ZIPS':['SGID.BOUNDARIES.ZipCodes', 'ZIP5', '']}
     addPolyAttributes(sgid, in_county_pts, zip_dict)
 
-in_pts = r'C:\ZBECK\Addressing\Weber\WeberCounty.gdb\address_pts'
+in_pts = r'C:\ZBECK\Addressing\Davis\DavisCounty.gdb\DavisAddress'
 
 add_ugrc_zips(in_pts)
 

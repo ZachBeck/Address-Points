@@ -29,6 +29,7 @@ def addBaseAddress(inAddressPoints):
             if 'BLDG' in row[1] and row[22] != '':
                 stripStr = f' BLDG {row[22]} {row[9]} {row[10]}'
             baseAdd = re.sub(stripStr, '', row[1])
+            print(baseAdd)
             baseAddList.append(baseAdd)
             allAddsDict.setdefault(row[1])
 
@@ -76,7 +77,7 @@ def addBaseAddress(inAddressPoints):
                 county = addressAttributeDict[key][3]
                 state = 'UT'
                 ptType = 'BASE ADDRESS'
-                addSrc = 'UGRC'
+                addSrc = 'UGRC BASE'
                 loadDate = addressAttributeDict[key][5]
                 parcel_id = addressAttributeDict[key][6]
                 usng = addressAttributeDict[key][7]

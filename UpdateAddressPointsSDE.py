@@ -24,7 +24,7 @@ def update_sde(county_name):
         sgid_pts = str(Path(__file__).resolve().parents[3].joinpath('sde', 'SGID_internal', 'SGID_Location.sde', 'SGID.LOCATION.AddressPoints'))
         
         #sql = f'"CountyID" = \'{fips_dict[county_name.title()]}\' AND NOT "AddSource" = \'DABC\''
-        sql = f'"CountyID" = \'{fips_dict[county_name.title()]}\' AND "AddSource" NOT IN (\'DABC\', \'HAFB\')'
+        sql = f'"CountyID" = \'{fips_dict[county_name.title()]}\' AND "AddSource" NOT IN (\'DABC\', \'HAFB\', \'UGRC\')'
      
         sgid_pts_fl = arcpy.MakeFeatureLayer_management(sgid_pts, 'sgid_pts_fl', sql)
 
@@ -34,7 +34,7 @@ def update_sde(county_name):
         count_sgid_pts_fl = arcpy.GetCount_management(sgid_pts_fl)[0]
         pt_increase = int(count_update_pts) - int(count_sgid_pts_fl)
 
-        if count_sgid_pts_fl > count_update_pts:
+        if int(count_sgid_pts_fl) > int(count_update_pts):
             print(f'!!!!!{county_name.upper()} COUNTY update has fewer points ({count_update_pts}) than what is in SDE ({count_sgid_pts_fl})')
             raise Exception('Update has fewer points than SDE')
 
@@ -66,6 +66,6 @@ def update_sde(county_name):
 
 
 
-update_sde('Davis') #Update input points and SQL query
+update_sde('Kane') #Update input points and SQL query
 
 
