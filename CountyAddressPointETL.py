@@ -362,7 +362,7 @@ def beaverCounty():
 
 
 def boxElderCounty():
-    boxelderCoAddPts = r'..\BoxElder\BoxElderCounty.gdb\BECO_ADDRESS_POINTS'
+    boxelderCoAddPts = r'..\BoxElder\BoxElderCounty.gdb\BECO_Address_Points'
     agrcAddPts_boxelderCo = r'..\BoxElder\BoxElder.gdb\AddressPoints_BoxElder'
     cntyFldr = r'..\BoxElder'
 
@@ -1110,6 +1110,7 @@ def davisCounty():
                       'RoadPostDirection', 'FullAddress', 'SHAPE@', 'PrimaryAddress', 'MunicipalName', 'LastUpdate']
 
     checkRequiredFields(davisCoAddPts, davisCoAddFLDS)
+    old_point_count = int(arcpy.GetCount_management(agrcAddPts_davisCo).getOutput(0))
     archive_last_month(agrcAddPts_davisCo)
     truncateOldCountyPts(agrcAddPts_davisCo)
 
@@ -1283,6 +1284,9 @@ def davisCounty():
     deleteDuplicatePts(agrcAddPts_davisCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
     dupePts = returnDuplicateAddresses(agrcAddPts_davisCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Davis_ErrorPts.shp'), errorFlds, dupePts)
+
+    new_point_count = int(arcpy.GetCount_management(agrcAddPts_davisCo).getOutput(0))
+    print (f'Old count {old_point_count}, new count {new_point_count}')
 
 
 def davisCounty_alias():
@@ -1728,7 +1732,8 @@ def grandCounty():
                       'City', 'ZipCode', 'PtLocation', 'PtType', 'Structure', 'ParcelID', 'ModifyDate', 'SHAPE@', 'OBJECTID']
 
     checkRequiredFields(grandCoAddPts, grandCoAddFLDS)
-    #archive_last_month(agrcAddPts_grandCo)
+    old_point_count = int(arcpy.GetCount_management(agrcAddPts_grandCo).getOutput(0))
+    archive_last_month(agrcAddPts_grandCo)
     truncateOldCountyPts(agrcAddPts_grandCo)
 
     errorPtsDict = {}
@@ -1834,6 +1839,9 @@ def grandCounty():
     dupePts = returnDuplicateAddresses(agrcAddPts_grandCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Grand_ErrorPts.shp'), errorPts, dupePts)
     deleteDuplicatePts(agrcAddPts_grandCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
+
+    new_point_count = int(arcpy.GetCount_management(agrcAddPts_grandCo).getOutput(0))
+    print (f'Old count {old_point_count}, new count {new_point_count}')
 
 
 def ironCounty():
@@ -3141,7 +3149,7 @@ def sanpeteCounty():
 
 
 def sevierCounty():
-    sevierCoAddPts = r'..\Sevier\SevierCounty.gdb\All_SC911AddressPts_042324'
+    sevierCoAddPts = r'..\Sevier\SevierCounty.gdb\SC911AddressPts'
     agrcAddPts_sevierCo = r'..\Sevier\Sevier.gdb\AddressPoints_Sevier'
 
     sevierCoAddFLDS = ['NUMBER', 'Pre', 'Name', 'Dir', 'Type', 'Unit', 'PARCEL__', 'SHAPE@', 'ADDRESS']
@@ -3151,7 +3159,8 @@ def sevierCounty():
     errorPtsDict = {}
 
     checkRequiredFields(sevierCoAddPts, sevierCoAddFLDS)
-    #archive_last_month(agrcAddPts_sevierCo)
+    old_point_count = int(arcpy.GetCount_management(agrcAddPts_sevierCo).getOutput(0))
+    archive_last_month(agrcAddPts_sevierCo)
     truncateOldCountyPts(agrcAddPts_sevierCo)
 
     hwyDict = {'SR 118':'HWY 118', 'SR 119':'HWY 119', 'SR 24':'HWY 24', 'SR 25':'HWY 25', 'SR 256':'HWY 256',
@@ -3227,6 +3236,9 @@ def sevierCounty():
     deleteDuplicatePts(agrcAddPts_sevierCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
     dupePts = returnDuplicateAddresses(agrcAddPts_sevierCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Sevier_ErrorPts.shp'), errorPts, dupePts)
+
+    new_point_count = int(arcpy.GetCount_management(agrcAddPts_sevierCo).getOutput(0))
+    print (f'Old count {old_point_count}, new count {new_point_count}')
 
 
 def summitCounty():
@@ -3548,7 +3560,7 @@ def tooeleCounty():
                 'SNIVELY':'CT', 'TAHOE':'ST', 'VIA LA COSTA':'ST', }
 
 
-    tooeleCoAddPts = r'..\Tooele\TooeleCounty.gdb\TCAddressPoints'
+    tooeleCoAddPts = r'..\Tooele\TooeleCounty.gdb\TCAddressMaster_08142024'
     agrcAddPts_tooeleCo = r'..\Tooele\Tooele.gdb\AddressPoints_Tooele'
     cntyFldr = r'..\Tooele'
 
@@ -4146,7 +4158,12 @@ def uintahCounty_oldSchema():
 
 
 def uintahCounty():
-    uintahCoAddPts = r'..\Uintah\UintahCounty.gdb\Uintah_MAL_2022'
+        
+    fs_url = 'https://apps.uintah.utah.gov/arcgis/rest/services/UintahMAL/MapServer/0'
+    agol_to_fgdb('Uintah', fs_url)
+
+    uintahCoAddPts = r'..\Uintah\UintahCounty.gdb\Uintah_agol_pts'
+    #uintahCoAddPts = r'..\Uintah\UintahCounty.gdb\Uintah_MAL_2022'
     agrcAddPts_uintahCo = r'..\Uintah\Uintah.gdb\AddressPoints_Uintah'
     cntyFldr = r'..\Uintah'
 
@@ -4156,16 +4173,18 @@ def uintahCounty():
                        'Building', 'UnitType', 'UnitID', 'City', 'ZipCode', 'PtLocation', 'PtType', 'Structure',
                        'ParcelID', 'EDIT_DATE', 'SHAPE@']
 
-    fix_name = {'AMEIAL EARHART':'AMELIA EARHART', 'AMEILA EARHART':'AMELIA EARHART', 'HIGWAY 40':'HWY 40',
-                'HIWY 40':'HWY 40', 'HW 40':'HWY 40', 'HWY 40 STE A-B':'HWY 40', 'US':'HWY 40',
-                'US 149':'HWY 149', 'WARRENDRAW':'WARREN DRAW'}
+    fix_name = {'19500 (THE LANE)':'THE LANE RD', 'DIAMOND MTN LANE':'THE LANE RD', 'DRY FORK CEMETARY':'DRY FORK CEMETERY',
+                'HIGHWAY 191':'HWY 191', 'HIGWAY 40':'HWY 40', 'HIWY 40':'HWY 40', 'HW 40':'HWY 40', 'HWY 40 STE A-B':'HWY 40',
+                'HORESHOE BEND':'HORSESHOE BEND', 'NDIAN TRAIL RANCH':'INDIAN TRAIL RANCH', 'US':'HWY 40', 'US 149':'HWY 149',
+                'WARRENDRAW':'WARREN DRAW'}
 
     checkRequiredFields(uintahCoAddPts, uintahCoAddFLDS)
+    old_point_count = int(arcpy.GetCount_management(agrcAddPts_uintahCo).getOutput(0))
+    #archive_last_month(agrcAddPts_uintahCo)
     truncateOldCountyPts(agrcAddPts_uintahCo)
 
     errorPtsDict = {}
     rdSet = createRoadSet('49047')
-    loadDate = today
 
     with arcpy.da.SearchCursor(uintahCoAddPts, uintahCoAddFLDS) as scursor, \
         arcpy.da.InsertCursor(agrcAddPts_uintahCo, agrcAddFLDS) as icursor:
@@ -4173,16 +4192,19 @@ def uintahCounty():
             if row[1] not in errorList and row[3] not in errorList:
                 add_num = row[1]
                 pre_dir = returnKey(row[2], dirs)
-                street_name = row[3]
+                street_name = row[3].strip()
                 street_type = returnKey(row[4], sTypeDir)
                 suf_dir = row[5].strip()
 
-                if street_name == '7500E':
-                    street_name = '7500'
-                    suf_dir = 'E'
-
                 if street_name in fix_name:
                     street_name = fix_name[street_name]
+
+                if street_name.endswith((' AVE', ' BLVD', ' CIR', ' DR', ' DRIVE', ' RD', ' ROAD', ' ST', ' WAY')):
+                    street_type = returnKey(street_name.split()[-1], sTypeDir)
+                    street_name = ' '.join(street_name.split()[:-1])
+
+                if street_name == 'THE LANE':
+                    street_type = 'RD'
 
                 unit_id = row[9].strip()
                 if row[8].isdigit() == False:
@@ -4253,11 +4275,14 @@ def uintahCounty():
     dupePts = returnDuplicateAddresses(agrcAddPts_uintahCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Uintah_ErrorPts.shp'), errorPts, dupePts)
 
+    new_point_count = int(arcpy.GetCount_management(agrcAddPts_uintahCo).getOutput(0))
+    print (f'Old count {old_point_count}, new count {new_point_count}')
+
 
 def wasatchCounty():
 
     fs_url = 'https://maps.wasatch.utah.gov/arcgis/rest/services/Maps/Basic_Map_Layer/MapServer/3'
-    #agol_to_fgdb('Wasatch', fs_url)
+    agol_to_fgdb('Wasatch', fs_url)
 
     rdSet = createRoadSet('49051')
    
@@ -4277,6 +4302,7 @@ def wasatchCounty():
                         'UnitType', 'UnitID', 'Subdivision', 'SiteAddID', 'PointType', 'SHAPE@']
 
     checkRequiredFields(wasatchCoAddPts, wasatchCoAddFLDS)
+    old_point_count = int(arcpy.GetCount_management(agrcAddPts_wasatchCo).getOutput(0))
     archive_last_month(agrcAddPts_wasatchCo)
     truncateOldCountyPts(agrcAddPts_wasatchCo)
 
@@ -4388,6 +4414,9 @@ def wasatchCounty():
     deleteDuplicatePts(agrcAddPts_wasatchCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
     dupePts = returnDuplicateAddresses(agrcAddPts_wasatchCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Wasatch_ErrorPts.shp'), errorFlds, dupePts)
+
+    new_point_count = int(arcpy.GetCount_management(agrcAddPts_wasatchCo).getOutput(0))
+    print (f'Old count {old_point_count}, new count {new_point_count}')
 
 
 def washingtonCounty():
@@ -4545,6 +4574,7 @@ def wayneCounty():
     wayneCoAddFLDS = ['HouseNumbe', 'Pre', 'Name', 'Type', 'Dir', 'Unit', 'SHAPE@', 'OBJECTID']
 
     checkRequiredFields(wayneCoAddPts, wayneCoAddFLDS)
+    old_point_count = int(arcpy.GetCount_management(agrcAddPts_wayneCo).getOutput(0))
     archive_last_month(agrcAddPts_wayneCo)
     truncateOldCountyPts(agrcAddPts_wayneCo)
 
@@ -4623,6 +4653,9 @@ def wayneCounty():
     deleteDuplicatePts(agrcAddPts_wayneCo, ['UTAddPtID', 'SHAPE@WKT', 'OBJECTID'])
     dupePts = returnDuplicateAddresses(agrcAddPts_wayneCo, ['UTAddPtID', 'SHAPE@'])
     updateErrorPts(os.path.join(cntyFldr, 'Wayne_ErrorPts.shp'), errorPts, dupePts)
+
+    new_point_count = int(arcpy.GetCount_management(agrcAddPts_wayneCo).getOutput(0))
+    print (f'Old count {old_point_count}, new count {new_point_count}')
 
 
 def weberCounty():
@@ -5005,7 +5038,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #cacheCounty()  #Complete w/error points
 #carbonCounty() #Complete
 #daggettCounty() #Complete w/error points
-davisCounty()  #Complete
+#davisCounty()  #Complete
 #davisCounty_alias()
 #duchesneCounty()
 #emeryCounty()  #Complete
@@ -5020,13 +5053,13 @@ davisCounty()  #Complete
 #murrayCity_ParcelPts()
 #piuteCounty()
 #richCounty()    #Complete
-saltLakeCounty() #Complete w/error points
+#saltLakeCounty() #Complete w/error points
 #SanJuanCounty()
 #sanpeteCounty()
 #sevierCounty()
 #summitCounty()
 #tooeleCounty()    #Complete
-#uintahCounty()
+uintahCounty()
 #utahCounty() #Complete
 #wasatchCounty()  #Complete w/error points
 #washingtonCounty()  #Complete

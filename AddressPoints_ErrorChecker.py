@@ -49,11 +49,13 @@ def add_ugrc_zips(in_county_pts):
     county_flds = arcpy.ListFields(in_county_pts)
     if 'UGRC_ZIPS' not in county_flds:
         arcpy.AddField_management(in_county_pts, 'UGRC_ZIPS', 'TEXT', '#', '#', '10')
+        print('added field UGRC_ZIPS')
 
     zip_dict = {'UGRC_ZIPS':['SGID.BOUNDARIES.ZipCodes', 'ZIP5', '']}
     addPolyAttributes(sgid, in_county_pts, zip_dict)
 
-in_pts = r'C:\ZBECK\Addressing\Davis\DavisCounty.gdb\DavisAddress'
+
+in_pts = r'C:\ZBECK\Addressing\Weber\WeberCounty.gdb\address_pts'
 
 add_ugrc_zips(in_pts)
 
