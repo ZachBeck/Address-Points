@@ -702,15 +702,26 @@ def cacheCounty():
 
 
 def carbonCounty():
-    carbonCoAddPts = r'..\Carbon\CarbonCounty.gdb\AddressPoints'
+    carbon_agol_pts = 'https://maps.carbon.utah.gov/arcgis/rest/services/CountyGeneralMap/Addressing_Ownership/MapServer/0'
+    carbonCoAddPts = r'..\Carbon\CarbonCounty.gdb\Carbon_agol_pts'
+    #carbonCoAddPts = r'..\Carbon\CarbonCounty.gdb\AddressPoints'
     agrcAddPts_carbonCo = r'..\Carbon\Carbon.gdb\AddressPoints_Carbon'
     cntyFldr = r'..\Carbon'
+
+    agol_to_fgdb('Carbon', carbon_agol_pts)
 
     # carbonCoAddFLDS = ['NAME', 'BUILD_TYPE', 'WHOLE_ADD', 'INDIC_ADDR', 'PRE_DIR', 'ST_NAME', 'ST_TYPE', 'SUF_DIR', 'UNIT_NUM', \
     #                    'BLDG_NUM', 'PARCEL_NUM', 'GPS_DATE', 'SHAPE@', 'OBJECTID']
 
     carbonCoAddFLDS = ['LandmaName', 'PtType', 'FullAdd', 'AddNum', 'PrefixDir', 'StreetName', 'StreetType', 'SuffixDir', 'UnitID', \
                        'Building', 'ParcelID', 'ModifyDate', 'SHAPE@', 'OBJECTID', 'UnitType']
+
+    checkRequiredFields(carbonCoAddPts, carbonCoAddFLDS)
+    archive_last_month(agrcAddPts_carbonCo)
+    truncateOldCountyPts(agrcAddPts_carbonCo)
+    rdSet = createRoadSet('49007')
+
+    errorPtsDict = {}
 
     ptTypeDict = {
     'Other' : ['AGRICULTURAL', 'GOVERMENT', 'EDUCATIONAL', 'FIRE HYDRANT', 'MISSING', 'OTHER', 'OUTBUILDING', 'OUT BUILDING', 'PUBLIC',
@@ -728,12 +739,6 @@ def carbonCounty():
     fix_types = ['WOOD HILL ROAD', 'WESTWOOD BLVD', 'SPRING GLEN ROAD', 'SPRING CANYON ROAD', 'SHELBY LANE', 'AIRPORT ROAD',
                  'RICHELMAN LANE', 'NORTH COAL CREEK ROAD', 'CONSUMERS ROAD', 'DRY VALLEY ROAD', 'FORD RIDGE ROAD']
 
-    checkRequiredFields(carbonCoAddPts, carbonCoAddFLDS)
-    #archive_last_month(agrcAddPts_carbonCo)
-    truncateOldCountyPts(agrcAddPts_carbonCo)
-    rdSet = createRoadSet('49007')
-
-    errorPtsDict = {}
 
     iCursor = arcpy.da.InsertCursor(agrcAddPts_carbonCo, agrcAddFLDS)
 
@@ -5036,7 +5041,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #beaverCounty()   #Complete w/error points
 #boxElderCounty()  #Complete w/error points
 #cacheCounty()  #Complete w/error points
-#carbonCounty() #Complete
+carbonCounty() #Complete
 #daggettCounty() #Complete w/error points
 #davisCounty()  #Complete
 #davisCounty_alias()
@@ -5059,7 +5064,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #sevierCounty()
 #summitCounty()
 #tooeleCounty()    #Complete
-uintahCounty()
+#uintahCounty()
 #utahCounty() #Complete
 #wasatchCounty()  #Complete w/error points
 #washingtonCounty()  #Complete
