@@ -47,5 +47,3 @@ def delete_by_query(in_pts, sql):
     arcpy.DeleteFeatures_management(delete_pts_fl)
     print(f'Deleted {delete_count} records with {sql}')
 
-
-

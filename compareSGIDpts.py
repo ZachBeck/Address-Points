@@ -1,5 +1,6 @@
 import arcpy
 import os
+from pathlib import Path
 
 def findMissingPts(inCountySGID, compareCounty):
 
@@ -16,7 +17,8 @@ def findMissingPts(inCountySGID, compareCounty):
     arcpy.AddField_management(outShape, outFlds[1], 'TEXT')
     arcpy.DeleteField_management(outShape, 'Id')
 
-    addPts_sgid10 = r'Database Connections\dc_agrc@SGID10@sgid.agrc.utah.gov.sde\SGID10.LOCATION.AddressPoints'
+    #addPts_sgid10 = r'Database Connections\dc_agrc@SGID10@sgid.agrc.utah.gov.sde\SGID10.LOCATION.AddressPoints'
+    addPts_sgid = str(Path(__file__).resolve().parents[3].joinpath('sde', 'SGID_internal', 'SGID_agrc.sde', 'SGID.LOCATION.AddressPoints'))
 
     fipsDict = {'Beaver': '49001', 'Box Elder': '49003', 'Cache': '49005', 'Carbon': '49007', 'Daggett': '49009', \
                 'Davis': '49011', 'Duchesne': '49013', 'Emery': '49015', 'Garfield': '49017', 'Grand': '49019', \
@@ -27,7 +29,7 @@ def findMissingPts(inCountySGID, compareCounty):
 
     sql = """"CountyID" = """ + "'" + fipsDict[inCountySGID] + "'"
 
-    sgidCounty_FL = arcpy.MakeFeatureLayer_management(addPts_sgid10, 'addPts_FL', sql)
+    sgidCounty_FL = arcpy.MakeFeatureLayer_management(addPts_sgid, 'addPts_FL', sql)
 
     sgidPtDict = {}
     cntyPtDict = {}
