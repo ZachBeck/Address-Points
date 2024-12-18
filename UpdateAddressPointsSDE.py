@@ -66,6 +66,6 @@ def update_sde(county_name):
 
 
 
-update_sde('Tooele') #Update input points and SQL query
+update_sde('Summit') #Update input points and SQL query
 
 
