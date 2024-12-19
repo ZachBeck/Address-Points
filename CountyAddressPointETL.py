@@ -3277,7 +3277,7 @@ def summitCounty():
 
     checkRequiredFields(summitCoAddPts, summitCoAddFLDS)
     old_point_count = int(arcpy.GetCount_management(agrcAddPts_summitCo).getOutput(0))
-    #archive_last_month(agrcAddPts_summitCo)
+    archive_last_month(agrcAddPts_summitCo)
     truncateOldCountyPts(agrcAddPts_summitCo)
 
     fix_sName = {'CLAIMJUMPER': 'CLAIM JUMPER', 'DEAR VALLEY':'DEER VALLEY', 'DEER VALL': 'DEER VALLEY',
