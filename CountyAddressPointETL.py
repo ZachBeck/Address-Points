@@ -1112,7 +1112,7 @@ def davisCounty():
 
     checkRequiredFields(davisCoAddPts, davisCoAddFLDS)
     old_point_count = int(arcpy.GetCount_management(agrcAddPts_davisCo).getOutput(0))
-    #archive_last_month(agrcAddPts_davisCo)
+    archive_last_month(agrcAddPts_davisCo)
     truncateOldCountyPts(agrcAddPts_davisCo)
 
     noTypeList = ['ANTELOPE ISLAND CAUSEWAY', 'APPLE ACRES', 'ASPEN GROVE', 'BOUNTIFUL MEMORIAL PARK', 'BROADWAY',
@@ -3415,7 +3415,7 @@ def summitCounty():
             if preDir == sufDir and sType == '' and preDir != '':
                 addressErrors = errorPtsDict.setdefault(row[6], [])
                 addressErrors.extend(['predir = sufdir', row[11]])
-            if sName not in rdSet and removeNone(row[3]).startswith('SR ') == False:
+            if sName not in rdSet and removeNone(row[3]).startswith('SR') == False:
                 addressErrors = errorPtsDict.setdefault(row[3], [])
                 addressErrors.extend(['Street name not found in roads', row[11]])
             # ------------------------------------
@@ -5104,10 +5104,10 @@ def checkRequiredFields(inCounty, requiredFlds):
 #SanJuanCounty()
 #sanpeteCounty()
 #sevierCounty()
-summitCounty()
+#summitCounty()
 #tooeleCounty()    #Complete
 #uintahCounty()
-#utahCounty() #Complete
+utahCounty() #Complete
 #wasatchCounty()  #Complete w/error points
 #washingtonCounty()  #Complete
 #wayneCounty()
