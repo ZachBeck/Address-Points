@@ -5320,7 +5320,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #garfieldCounty()  #Complete
 #grandCounty()
 #ironCounty()   #Complete
-#juabCounty()
+juabCounty()
 #kaneCounty()   #Complete
 #millardCounty()   #Complete w/error points
 #morganCounty()    #Complete

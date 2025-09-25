@@ -66,6 +66,6 @@ def update_sde(county_name):
 
 
 
-update_sde('Duchesne') #Update input points and SQL query
+update_sde('Juab') #Update input points and SQL query
 
 
