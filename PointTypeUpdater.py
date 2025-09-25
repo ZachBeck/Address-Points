@@ -104,12 +104,13 @@ def addPolyAttributesLIR(sgid, pts, polyLyrDict, lirDict):
             try:
                 if pt2Poly_Dict[urow[0]] in polyDict:
                     if returnKey(polyDict[pt2Poly_Dict[urow[0]]], lirDict) == '':
-                        continue
+                        urow[1] = 'Unknown'
+                        #continue
                     else:
                         urow[1] = returnKey(polyDict[pt2Poly_Dict[urow[0]]], lirDict)
             except:
-                print('except')
-                #urow[1] = 'Unknown'
+                #print('except')
+                urow[1] = 'Unknown'
 
             if urow[1] == '':
                 urow[1] = 'Unknown'

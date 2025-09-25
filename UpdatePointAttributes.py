@@ -80,6 +80,17 @@ def updateAddPtID(inPts):
 
     del uCursor
 
+def update_alias_AddPtID(inPts):
+    flds = ['AddSystem', 'UTAddPtID', 'AddNum', 'AddNumSuffix', 'PrefixDir', 'StreetName', 'StreetType', 'SuffixDir', 'UnitType', 'UnitID']
+    with arcpy.da.UpdateCursor(inPts, flds) as uCursor:
+        for urow in uCursor:
+            full_add = f'{urow[2]} {urow[3]} {urow[4]} {urow[5]} {urow[6]} {urow[7]} {urow[8]} {urow[9]}'
+            full_add = ' '.join(full_add.split()).strip()
+            urow[1] = f'{urow[0]} | {full_add}'
+            uCursor.updateRow(urow)
+
+    del uCursor
+
 def updateField(inPts, fld, dict):
     # def returnKey(word, dict):
     #     if word == None:

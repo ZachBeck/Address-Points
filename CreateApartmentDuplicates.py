@@ -29,7 +29,7 @@ def addBaseAddress(inAddressPoints):
             if 'BLDG' in row[1] and row[22] != '':
                 stripStr = f' BLDG {row[22]} {row[9]} {row[10]}'
             baseAdd = re.sub(stripStr, '', row[1])
-            print(baseAdd)
+            #print(baseAdd)
             baseAddList.append(baseAdd)
             allAddsDict.setdefault(row[1])
 
