@@ -55,7 +55,7 @@ def add_ugrc_zips(in_county_pts):
     addPolyAttributes(sgid, in_county_pts, zip_dict)
 
 
-in_pts = r'C:\ZBECK\Addressing\Weber\WeberCounty.gdb\address_pts'
+in_pts = r'C:\ZBECK\Addressing\SaltLake\SaltLakeCounty.gdb\ADDRESS_POINTS'
 
 add_ugrc_zips(in_pts)
 
