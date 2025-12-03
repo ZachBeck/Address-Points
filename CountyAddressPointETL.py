@@ -2501,8 +2501,7 @@ def morganCounty():
     errorPtsDict = {}
     rdSet = createRoadSet('49029')
 
-    #exp = re.compile(r'(?:^[NSEW]\s)?(?:(.+)(\s[NSEW]$)|(.+$))')
-    rd_alias_pattern = r'\s*\([^)]*[\)]?'
+    rd_paren_pattern = r'\s*\([^)]*[\)]?'
 
     leadingSpaceTypes.extend([' LANE', ' COURT', ' COVE', ' CIRCLE', ' PARKWAY'])
                                        
@@ -2511,39 +2510,19 @@ def morganCounty():
 
         for row in sCursor:
             if row[0] not in errorList and row[1] not in errorList:
-                addNum = row[0].strip()
-                #fullName = row[1].upper()
-                fullName = re.sub(rd_alias_pattern, '', row[1]).upper()
                 fullAddr = row[6].upper().strip()
-                sName = ''
-                preDir = ''
-                sType = ''
-                sufDir = ''
-                unitType = ''
+                address = parse_address.parse(row[6])
 
-                #expMatches = re.findall(exp, fullName)[0]
-                if fullName[:2].strip() in dirs:
-                    preDir = fullName[:2].strip()
-                    sName = fullName[2:].upper()
-                    if sName == 'HWY 66':
-                        sType = ''
-                    if sName.endswith((tuple(leadingSpaceTypes))):
-                        sType = returnKey(sName.split()[-1], sTypeDir)
-                        sName = ' '.join(sName.split()[:-1])
-                        #sName = sName.strip(' {}'.format(sType)).rstrip()
-                    if sName[0].isdigit():
-                        sufDir = sName[-1]
-                        sName = ' '.join(sName.split()[:-1])
-                        sType = ''
-                else:
-                    sName = fullName.upper()
-                    preDir = ''
-                    if sName.endswith((tuple(leadingSpaceTypes))):
-                        sType = returnKey(sName.split()[-1], sTypeDir)
-                        sName = ' '.join(sName.split()[:-1])
+                addNum = address.houseNumber
+                preDir = removeNone(address.prefixDirection)
+                sName = removeNone(address.streetName)
+                sName = re.sub(rd_paren_pattern, '', sName)
+                sType = removeNone(address.suffixType)
+                sufDir = removeNone(address.suffixDirection)
+                
+                unitType = returnKey(removeNone(row[2]), unitTypeDir)
+                unitID = removeNone(row[3]).strip(' #')
 
-                # if sName.isdigit() == True:
-                    # sType = ''
             else:
                 continue
 
@@ -2551,16 +2530,12 @@ def morganCounty():
                 sName = 'POWDER HORN'
                 sType = 'DR'
                 sufDir = ''
+
             sName = sName.replace('POWDERHORN', 'POWDER HORN')
-
-            if row[2] not in errorList:
-                unitType = returnKey(row[2].upper(), unitTypeDir)
-
-            unitID = removeBadValues(row[3], errorList).strip('#')
+            sName = sName.replace('HIGHWAY', 'HWY')
 
             modDate = row[4]
             loadDate = today
-            #parcel = removeNone(row[7])
             parcel = ''
 
             shp = row[5]
@@ -5357,8 +5332,7 @@ def checkRequiredFields(inCounty, requiredFlds):
 #juabCounty()
 #kaneCounty()   #Complete
 #millardCounty()   #Complete w/error points
-morgan_test()
-#morganCounty()    #Complete
+morganCounty()    #Complete
 #murrayCity_AddressPts()
 #murrayCity_ParcelPts()
 #piuteCounty()
