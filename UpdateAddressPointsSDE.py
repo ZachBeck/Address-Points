@@ -16,7 +16,7 @@ def update_sde(county_name):
     
 
     path_name = ''.join(county_name.title().split())
-    update_pts = f'..\{path_name}\{path_name}.gdb\AddressPoints_{path_name}'
+    update_pts = rf'..\{path_name}\{path_name}.gdb\AddressPoints_{path_name}'
     
 
     if arcpy.Exists(update_pts):
@@ -66,6 +66,6 @@ def update_sde(county_name):
 
 
 
-update_sde('Cache') #Update input points and SQL query
+update_sde('Weber') #Update input points and SQL query
 
 

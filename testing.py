@@ -72,13 +72,56 @@ import arcpy
 
 #             # if lyr.dataSource == os.path.join(old_hillshade, lyr_name):
 #             #     lyr.updateConnectionProperties(old_hillshade, new_hillshade)
-
-
 # p.save()
-import re
-pattern = r'\s*\([^)]*[\)]?'
 
-s_list = ['The Ranches Road (250 N)', 'S Wasatchback Drive (6600 N(', 'S Shoreline Drive (pending)', 'W Zion Rd', 'North Village Lane (3525 N', 'North Village Road (5500 W)', 'Upper Townhome Lane (5550 W)', 'W Wasatchback Drive (6600 N)']
-for s in s_list:
-    cleaned_s = re.sub(pattern, '', s)
-    print(cleaned_s)
+import arcpy
+
+# Set environment settings
+arcpy.env.overwriteOutput = True
+
+def find_nearby_points(input_fc, output_fc, search_radius="1 Meters"):
+    """
+    Identifies points within a specified distance of each other.
+    """
+    try:
+        print(f"Analyzing {input_fc}...")
+
+        # Perform a Spatial Join on itself
+        # We use 'CLOSEST' and a search radius to find neighbors
+        arcpy.analysis.SpatialJoin(
+            target_features=input_fc,
+            join_features=input_fc,
+            out_feature_class=output_fc,
+            join_operation="JOIN_ONE_TO_MANY",
+            join_type="KEEP_COMMON",
+            match_option="WITHIN_A_DISTANCE",
+            search_radius=search_radius
+        )
+
+        # The spatial join will match a point to itself. 
+        # We need to filter out records where TARGET_FID == JOIN_FID.
+        # We also filter out duplicates (e.g., A matches B and B matches A) 
+        # by using the 'less than' operator.
+        
+        layer_name = "joined_points_layer"
+        arcpy.management.MakeFeatureLayer(output_fc, layer_name)
+        
+        query = "TARGET_FID <> JOIN_FID AND TARGET_FID < JOIN_FID"
+        arcpy.management.SelectLayerByAttribute(layer_name, "NEW_SELECTION", query)
+
+        # Export the final result of just the nearby pairs
+        final_output = output_fc + "_Filtered"
+        arcpy.management.CopyFeatures(layer_name, final_output)
+
+        print(f"Success! Nearby points saved to: {final_output}")
+        
+    except arcpy.ExecuteError:
+        print(arcpy.GetMessages(2))
+
+if __name__ == "__main__":
+    # Update these paths to your local data
+    input_data = r"C:\ZBECK\SGID\incoming\Parks\Parks.gdb\Parks_UGRC_OSM_FeatureToPoint"
+    output_data = r"C:\ZBECK\SGID\incoming\Parks\Parks.gdb\Parks_UGRC_OSM_Nearby"
+    
+    find_nearby_points(input_data, output_data)
+
